@@ -6,8 +6,11 @@
       extraConfig = ''
         # Needed for either SSD or btrfs.
         SATA_LINKPWR_ON_BAT=max_performance
+        # Set Battery Threshold
         START_CHARGE_THRESH_BAT0=31
-        STOP_CHARGE_THRESH_BAT0=81 
+        STOP_CHARGE_THRESH_BAT0=81
+        # Set disabled radio device when startup
+        DEVICES_TO_DISABLE_ON_STARTUP="bluetooth"
       '';
     };
    # xserver.xkbModel = "thinkpad60";
@@ -17,8 +20,6 @@
     kernelModules = [ 
       #"tp_smapi" 
       "thinkpad_acpi" 
-      #"fbcon" 
-      #"i915" 
       "acpi_call" 
     ];
     extraModulePackages = with config.boot.kernelPackages; [ 

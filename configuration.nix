@@ -128,6 +128,7 @@
       pkgs.gnome3.totem-pl-parser
       pkgs.gnome3.gnome-music
       pkgs.gnome3.evolution
+      pkgs.gnome3.gnome-weather
     ];
  
   # Define a user account. Don't forget to set a password with ‘passwd’.

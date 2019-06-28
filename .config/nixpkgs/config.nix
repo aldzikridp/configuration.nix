@@ -7,6 +7,7 @@
         libreoffice
         keepassxc
         htop
+        gnome3.geary
         lollypop
         mpv
         neofetch
