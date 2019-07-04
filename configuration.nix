@@ -47,7 +47,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
-      wget git neovim gnupg  
+     wget 
+     git 
+     neovim 
+     gnupg
+     #libva-utils #for VAAPI
     ];
    
   # Some programs need SUID wrappers, can be configured further or are
@@ -67,13 +71,13 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ 51413 ];
-   networking.firewall.allowedUDPPorts = [ 51413 ];
+   networking.firewall.allowedTCPPorts = [ 51413 38692 ];
+   networking.firewall.allowedUDPPorts = [ 51413 38692 ];
   # Or disable the firewall altogether.
    networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
@@ -89,6 +93,7 @@
       vaapiIntel
       vaapiVdpau
       libvdpau-va-gl
+      vaapi-intel-hybrid
       intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
     ];
   };
@@ -129,6 +134,9 @@
       pkgs.gnome3.gnome-music
       pkgs.gnome3.evolution
       pkgs.gnome3.gnome-weather
+      pkgs.gnome3.vinagre
+      pkgs.gnome3.gnome-todo
+      pkgs.gnome3.simple-scan
     ];
  
   # Define a user account. Don't forget to set a password with ‘passwd’.
