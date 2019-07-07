@@ -49,7 +49,6 @@
    environment.systemPackages = with pkgs; [
      wget 
      git 
-     neovim 
      gnupg
      #libva-utils #for VAAPI
     ];
