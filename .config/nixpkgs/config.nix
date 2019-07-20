@@ -5,9 +5,8 @@
       name = "desktop-gnome-masterx";
       paths = [
         chromium
-        emacs
         firefox
-        flashplayer-standalone
+        #flashplayer-standalone
         libreoffice
         keepassxc
         htop
@@ -19,7 +18,6 @@
         neofetch
         neovim
         powerline-fonts
-        source-code-pro
         tdesktop
         transmission-gtk
         weechat
