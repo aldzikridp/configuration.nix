@@ -14,6 +14,7 @@
   # Use the systemd-boot EFI boot loader.
    boot.loader.systemd-boot.enable = true;
    boot.loader.efi.canTouchEfiVariables = true;
+   boot.supportedFilesystems = [ "ntfs" ];
 
    networking.hostName = "EVA-01"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -28,7 +29,7 @@
     # or setup your own.
     resolverName = "d0wn-lv-ns1";
     };
-    networking.nameservers = ["127.0.0.1"];
+   networking.nameservers = ["127.0.0.1"];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -41,6 +42,9 @@
   #   defaultLocale = "en_US.UTF-8";
   # };
 
+  # Enable docker service
+  virtualisation.docker.enable = true;
+
   # Set your time zone.
    time.timeZone = "Asia/Jakarta";
 
@@ -52,7 +56,7 @@
      gnupg
      #libva-utils #for VAAPI
     ];
-   
+   programs.firejail.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -70,8 +74,8 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ 51413 38692 ];
-   networking.firewall.allowedUDPPorts = [ 51413 38692 ];
+   networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
+   networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
   # Or disable the firewall altogether.
    networking.firewall.enable = true;
 
@@ -141,7 +145,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker"]; # Enable ‘sudo’ for the user.
   };
 
   # This value determines the NixOS release with which your system is to be
