@@ -5,31 +5,50 @@
 { config, pkgs, ... }:
 
 {
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+    }))
+  ];
+
   imports =
     [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./thinkpad.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
    boot.loader.systemd-boot.enable = true;
    boot.loader.efi.canTouchEfiVariables = true;
+   boot.loader.systemd-boot.configurationLimit = 4;
    boot.supportedFilesystems = [ "ntfs" ];
 
-   networking.hostName = "EVA-01"; # Define your hostname.
+   networking.hostName = "EVA-02"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
    networking.networkmanager.enable  = true;
 
   # Enable dnscrypt client
-   services.dnscrypt-proxy = {
+   services.dnscrypt-proxy2 = {
     enable = true;
-    # the official default resolver is unreliable from time to time
-    # either use a different, trust-worthy one from here:
-    #   https://github.com/jedisct1/dnscrypt-proxy/blob/master/dnscrypt-resolvers.csv 
-    # or setup your own.
-    resolverName = "d0wn-lv-ns1";
+    settings = {
+      ipv6_servers = false;
+      require_dnssec = true;
+
+      sources.public-resolvers = {
+        urls = [
+          "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
+          "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
+        ];
+        cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+      };
+
+      # You can choose a specific set of servers from https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
     };
-   networking.nameservers = ["127.0.0.1"];
+  };
+
+  systemd.services.dnscrypt-proxy2.serviceConfig = {
+    StateDirectory = "dnscrypt-proxy2";
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -51,22 +70,62 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
    environment.systemPackages = with pkgs; [
-     wget 
+     aria
+     brightnessctl
+     clang
+     fd
+     ffmpeg
+     fzf
      git 
      gnupg
+     htop
+     imagemagick
+     imagemagick
+     imv
+     jq
+     mpv
+     neovim-nightly
+     p7zip
+     pavucontrol
+     polkit_gnome
+     ranger
+     ripgrep
+     rsync
+     slurp
+     starship
+     ungoogled-chromium
+     wf-recorder
+     wget 
+     zathura
      #libva-utils #for VAAPI
     ];
-   programs.firejail.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-   programs.zsh.enable = true;
+  # programs.zsh.enable = true;
    programs.gnupg.agent.enable = true;
+   programs.sway = {
+   enable = true;
+   wrapperFeatures.gtk = true; # so that gtk works properly
+   extraPackages = with pkgs; [
+     swaylock
+     swayidle
+     wl-clipboard
+     grim
+     mako # notification daemon
+     kitty # Alacritty is the default terminal in the config
+     wofi # Dmenu is the default in the config but i recommend wofi since its wayland native
+     waybar
+     xwayland
+   ];
+ };
+  nixpkgs.config.pulseaudio = true;
 
-  users.extraUsers.master-x = {
-    shell = pkgs.zsh;
-   };
+
+  #users.extraUsers.master-x = {
+  #  shell = pkgs.zsh;
+  # };
 
   # List services that you want to enable:
 
@@ -74,8 +133,8 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-   networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
-   networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
+   #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
+   #networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
   # Or disable the firewall altogether.
    networking.firewall.enable = true;
 
@@ -87,17 +146,17 @@
   hardware.pulseaudio.enable = true;
 
   # Enable VAAPI.
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
+  #nixpkgs.config.packageOverrides = pkgs: {
+  #  vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  #};
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
-      vaapiIntel
       vaapiVdpau
       libvdpau-va-gl
-      vaapi-intel-hybrid
-      intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
+      #vaapi-intel-hybrid
+      #vaapiIntel
+      #intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
     ];
   };
 
@@ -114,44 +173,44 @@
   # services.xserver.desktopManager.plasma5.enable = true;
   
   # Enable the Gnome Desktop Environment.
-    services.xserver = {
-      enable = true;
+  #  services.xserver = {
+  #    enable = true;
 
-      displayManager.gdm = {
-        enable = true;
-      };
+  #    displayManager.gdm = {
+  #      enable = true;
+  #    };
 
-      desktopManager.gnome3 = {
-        enable = true;
-      };
-    };  
+  #    desktopManager.gnome3 = {
+  #      enable = true;
+  #    };
+  #  };  
 
-    environment.gnome3.excludePackages = [
-      pkgs.gnome3.gnome-software
-      pkgs.gnome3.gnome-usage
-      pkgs.gnome3.epiphany
-      pkgs.gnome3.accerciser
-      pkgs.gnome3.gnome-packagekit
-      pkgs.gnome3.totem
-      pkgs.gnome3.totem-pl-parser
-      pkgs.gnome3.gnome-music
-      pkgs.gnome3.evolution
-      pkgs.gnome3.gnome-weather
-      pkgs.gnome3.vinagre
-      pkgs.gnome3.gnome-todo
-      pkgs.gnome3.simple-scan
-    ];
+  #  environment.gnome3.excludePackages = [
+  #    pkgs.gnome3.gnome-software
+  #    pkgs.gnome3.gnome-usage
+  #    pkgs.gnome3.epiphany
+  #    pkgs.gnome3.accerciser
+  #    pkgs.gnome3.gnome-packagekit
+  #    pkgs.gnome3.totem
+  #    pkgs.gnome3.totem-pl-parser
+  #    pkgs.gnome3.gnome-music
+  #    pkgs.gnome3.evolution
+  #    pkgs.gnome3.gnome-weather
+  #    pkgs.gnome3.vinagre
+  #    pkgs.gnome3.gnome-todo
+  #    pkgs.gnome3.simple-scan
+  #  ];
  
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "video" "audio"]; # Enable ‘sudo’ for the user.
   };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
+  system.stateVersion = "20.09"; # Did you read the comment?
 
 }
