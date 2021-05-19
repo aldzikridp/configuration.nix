@@ -14,13 +14,28 @@
   imports =
     [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    #/etc/nixos/hardware-configuration.nix
+    ./module/systemd-boot/systemd-boot.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
-   boot.loader.systemd-boot.enable = true;
-   boot.loader.efi.canTouchEfiVariables = true;
-   boot.loader.systemd-boot.configurationLimit = 4;
-   boot.supportedFilesystems = [ "ntfs" ];
+   #boot.loader.systemd-boot.enable = true;
+   #boot.loader.efi.canTouchEfiVariables = true;
+   #boot.loader.systemd-boot.configurationLimit = 4;
+   #boot.supportedFilesystems = [ "ntfs" ];
+   boot = {
+    loader = {
+     systemd-boot = {
+      enable = true;
+      signed = true;
+      signing-key = "/home/master-x/boot-key/DB.key";
+      signing-certificate = "/home/master-x/boot-key/DB.crt";
+      configurationLimit = 4;
+     };
+     efi.canTouchEfiVariables = true;
+    };
+    #supportedFilesystems = [ "ntfs" ];
+   };
 
    networking.hostName = "EVA-02"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
