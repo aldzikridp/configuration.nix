@@ -86,6 +86,7 @@
   # $ nix search wget
    environment.systemPackages = with pkgs; [
      aria
+     firefox-wayland
      brightnessctl
      clang
      fd
@@ -98,6 +99,7 @@
      imagemagick
      imv
      jq
+     keepassxc
      mpv
      neovim-nightly
      p7zip
@@ -108,7 +110,6 @@
      rsync
      slurp
      starship
-     ungoogled-chromium
      wf-recorder
      wget 
      zathura
