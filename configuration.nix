@@ -61,9 +61,9 @@
     };
   };
 
-  systemd.services.dnscrypt-proxy2.serviceConfig = {
-    StateDirectory = "dnscrypt-proxy2";
-  };
+  #systemd.services.dnscrypt-proxy2.serviceConfig = {
+  #  StateDirectory = "dnscrypt-proxy2";
+  #};
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -220,7 +220,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "video" "audio"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "video" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
 
   # This value determines the NixOS release with which your system is to be
