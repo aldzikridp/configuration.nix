@@ -14,14 +14,24 @@
       scripts = [ self.mpvScripts.thumbnail self.mpvScripts.thumbnail ];
     };
     })
+    (self: super: {
+        firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
+               pname = "firmware-linux-nonfree";
+               version = "2021-03-15";
+               src = super.fetchgit {
+                url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+                rev = "refs/tags/" + super.lib.replaceStrings ["-"] [""] version;
+                sha256 = "sha256-BnYqveVFJk/tVYgYuggXgYGcUCZT9iPkCQIi48FOTWc=";
+               };
+               outputHash = "sha256-TzAMGj7IDhzXcFhHAd15aZvAqyN+OKlJTkIhVGoTkIs=";
+        });
+    })
   ];
 
   imports =
     [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    #/etc/nixos/hardware-configuration.nix
     ./module/systemd-boot/systemd-boot.nix
-    #./module/opengl/opengl.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
