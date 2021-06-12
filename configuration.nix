@@ -40,6 +40,7 @@
    #boot.loader.systemd-boot.configurationLimit = 4;
    #boot.supportedFilesystems = [ "ntfs" ];
    boot = {
+    cleanTmpDir = true;
     loader = {
      systemd-boot = {
       enable = true;
