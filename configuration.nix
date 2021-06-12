@@ -21,6 +21,7 @@
     ./hardware-configuration.nix
     #/etc/nixos/hardware-configuration.nix
     ./module/systemd-boot/systemd-boot.nix
+    #./module/opengl/opengl.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -117,6 +118,7 @@
      rsync
      slurp
      starship
+     udiskie
      wf-recorder
      wget 
      zathura
