@@ -9,57 +9,55 @@
     (import (builtins.fetchTarball {
       url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
     }))
+
+    #(self: super: {
+    #mpv = super.mpv-with-scripts.override {
+    #  scripts = [ self.mpvScripts.thumbnail self.mpvScripts.thumbnail ];
+    #};
+    #})
     (self: super: {
-    mpv = super.mpv-with-scripts.override {
-      scripts = [ self.mpvScripts.thumbnail self.mpvScripts.thumbnail ];
-    };
-    })
-    (self: super: {
-        firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
-               pname = "firmware-linux-nonfree";
-               version = "2021-03-15";
-               src = super.fetchgit {
-                url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-                rev = "refs/tags/" + super.lib.replaceStrings ["-"] [""] version;
-                sha256 = "sha256-BnYqveVFJk/tVYgYuggXgYGcUCZT9iPkCQIi48FOTWc=";
-               };
-               outputHash = "sha256-TzAMGj7IDhzXcFhHAd15aZvAqyN+OKlJTkIhVGoTkIs=";
-        });
+      firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
+        pname = "firmware-linux-nonfree";
+        version = "2021-03-15";
+        src = super.fetchgit {
+          url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+          rev = "refs/tags/" + super.lib.replaceStrings [ "-" ] [ "" ] version;
+          sha256 = "sha256-BnYqveVFJk/tVYgYuggXgYGcUCZT9iPkCQIi48FOTWc=";
+        };
+        outputHash = "sha256-TzAMGj7IDhzXcFhHAd15aZvAqyN+OKlJTkIhVGoTkIs=";
+      });
     })
   ];
 
   imports =
-    [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./module/systemd-boot/systemd-boot.nix
+    [
+      # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+      ./module/systemd-boot/systemd-boot.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
-   #boot.loader.systemd-boot.enable = true;
-   #boot.loader.efi.canTouchEfiVariables = true;
-   #boot.loader.systemd-boot.configurationLimit = 4;
-   #boot.supportedFilesystems = [ "ntfs" ];
-   boot = {
+  boot = {
     cleanTmpDir = true;
     loader = {
-     systemd-boot = {
-      enable = true;
-      signed = true;
-      signing-key = "/home/master-x/boot-key/DB.key";
-      signing-certificate = "/home/master-x/boot-key/DB.crt";
-      configurationLimit = 4;
-     };
-     efi.canTouchEfiVariables = true;
+      systemd-boot = {
+        enable = true;
+        signed = true;
+        signing-key = "/home/master-x/boot-key/DB.key";
+        signing-certificate = "/home/master-x/boot-key/DB.crt";
+        configurationLimit = 4;
+      };
+      efi.canTouchEfiVariables = true;
     };
     #supportedFilesystems = [ "ntfs" ];
-   };
+  };
 
-   networking.hostName = "EVA-02"; # Define your hostname.
+  networking.hostName = "EVA-02"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-   networking.networkmanager.enable  = true;
+  networking.networkmanager.enable = true;
 
   # Enable dnscrypt client
-   services.dnscrypt-proxy2 = {
+  services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
       ipv6_servers = false;
@@ -80,82 +78,71 @@
 
   services.earlyoom.enable = true;
 
-  #systemd.services.dnscrypt-proxy2.serviceConfig = {
-  #  StateDirectory = "dnscrypt-proxy2";
-  #};
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
   # Enable docker service
   virtualisation.docker.enable = true;
 
   # Set your time zone.
-   time.timeZone = "Asia/Jakarta";
+  time.timeZone = "Asia/Jakarta";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-   environment.systemPackages = with pkgs; [
-     aria
-     firefox-wayland
-     brightnessctl
-     clang
-     fd
-     ffmpeg
-     fzf
-     git 
-     gnupg
-     htop
-     imagemagick
-     imagemagick
-     imv
-     jq
-     keepassxc
-     mpv
-     neovim-nightly
-     p7zip
-     pavucontrol
-     polkit_gnome
-     ranger
-     ripgrep
-     rsync
-     slurp
-     starship
-     udiskie
-     wf-recorder
-     wget 
-     zathura
-     #libva-utils #for VAAPI
-    ];
+  environment.systemPackages = with pkgs; [
+    aria
+    firefox-wayland
+    brightnessctl
+    clang
+    fd
+    ffmpeg
+    fzf
+    git
+    gnupg
+    htop
+    imagemagick
+    imagemagick
+    imv
+    jq
+    keepassxc
+    mpv
+    neovim-nightly
+    # (import ./module/neovim/neovim.nix)
+    p7zip
+    pavucontrol
+    polkit_gnome
+    ranger
+    ripgrep
+    rsync
+    slurp
+    starship
+    udiskie
+    wf-recorder
+    wget
+    zathura
+    #libva-utils #for VAAPI
+  ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   # programs.zsh.enable = true;
-   programs.gnupg.agent.enable = true;
-   programs.sway = {
-   enable = true;
-   wrapperFeatures.gtk = true; # so that gtk works properly
-   extraPackages = with pkgs; [
-     swaylock
-     swayidle
-     wl-clipboard
-     grim
-     mako # notification daemon
-     kitty # Alacritty is the default terminal in the config
-     wofi # Dmenu is the default in the config but i recommend wofi since its wayland native
-     waybar
-     xwayland
-   ];
- };
+  programs.gnupg.agent.enable = true;
+  # Sway polkit
+  security.polkit.enable = true;
+  environment.pathsToLink = [ "/libexec" ];
+  programs.sway = {
+      enable = true;
+    wrapperFeatures.gtk = true; # so that gtk works properly
+    extraPackages = with pkgs; [
+      swaylock
+      swayidle
+      wl-clipboard
+      grim
+      mako # notification daemon
+      kitty # Alacritty is the default terminal in the config
+      wofi # Dmenu is the default in the config but i recommend wofi since its wayland native
+      waybar
+      xwayland
+    ];
+  };
   nixpkgs.config.pulseaudio = true;
 
 
@@ -169,10 +156,10 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-   #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
-   #networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
+  #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
+  #networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
   # Or disable the firewall altogether.
-   networking.firewall.enable = true;
+  networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -196,47 +183,9 @@
     ];
   };
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
   # Enable touchpad support.
   # services.xserver.libinput.enable = true;
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-  
-  # Enable the Gnome Desktop Environment.
-  #  services.xserver = {
-  #    enable = true;
-
-  #    displayManager.gdm = {
-  #      enable = true;
-  #    };
-
-  #    desktopManager.gnome3 = {
-  #      enable = true;
-  #    };
-  #  };  
-
-  #  environment.gnome3.excludePackages = [
-  #    pkgs.gnome3.gnome-software
-  #    pkgs.gnome3.gnome-usage
-  #    pkgs.gnome3.epiphany
-  #    pkgs.gnome3.accerciser
-  #    pkgs.gnome3.gnome-packagekit
-  #    pkgs.gnome3.totem
-  #    pkgs.gnome3.totem-pl-parser
-  #    pkgs.gnome3.gnome-music
-  #    pkgs.gnome3.evolution
-  #    pkgs.gnome3.gnome-weather
-  #    pkgs.gnome3.vinagre
-  #    pkgs.gnome3.gnome-todo
-  #    pkgs.gnome3.simple-scan
-  #  ];
- 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
