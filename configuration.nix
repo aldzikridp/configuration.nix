@@ -9,27 +9,11 @@
     (import (builtins.fetchTarball {
       url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
     }))
-    (self: super: {
-    mpv = super.mpv-with-scripts.override {
-      scripts = [ self.mpvScripts.thumbnail self.mpvScripts.thumbnail ];
-    };
-    })
-    (self: super: {
-        firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
-               pname = "firmware-linux-nonfree";
-               version = "2021-03-15";
-               src = super.fetchgit {
-                url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-                rev = "refs/tags/" + super.lib.replaceStrings ["-"] [""] version;
-                sha256 = "sha256-BnYqveVFJk/tVYgYuggXgYGcUCZT9iPkCQIi48FOTWc=";
-               };
-               outputHash = "sha256-TzAMGj7IDhzXcFhHAd15aZvAqyN+OKlJTkIhVGoTkIs=";
-        });
-    })
   ];
 
   imports =
     [ # Include the results of the hardware scan.
+    ./thinkpad.nix
     ./hardware-configuration.nix
     ./module/systemd-boot/systemd-boot.nix
     ];
@@ -54,7 +38,7 @@
     #supportedFilesystems = [ "ntfs" ];
    };
 
-   networking.hostName = "EVA-02"; # Define your hostname.
+   networking.hostName = "EVA-01"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
    networking.networkmanager.enable  = true;
 
@@ -133,7 +117,7 @@
      wf-recorder
      wget 
      zathura
-     #libva-utils #for VAAPI
+     libva-utils #for VAAPI
     ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -182,17 +166,17 @@
   hardware.pulseaudio.enable = true;
 
   # Enable VAAPI.
-  #nixpkgs.config.packageOverrides = pkgs: {
-  #  vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  #};
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
-      #vaapi-intel-hybrid
-      #vaapiIntel
-      #intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
+      vaapi-intel-hybrid
+      vaapiIntel
+      intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
     ];
   };
 
