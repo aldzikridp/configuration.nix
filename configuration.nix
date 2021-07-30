@@ -145,6 +145,10 @@
   };
   nixpkgs.config.pulseaudio = true;
 
+  #Games
+  nixpkgs.config.allowUnfree = true;
+  programs.steam.enable = true;
+
 
   #users.extraUsers.master-x = {
   #  shell = pkgs.zsh;
