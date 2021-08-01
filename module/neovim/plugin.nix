@@ -4,22 +4,14 @@ with vimUtils;
 
 let
   buildVimPlugin = pkgs.vimUtils.buildVimPluginFrom2Nix;
-  #yarn2nix = pkgs.callPackage
-  #  (pkgs.fetchFromGitHub {
-  #    owner = "moretea";
-  #    repo = "yarn2nix";
-  #    rev = "780e33a07fd821e09ab5b05223ddb4ca15ac663f";
-  #    sha256 = "1f83cr9qgk95g3571ps644rvgfzv2i4i7532q8pg405s4q5ada3h";
-  #  })
-  #  { };
 in
 {
   "tokyonight" = buildVimPlugin {
     name = "tokyonight";
     src = fetchgit {
       url = "https://github.com/folke/tokyonight.nvim";
-      rev = "852c9a846808a47d6ff922fcdbebc5dbaf69bb56";
-      sha256 = "1fkp03kycwp73i1k2jmxm0m3zipbxwa8lrb5shzfwcdcn6a3cwja";
+      rev = "0ee0bcf14d8c7c70081a0e9967c211121c4300c7";
+      sha256 = "0rkw544dzgyp76ag3zrh8d3n0mri5c0cjpy8mvbfpgyj87w18m8d";
     };
     dependencies = [ ];
   };

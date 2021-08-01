@@ -1,20 +1,7 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
   nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-    }))
-
-    #(self: super: {
-    #mpv = super.mpv-with-scripts.override {
-    #  scripts = [ self.mpvScripts.thumbnail self.mpvScripts.thumbnail ];
-    #};
-    #})
     (self: super: {
       firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
         pname = "firmware-linux-nonfree";
@@ -31,26 +18,12 @@
 
   imports =
     [
-      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./module/systemd-boot/systemd-boot.nix
+      ./module/systemd-boot/boot.nix
+      ./module/neovim/neovim.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot = {
-    cleanTmpDir = true;
-    loader = {
-      systemd-boot = {
-        enable = true;
-        signed = true;
-        signing-key = "/home/master-x/boot-key/DB.key";
-        signing-certificate = "/home/master-x/boot-key/DB.crt";
-        configurationLimit = 4;
-      };
-      efi.canTouchEfiVariables = true;
-    };
-    #supportedFilesystems = [ "ntfs" ];
-  };
 
   networking.hostName = "EVA-02"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -71,8 +44,6 @@
         cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
         minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
       };
-
-      # You can choose a specific set of servers from https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
     };
   };
 
@@ -103,8 +74,6 @@
     jq
     keepassxc
     mpv
-    neovim-nightly
-    # (import ./module/neovim/neovim.nix)
     p7zip
     pavucontrol
     polkit_gnome
@@ -117,7 +86,6 @@
     wf-recorder
     wget
     zathura
-    #libva-utils #for VAAPI
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -138,7 +106,7 @@
       grim
       mako # notification daemon
       kitty # Alacritty is the default terminal in the config
-      wofi # Dmenu is the default in the config but i recommend wofi since its wayland native
+      wofi # use wofi instead of dmenu 
       waybar
       xwayland
     ];
@@ -150,50 +118,33 @@
   programs.steam.enable = true;
 
 
-  #users.extraUsers.master-x = {
-  #  shell = pkgs.zsh;
-  # };
-
-  # List services that you want to enable:
-
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Open ports in the firewall.
+  # Firewall.
   #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
   #networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
-  # Or disable the firewall altogether.
   networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  #services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = true; #Waybar can't show/control vol w/o this
 
-  # Enable VAAPI.
-  #nixpkgs.config.packageOverrides = pkgs: {
-  #  vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  #};
   hardware.opengl = {
     enable = true;
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
-      #vaapi-intel-hybrid
-      #vaapiIntel
-      #intel-media-driver # only available starting nixos-19.03 or the current nixos-unstable
     ];
   };
-
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "video" "audio" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "video" "audio" "networkmanager" ];
   };
 
   # This value determines the NixOS release with which your system is to be
