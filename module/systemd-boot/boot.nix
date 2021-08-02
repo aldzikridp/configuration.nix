@@ -1,5 +1,5 @@
 let 
- secrets = import ../../secrets.nix;
+ secrets = import ../../secrets/secrets.nix;
 in {
 # Use the systemd-boot EFI boot loader.
   boot = {

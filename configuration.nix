@@ -69,7 +69,6 @@
     gnupg
     htop
     imagemagick
-    imagemagick
     imv
     jq
     keepassxc
@@ -104,14 +103,14 @@
       swayidle
       wl-clipboard
       grim
-      mako # notification daemon
-      kitty # Alacritty is the default terminal in the config
-      wofi # use wofi instead of dmenu 
+      mako
+      kitty
+      wofi
       waybar
       xwayland
     ];
   };
-  nixpkgs.config.pulseaudio = true;
+  nixpkgs.config.pulseaudio = true; #pulse support for waybar
 
   #Games
   nixpkgs.config.allowUnfree = true;
@@ -131,7 +130,7 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true; #Waybar can't show/control vol w/o this
+  hardware.pulseaudio.enable = true;
 
   hardware.opengl = {
     enable = true;
