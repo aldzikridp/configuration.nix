@@ -12,30 +12,28 @@
    # xserver.xkbModel = "thinkpad60";
   };
 };
+
   boot = {
     kernelModules = [ 
-      #"tp_smapi" 
       "thinkpad_acpi" 
       "acpi_call" 
     ];
     extraModulePackages = with config.boot.kernelPackages; [ 
-     # tp_smapi 
       acpi_call 
     ];
   };
 
-  #systemd.services = {
-  #  battery_threshold = {
-  #    description = "Set battery charging thresholds.";
-  #    path = [ pkgs.tpacpi-bat ];
-  #    after = [ "basic.target" ];
-  #    wantedBy = [ "multi-user.target" ];
-  #    script = ''
-  #      tpacpi-bat -s ST 1 39
-  #      tpacpi-bat -s ST 2 39
-  #      tpacpi-bat -s SP 1 80
-  #      tpacpi-bat -s SP 2 80
-  #    '';
-  #  };
-  #};
-  }
+  # Enable VAAPI.
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      vaapi-intel-hybrid
+      vaapiIntel
+      intel-media-driver
+    ];
+  };
+}
