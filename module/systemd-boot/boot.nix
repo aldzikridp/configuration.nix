@@ -2,6 +2,10 @@ let
  secrets = import ../../secrets/secrets.nix;
 in {
 # Use the systemd-boot EFI boot loader.
+  imports =
+  [
+    ./systemd-boot.nix
+  ];
   boot = {
     cleanTmpDir = true;
     loader = {

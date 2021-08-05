@@ -19,7 +19,6 @@
   imports =
     [
       ./hardware-configuration.nix
-      ./module/systemd-boot/systemd-boot.nix
       ./module/systemd-boot/boot.nix
       ./module/neovim/neovim.nix
     ];
