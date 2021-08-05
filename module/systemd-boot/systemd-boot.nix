@@ -7,7 +7,7 @@ let
 
   efi = config.boot.loader.efi;
 
-  gummibootBuilder = pkgs.substituteAll {
+  systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
@@ -37,6 +37,17 @@ let
     signingCertificate =
       if cfg.signed then cfg.signing-certificate else "/no-signing-crt";
   };
+
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+    nativeBuildInputs = [ pkgs.mypy ];
+  } ''
+    install -m755 ${systemdBootBuilder} $out
+    mypy \
+      --no-implicit-optional \
+      --disallow-untyped-calls \
+      --disallow-untyped-defs \
+      $out
+  '';
 in {
   disabledModules = [ "system/boot/loader/systemd-boot/systemd-boot.nix" ];
 
@@ -72,6 +83,7 @@ in {
         programs. Note: Do not pass a store path. Passing the key like
         <literal>signing-key = ./db.key;</literal> will copy the
         private key in to the Nix store and make it world-readable.
+
         Instead, pass the path as an absolute path string, like:
         <literal>signing-key = "/root/secure-boot/db.key";</literal>.
       '';
@@ -107,6 +119,7 @@ in {
       description = ''
         Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
+
         <literal>null</literal> means no limit i.e. all generations
         that were not garbage collected yet.
       '';
@@ -119,6 +132,7 @@ in {
 
       description = ''
         The resolution of the console. The following values are valid:
+
         <itemizedlist>
           <listitem><para>
             <literal>"0"</literal>: Standard UEFI 80x25 mode
@@ -170,7 +184,7 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     system = {
-      build.installBootLoader = gummibootBuilder;
+      build.installBootLoader = checkedSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 
