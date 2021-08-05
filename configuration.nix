@@ -20,31 +20,13 @@
     [
       ./hardware-configuration.nix
       ./module/systemd-boot/boot.nix
+      ./module/network/networking.nix
+      ./module/network/dnscrypt.nix
       ./module/neovim/neovim.nix
+      ./module/sway/sway.nix
     ];
 
 
-  networking.hostName = "EVA-02"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;
-
-  # Enable dnscrypt client
-  services.dnscrypt-proxy2 = {
-    enable = true;
-    settings = {
-      ipv6_servers = false;
-      require_dnssec = true;
-
-      sources.public-resolvers = {
-        urls = [
-          "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
-          "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
-        ];
-        cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
-        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
-      };
-    };
-  };
 
   services.earlyoom.enable = true;
 
@@ -59,7 +41,6 @@
   environment.systemPackages = with pkgs; [
     aria
     firefox-wayland
-    brightnessctl
     clang
     fd
     ffmpeg
@@ -68,22 +49,15 @@
     gnupg
     htop
     imagemagick
-    imv
-    jq
     keepassxc
     mpv
     p7zip
-    pavucontrol
-    polkit_gnome
     ranger
     ripgrep
     rsync
-    slurp
+    rnix-lsp
     starship
-    udiskie
-    wf-recorder
     wget
-    zathura
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -91,25 +65,6 @@
   # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   # programs.zsh.enable = true;
   programs.gnupg.agent.enable = true;
-  # Sway polkit
-  security.polkit.enable = true;
-  environment.pathsToLink = [ "/libexec" ];
-  programs.sway = {
-      enable = true;
-    wrapperFeatures.gtk = true; # so that gtk works properly
-    extraPackages = with pkgs; [
-      swaylock
-      swayidle
-      wl-clipboard
-      grim
-      mako
-      kitty
-      wofi
-      waybar
-      xwayland
-    ];
-  };
-  nixpkgs.config.pulseaudio = true; #pulse support for waybar
 
   #Games
   nixpkgs.config.allowUnfree = true;
@@ -119,10 +74,6 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Firewall.
-  #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];
-  #networking.firewall.allowedUDPPorts = [ 51413 38692 15441 ];
-  networking.firewall.enable = true;
 
   # Enable CUPS to print documents.
   #services.printing.enable = true;
