@@ -21,7 +21,7 @@
       ./hardware-configuration.nix
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
-      ./module/network/dnscrypt.nix
+      ./module/network/wireguard.nix
       ./module/neovim/neovim.nix
       ./module/sway/sway.nix
     ];
