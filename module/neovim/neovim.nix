@@ -8,7 +8,7 @@ let
   plugins = pkgs.callPackage ./plugin.nix { };
   myneovim = unstable.neovim.override {
     configure = {
-      packages.myVimPackage = with pkgs.vimPlugins; {
+      packages.myVimPackage = with unstable.pkgs.vimPlugins; {
         start = [
           nvim-lspconfig
           nvim-tree-lua
@@ -21,7 +21,7 @@ let
           nvim-web-devicons
           nvim-colorizer-lua
           lualine-nvim
-          nvim-bufferline-lua
+          bufferline-nvim
           plugins.tokyonight
         ];
         opt = [
