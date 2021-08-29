@@ -10,19 +10,25 @@ let
     configure = {
       packages.myVimPackage = with unstable.pkgs.vimPlugins; {
         start = [
+          bufferline-nvim
+          cmp-buffer
+          cmp-nvim-lsp
+          cmp-nvim-lua
+          cmp-path
+          cmp_luasnip
+          lspsaga-nvim
+          lualine-nvim
+          luasnip
+          nvim-cmp
+          nvim-colorizer-lua
           nvim-lspconfig
           nvim-tree-lua
           nvim-treesitter
-          popup-nvim
-          telescope-nvim
-          telescope-fzy-native-nvim
-          lspsaga-nvim
-          nvim-compe
           nvim-web-devicons
-          nvim-colorizer-lua
-          lualine-nvim
-          bufferline-nvim
           plugins.tokyonight
+          popup-nvim
+          telescope-fzy-native-nvim
+          telescope-nvim
         ];
         opt = [
           nvim-jdtls
