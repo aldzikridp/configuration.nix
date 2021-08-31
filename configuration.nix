@@ -39,6 +39,7 @@
     ranger
     ripgrep
     rsync
+    rclone
     rnix-lsp
     starship
     wget
