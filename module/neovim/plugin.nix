@@ -16,6 +16,34 @@ in
     dependencies = [ ];
   };
 
+  cmp-nvim-lsp = buildVimPlugin {
+    name = "cmp-nvim-lsp";
+    src = fetchgit {
+      url = "https://github.com/hrsh7th/cmp-nvim-lsp";
+      rev = "899f70af0786d4100fb29987b9ab03eac7eedd6a";
+      sha256 = "1gw478b77smkn3k42h2q3ddq2kcd7vm6mnmjmksvbsfv5xp9pln0";
+    };
+  };
+
+ cmp_luasnip = buildVimPlugin {
+    name = "cmp_luasnip";
+    src = fetchgit {
+      url = "https://github.com/saadparwaiz1/cmp_luasnip/";
+      rev = "fc033ce441b29f1755fd2314125772d21e5c5127";
+      sha256 = "1np6x7wybh7w1m06h03sczv35a7ag3j37a8sk0yjcm95vysmwikd";
+    };
+  };
+
+  nvim-cmp = buildVimPlugin {
+    name = "nvim-cmp";
+    src = fetchgit {
+      url = "https://github.com/hrsh7th/nvim-cmp/";
+      rev = "f3a54918944d2c8778e6f13e2fc3ec4251863afb";
+      sha256 = "0zjmvpxx46dy1q7jg1a7r51nqc7wzqa8vjzd8ff8nphs0j5zlvfn";
+    };
+  };
+
+
   #"DyeVim" = buildVimPlugin {
   #  name = "DyeVim";
   #  src = fetchgit {
