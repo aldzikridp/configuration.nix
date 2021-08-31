@@ -1,5 +1,5 @@
 let
-    vpn = import ../../secrets/wg-id.nix;
+    vpn = import ../../secrets/wg-sg.nix;
 in
 
 {
