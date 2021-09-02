@@ -27,6 +27,7 @@ let
           nvim-web-devicons
           plugins.tokyonight
           popup-nvim
+          Shade-nvim
           telescope-fzy-native-nvim
           telescope-nvim
         ];

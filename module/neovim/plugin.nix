@@ -10,8 +10,8 @@ in
     name = "tokyonight";
     src = fetchgit {
       url = "https://github.com/folke/tokyonight.nvim";
-      rev = "0ee0bcf14d8c7c70081a0e9967c211121c4300c7";
-      sha256 = "0rkw544dzgyp76ag3zrh8d3n0mri5c0cjpy8mvbfpgyj87w18m8d";
+      rev = "eede574f9ef57137e6d7e4bab37b09db636c5a56";
+      sha256 = "06hhg5n8k9iri3mlgbf80hwz9qwjkvvl6x5f6kjih7klzcx6x04j";
     };
     dependencies = [ ];
   };
