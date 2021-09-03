@@ -16,7 +16,6 @@ let
           cmp-nvim-lua
           cmp-path
           cmp_luasnip
-          lspsaga-nvim
           lualine-nvim
           luasnip
           nvim-cmp
