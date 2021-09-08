@@ -41,7 +41,7 @@
   environment.systemPackages = with pkgs; [
     aria
     firefox-wayland
-    clang
+    gcc
     fd
     ffmpeg
     fzf
