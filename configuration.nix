@@ -53,6 +53,7 @@
     mpv
     p7zip
     ranger
+    rclone
     ripgrep
     rsync
     rnix-lsp
