@@ -10,10 +10,10 @@
         DEVICES_TO_DISABLE_ON_STARTUP="bluetooth";
     };
    # xserver.xkbModel = "thinkpad60";
+  };
    tcsd = {
        enable = true;
    };
-  };
 };
 
   boot = {
