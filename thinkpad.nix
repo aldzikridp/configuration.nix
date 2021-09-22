@@ -10,6 +10,9 @@
         DEVICES_TO_DISABLE_ON_STARTUP="bluetooth";
     };
    # xserver.xkbModel = "thinkpad60";
+   tcsd = {
+       enable = true;
+   };
   };
 };
 
@@ -27,6 +30,9 @@
   nixpkgs.config.packageOverrides = pkgs: {
     vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
+  environment.systemPackages = with pkgs; [
+    trousers
+  ];
 
   hardware.opengl = {
     enable = true;
