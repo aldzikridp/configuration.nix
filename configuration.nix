@@ -22,6 +22,8 @@
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
+      ./module/neomutt/neomutt.nix
+      ./module/pass/pass.nix
       ./module/neovim/neovim.nix
       ./module/sway/sway.nix
     ];
