@@ -15,6 +15,7 @@ in
           allowedIPs = [ "0.0.0.0/0" "::/0" ];
           endpoint = vpn.endpoint;
           persistentKeepalive = 25;
+          presharedKey = vpn.presharedKey;
         }
       ];
     };
