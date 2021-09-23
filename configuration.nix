@@ -7,6 +7,8 @@
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
+      ./module/neomutt/neomutt.nix
+      ./module/pass/pass.nix
       ./module/neovim/neovim.nix
       ./module/sway/sway.nix
       ./thinkpad.nix
@@ -30,26 +32,29 @@
     ffmpeg
     fzf
     git
-    gnupg
     htop
     imagemagick
     keepassxc
     mpv
     p7zip
     ranger
+    rclone
     ripgrep
     rsync
     rclone
     rnix-lsp
     starship
+    steam-run-native
     wget
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   # programs.zsh.enable = true;
-  programs.gnupg.agent.enable = true;
+   programs.gnupg.agent = {
+      enable = true;
+      pinentryFlavor = "gnome3";
+  };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
