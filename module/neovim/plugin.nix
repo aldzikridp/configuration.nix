@@ -3,7 +3,7 @@
 with vimUtils;
 
 let
-  buildVimPlugin = pkgs.vimUtils.buildVimPluginFrom2Nix;
+  buildVimPlugin = pkgs.vimUtils.buildVimPlugin;
 in
 {
   "tokyonight" = buildVimPlugin {
