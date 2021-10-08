@@ -1,21 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs.overlays = [
-    (self: super: {
-      firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: rec {
-        pname = "firmware-linux-nonfree";
-        version = "2021-03-15";
-        src = super.fetchgit {
-          url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-          rev = "refs/tags/" + super.lib.replaceStrings [ "-" ] [ "" ] version;
-          sha256 = "sha256-BnYqveVFJk/tVYgYuggXgYGcUCZT9iPkCQIi48FOTWc=";
-        };
-        outputHash = "sha256-TzAMGj7IDhzXcFhHAd15aZvAqyN+OKlJTkIhVGoTkIs=";
-      });
-    })
-  ];
-
   imports =
     [
       ./hardware-configuration.nix
@@ -60,6 +45,7 @@
     starship
     steam-run-native
     wget
+    qutebrowser
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
