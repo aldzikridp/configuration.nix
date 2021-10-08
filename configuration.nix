@@ -7,7 +7,6 @@
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
-      ./module/neomutt/neomutt.nix
       ./module/pass/pass.nix
       ./module/neovim/neovim.nix
       ./module/sway/sway.nix
@@ -46,6 +45,7 @@
     starship
     steam-run-native
     wget
+    qutebrowser
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
