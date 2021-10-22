@@ -34,7 +34,7 @@ let
           nvim-lspconfig
           nvim-tree-lua
           nvim-web-devicons
-          telescope-fzy-native-nvim
+          telescope-fzf-native-nvim
           telescope-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
