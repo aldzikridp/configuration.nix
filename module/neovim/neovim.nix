@@ -2,7 +2,7 @@
 with import <nixpkgs> { };
 let
   unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/archive/39f0cfdd12119d991225c6ab2d7e4483d67cf0a3.tar.gz)
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz)
     # reuse the current configuration
     { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
