@@ -2,6 +2,6 @@
 
 {
   environment.systemPackages = with pkgs; [
-      (pass.withExtensions (ext: with ext; [ pass-import ]))
-    ];
+    (pass.withExtensions (ext: with ext; [ pass-import ]))
+  ];
 }

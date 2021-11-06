@@ -4,7 +4,7 @@
   security.polkit.enable = true;
   environment.pathsToLink = [ "/libexec" ];
   programs.sway = {
-      enable = true;
+    enable = true;
     wrapperFeatures.gtk = true; # so that gtk works properly
     extraPackages = with pkgs; [
       swaylock

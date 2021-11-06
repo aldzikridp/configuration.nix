@@ -1,4 +1,4 @@
-{ config, ...}:
+{ config, ... }:
 {
   # Enable dnscrypt client
   services.dnscrypt-proxy2 = {

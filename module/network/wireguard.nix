@@ -1,5 +1,5 @@
 let
-    vpn = import ../../secrets/wg-sg.nix;
+  vpn = import ../../secrets/wg-sg.nix;
 in
 
 {
@@ -8,7 +8,7 @@ in
       address = vpn.clientip;
       privateKey = vpn.privateKey;
       dns = [ "1.1.1.1" ];
-      
+
       peers = [
         {
           publicKey = vpn.publicKey;

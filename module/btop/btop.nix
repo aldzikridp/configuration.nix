@@ -5,9 +5,9 @@ let
     (builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz)
     # reuse the current configuration
     { config = config.nixpkgs.config; };
-in 
+in
 {
-    environment.systemPackages = with pkgs; [
-        unstable.btop
-    ];
+  environment.systemPackages = with pkgs; [
+    unstable.btop
+  ];
 }

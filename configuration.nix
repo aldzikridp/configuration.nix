@@ -51,9 +51,9 @@
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.zsh.enable = true;
-   programs.gnupg.agent = {
-      enable = true;
-      pinentryFlavor = "gnome3";
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryFlavor = "gnome3";
   };
 
   #Games

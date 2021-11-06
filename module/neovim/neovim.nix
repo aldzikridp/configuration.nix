@@ -38,7 +38,7 @@ let
           telescope-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
-              plugins: unstable.pkgs.tree-sitter.allGrammars
+            plugins: unstable.pkgs.tree-sitter.allGrammars
           ))
         ];
         opt = [
@@ -50,6 +50,6 @@ let
 in
 {
   environment.systemPackages = with pkgs; [
-   myneovim
+    myneovim
   ];
 }
