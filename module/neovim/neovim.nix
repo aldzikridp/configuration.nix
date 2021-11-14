@@ -29,10 +29,15 @@ let
           friendly-snippets
           lualine-nvim
           luasnip
+          indent-blankline-nvim
+          null-ls-nvim
           nvim-cmp
           nvim-colorizer-lua
           nvim-lspconfig
+          nvim-lsp-ts-utils
           nvim-tree-lua
+          nvim-treesitter-refactor
+          nvim-treesitter-textobjects
           nvim-web-devicons
           telescope-fzf-native-nvim
           telescope-nvim
