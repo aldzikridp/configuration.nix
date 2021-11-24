@@ -11,6 +11,7 @@
       ./module/btop/btop.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
+      ./module/fonts/fonts.nix
     ];
 
 
