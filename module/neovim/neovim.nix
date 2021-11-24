@@ -2,7 +2,7 @@
 with import <nixpkgs> { };
 let
   unstable = import
-    (builtins.fetchTarball https://github.com/nixos/nixpkgs/archive/39f0cfdd12119d991225c6ab2d7e4483d67cf0a3.tar.gz)
+    (builtins.fetchTarball https://github.com/nixos/nixpkgs/archive/nixos-unstable.tar.gz)
     # reuse the current configuration
     { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
@@ -29,16 +29,21 @@ let
           friendly-snippets
           lualine-nvim
           luasnip
+          indent-blankline-nvim
+          null-ls-nvim
           nvim-cmp
           nvim-colorizer-lua
           nvim-lspconfig
+          nvim-lsp-ts-utils
           nvim-tree-lua
+          nvim-treesitter-refactor
+          nvim-treesitter-textobjects
           nvim-web-devicons
           telescope-fzf-native-nvim
           telescope-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
-              plugins: unstable.pkgs.tree-sitter.allGrammars
+            plugins: unstable.pkgs.tree-sitter.allGrammars
           ))
         ];
         opt = [
@@ -50,6 +55,6 @@ let
 in
 {
   environment.systemPackages = with pkgs; [
-   myneovim
+    myneovim
   ];
 }

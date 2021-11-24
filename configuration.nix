@@ -25,7 +25,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    aria
     gcc
     fd
     ffmpeg
@@ -44,16 +43,16 @@
     rnix-lsp
     starship
     steam-run-native
-    wget
+    wget2
     qutebrowser
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.zsh.enable = true;
-   programs.gnupg.agent = {
-      enable = true;
-      pinentryFlavor = "gnome3";
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryFlavor = "gnome3";
   };
 
   # Enable the OpenSSH daemon.
@@ -68,9 +67,11 @@
 
   hardware.opengl = {
     enable = true;
+    driSupport = true;
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
+      amdvlk
     ];
   };
 
