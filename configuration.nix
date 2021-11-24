@@ -71,7 +71,6 @@
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
-      amdvlk
     ];
   };
 
