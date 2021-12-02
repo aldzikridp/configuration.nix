@@ -32,6 +32,7 @@
     ffmpeg
     fzf
     git
+    gitui
     htop
     imagemagick
     keepassxc
