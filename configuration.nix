@@ -36,8 +36,6 @@
     htop
     imagemagick
     keepassxc
-    mpv
-    p7zip
     ranger
     rclone
     ripgrep
@@ -47,6 +45,12 @@
     steam-run-native
     wget2
     qutebrowser
+    transmission
+    unrar
+    unzip
+    zip
+    killall
+    gnumake
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
