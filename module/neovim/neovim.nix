@@ -18,6 +18,9 @@ let
   #};
   myneovim = unstable.neovim.override {
     configure = {
+      customRC = ''
+        source /home/master-x/.config/nvim/init.lua
+      '';
       packages.myVimPackage = with unstable.pkgs.vimPlugins; {
         start = [
           bufferline-nvim
