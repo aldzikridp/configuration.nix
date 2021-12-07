@@ -30,5 +30,6 @@
     wf-recorder
     slurp
     zathura
+    gnome.adwaita-icon-theme
   ];
 }

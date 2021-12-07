@@ -9,5 +9,6 @@ in
 {
   environment.systemPackages = with pkgs; [
     unstable.yt-dlp
+    mpv
   ];
 }
