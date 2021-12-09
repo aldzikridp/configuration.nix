@@ -47,7 +47,6 @@
     wget2
     qutebrowser
     transmission
-    unrar
     unzip
     zip
     killall
