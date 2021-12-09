@@ -47,7 +47,6 @@
     wget2
     qutebrowser
     transmission
-    unrar
     unzip
     zip
     killall
@@ -63,8 +62,8 @@
   };
 
   #Games
-  nixpkgs.config.allowUnfree = true;
-  programs.steam.enable = true;
+  #nixpkgs.config.allowUnfree = true;
+  #programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
