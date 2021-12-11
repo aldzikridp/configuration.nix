@@ -28,19 +28,19 @@ let
 
     inherit (cfg) consoleMode;
 
+    inherit (cfg.secureBoot) keyPath certPath;
+
+    secureBootEnable = cfg.secureBoot.enable;
+
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
     memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
-
-    inherit (cfg) signed;
-    signingKey = if cfg.signed then cfg.signing-key else "/no-signing-key";
-    signingCertificate =
-      if cfg.signed then cfg.signing-certificate else "/no-signing-crt";
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
-  } ''
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot"
+    {
+      nativeBuildInputs = [ pkgs.mypy ];
+    } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
       --no-implicit-optional \
@@ -48,14 +48,14 @@ let
       --disallow-untyped-defs \
       $out
   '';
-in {
-  disabledModules = [ "system/boot/loader/systemd-boot/systemd-boot.nix" ];
+in
+{
 
-  # disabledModules doesn't remove imports, so comment it out here.
-  #
-  #  imports =
-  #    [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
-  #    ];
+  disabledModules = [ "system/boot/loader/systemd-boot/systemd-boot.nix" ];
+  imports =
+    [
+      (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+    ];
 
   options.boot.loader.systemd-boot = {
     enable = mkOption {
@@ -64,38 +64,6 @@ in {
       type = types.bool;
 
       description = "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
-    };
-
-    signed = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Whether or not the bootloader files, including systemd-boot
-        EFI programs should be signed.
-      '';
-    };
-
-    signing-key = mkOption {
-      type = types.path;
-      example = "/root/secure-boot/db.key";
-      description = ''
-        The <literal>db.key</literal> signing key, for signing EFI
-        programs. Note: Do not pass a store path. Passing the key like
-        <literal>signing-key = ./db.key;</literal> will copy the
-        private key in to the Nix store and make it world-readable.
-
-        Instead, pass the path as an absolute path string, like:
-        <literal>signing-key = "/root/secure-boot/db.key";</literal>.
-      '';
-    };
-
-    signing-certificate = mkOption {
-      type = types.path;
-      example = "/root/secure-boot/db.crt";
-      description = ''
-        The <literal>db.crt</literal> signing certificate, for signing
-        EFI programs. Note: certificate files are not private.
-      '';
     };
 
     editor = mkOption {
@@ -119,7 +87,6 @@ in {
       description = ''
         Maximum number of latest generations in the boot menu.
         Useful to prevent boot partition running out of disk space.
-
         <literal>null</literal> means no limit i.e. all generations
         that were not garbage collected yet.
       '';
@@ -132,7 +99,6 @@ in {
 
       description = ''
         The resolution of the console. The following values are valid:
-
         <itemizedlist>
           <listitem><para>
             <literal>"0"</literal>: Standard UEFI 80x25 mode
@@ -168,10 +134,46 @@ in {
         '';
       };
     };
+
+    secureBoot = {
+      enable = mkOption {
+        default = false;
+
+        type = types.bool;
+
+        description = "Whether to enable secureboot for systemd-boot";
+      };
+
+      keyPath = mkOption {
+        default = null;
+
+        type = types.nullOr types.str;
+
+        description = "Path to the secureboot signing key";
+      };
+
+      certPath = mkOption {
+        default = null;
+
+        type = types.nullOr types.str;
+
+        description = "Path to the secureboot signing certificate";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
     assertions = [
+      {
+        assertion = !(cfg.secureBoot.enable && isNull cfg.secureBoot.keyPath);
+
+        message = "The secureboot signing key must be provided";
+      }
+      {
+        assertion = !(cfg.secureBoot.enable && isNull cfg.secureBoot.certPath);
+
+        message = "The secureboot signing certificate must be provided";
+      }
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
 

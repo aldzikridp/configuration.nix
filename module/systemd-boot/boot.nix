@@ -10,14 +10,17 @@ in
   boot = {
     cleanTmpDir = true;
     loader = {
+      timeout = 2;
       systemd-boot = {
         enable = true;
-        signed = true;
-        signing-key = secrets.secure-boot.key;
-        signing-certificate = secrets.secure-boot.cert;
         configurationLimit = 4;
+        secureBoot = {
+          enable = true;
+          keyPath = secrets.secure-boot.key;
+          certPath = secrets.secure-boot.cert;
+        };
       };
-      efi.canTouchEfiVariables = true;
+      #efi.canTouchEfiVariables = true;
     };
     #supportedFilesystems = [ "ntfs" ];
   };
