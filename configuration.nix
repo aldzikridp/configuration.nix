@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -63,7 +63,12 @@
 
   #Games
   #nixpkgs.config.allowUnfree = true;
-  #programs.steam.enable = true;
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-original"
+    "steam-runtime"
+  ];
+  programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
