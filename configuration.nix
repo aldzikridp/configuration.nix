@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -60,6 +60,16 @@
     enable = true;
     pinentryFlavor = "gnome3";
   };
+
+  #Games
+  #nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+  #  "steam"
+  #  "steam-original"
+  #  "steam-runtime"
+  #];
+  #programs.steam.enable = true;
+
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
