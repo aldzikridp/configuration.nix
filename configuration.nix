@@ -8,7 +8,6 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/neovim/neovim.nix
-      ./module/btop/btop.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
@@ -28,6 +27,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    btop
     gcc
     fd
     ffmpeg
