@@ -12,6 +12,7 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python/python-package.nix
+      ./module/librewolf/librewolf.nix
     ];
 
 
