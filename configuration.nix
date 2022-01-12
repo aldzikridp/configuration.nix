@@ -46,7 +46,6 @@
     starship
     steam-run-native
     wget2
-    qutebrowser
     transmission
     unzip
     zip
