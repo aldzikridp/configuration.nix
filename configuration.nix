@@ -12,6 +12,7 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python/python-package.nix
+      ./module/librewolf/librewolf.nix
       ./thinkpad.nix
     ];
 
@@ -27,6 +28,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     btop
+    claws-mail
     gcc
     fd
     ffmpeg
@@ -45,7 +47,6 @@
     starship
     steam-run-native
     wget2
-    qutebrowser
     transmission
     unzip
     zip
