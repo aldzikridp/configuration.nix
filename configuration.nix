@@ -7,6 +7,7 @@
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
+      ./module/network/dnsmasq-adblock
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
