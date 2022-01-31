@@ -24,9 +24,11 @@ in {
     resolveLocalQueries = false;
     extraConfig = ''
       conf-file="${adblockhost}"
+      conf-file="${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf"
       cache-size=1000
       domain-needed
       bogus-priv
+      dnssec
     '';
   };
 }
