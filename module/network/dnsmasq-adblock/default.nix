@@ -28,7 +28,6 @@ in {
       cache-size=1000
       domain-needed
       bogus-priv
-      dnssec
     '';
   };
 }
