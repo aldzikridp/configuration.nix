@@ -1,3 +1,11 @@
+#########################################
+#              WARNING                  #
+#########################################
+# Privoxy is less efficient than uBlock
+# and reauire much more cpu than
+# browser + ublock itself
+# consider just using ublock
+
 { pkgs, ... }:
 let
   curlCA = (builtins.fetchurl {
