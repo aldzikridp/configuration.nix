@@ -8,7 +8,6 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
-      ./module/network/dnsmasq-adblock/privoxy.nix
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
