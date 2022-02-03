@@ -2,18 +2,18 @@
 let
   adblockhost = pkgs.stdenv.mkDerivation {
     name = "adblockhost";
-    host1 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt";
-    });
-    host2 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts";
-    });
+    host1 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt"; });
+    host2 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"; });
+    host3 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Extension/GoodbyeAds-YouTube-AdBlock.txt"; });
+    host4 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Hosts/GoodbyeAds.txt"; });
+    host5 = (builtins.fetchurl { url = "https://block.energized.pro/ultimate/formats/hosts.txt"; });
+    host6 = (builtins.fetchurl { url = "https://block.energized.pro/assets/sources/filter/abpindo.txt"; });
 
    phases = [ "installPhase" ];
    
    # Minify host file
    installPhase = ''
-     ${pkgs.gawk}/bin/awk '!a[$2]++ { if ($1 == "0.0.0.0") { print "address=/"$2"/0.0.0.0/" }}' $host1 $host2 > $out
+     ${pkgs.gawk}/bin/awk '!a[$2]++ { if ($1 == "0.0.0.0") { print "address=/"$2"/0.0.0.0/" }}' $host1 $host2 $host3 $host4 $host5 $host6 > $out
    '';
   };
 
