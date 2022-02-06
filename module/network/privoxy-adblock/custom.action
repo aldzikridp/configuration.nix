@@ -1,0 +1,35 @@
+{+block{Layered ads.} +handle-as-empty-document}
+.realsrv.com/.*\.js$
+.exosrv.com/.*\.js$
+.google-analytics.com/.*\.js$
+
+{+block{Banner} +set-image-blocker{blank} +handle-as-image}
+.torrindex.net/images/epv
+.gambar123.com/ads
+.gambar123.com/xf
+s1.indexmovies.xyz/assets
+redditstatic.com/desktop2x/img/renderTimingPixel
+
+{+filter{hitomila}}
+.hitomi.la
+
+{+filter{semprot}}
+.semprot.com
+
+{+filter{youtube}}
+.youtube.com
+
+{+filter{nhentai google-analytics}}
+.nhentai.net
+
+{+filter{kimcartoon}}
+.kimcartoon.li
+
+{+filter{reddit}}
+.reddit.com
+
+{+filter{rule34}}
+.rule34.xxx
+
+{+filter{detik}}
+.detik.com
