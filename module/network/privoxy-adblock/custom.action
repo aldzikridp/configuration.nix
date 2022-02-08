@@ -1,7 +1,9 @@
 {+block{Layered ads.} +handle-as-empty-document}
 .realsrv.com/.*\.js$
 .exosrv.com/.*\.js$
+.googletagmanager.com/.*\.js$
 .google-analytics.com/.*\.js$
+.a.adtng.com
 
 {+block{Banner} +set-image-blocker{blank} +handle-as-image}
 .torrindex.net/images/epv
@@ -19,7 +21,7 @@ redditstatic.com/desktop2x/img/renderTimingPixel
 {+filter{youtube}}
 .youtube.com
 
-{+filter{nhentai google-analytics}}
+{+filter{nhentai analytics}}
 .nhentai.net
 
 {+filter{kimcartoon}}
@@ -33,3 +35,9 @@ redditstatic.com/desktop2x/img/renderTimingPixel
 
 {+filter{detik}}
 .detik.com
+
+{+filter{analytics}}
+.tempo.co
+
+{+filter{suara}}
+.suara.com

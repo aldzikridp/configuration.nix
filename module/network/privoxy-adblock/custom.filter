@@ -1,5 +1,12 @@
-FILTER: google-analytics
-s/(<script.*)www.google-analytics.com.*(.*<\/script>)//Usig
+FILTER: analytics
+s|<script.*google-analytics.*</script>||Usig
+s|<script.*googletagmanager.*</script>||Usig
+s|<script.*g\.doubleclick\.net\.*</script>||Usig
+s|<script.*connect/.facebook/.net.*</script>||Usig
+s|(<script.*)google-analytics(?=.*</script>)||sigU
+s|(<script.*)googletagmanager(?=.*</script>)||sigU
+s|(<script.*)g\.doubleclick\.net(?=.*</script>)||sigU
+s|<script async=['"]['"] src="https://www.google-analytics.com/analytics.js"></script>||sigU
 
 FILTER: hitomila
 s/(<script.*)ad_.*(.*<\/script>)//Usig
@@ -12,7 +19,7 @@ s/(<script.*)yefbmjqdjkpr.*(.*<\/script>)//Usig
 s/(<script.*)groundsstationeryglare.*(.*<\/script>)//Usig
 
 FILTER: semprot
-s/(<img.*)gambar123.com.*>//ig
+s/(<img.*)gambar123.com.*(>)//ig
 s/<link.*gambar123.com.*>//ig
 s/(<a.*)rel="external nofollow noopener".*(.*<\/a>)//ig
 
@@ -20,9 +27,8 @@ FILTER: youtube
 s/<ytd-display-ad-renderer.*//sig
 
 FILTER: nhentai
-s/.*advertisement advt.*//sig
-s/.*window._n_app.*//ig
-s/<section\s+class\s*=\s*['"].*advertisement.*<\/section>//sig
+s|<section class="container advertisement advt">.*</section>||sig
+s|<script>.*show_popunders\s*:\s*true.*</section>||sig
 
 FILTER: thepiratebay
 s/(<img.*)images\/epv.*//sig
@@ -39,5 +45,10 @@ FILTER: reddit
 s/<div*promotedlink\s*['"]*//sig
 
 FILTER: rule34
-s/<div\sclass\s*=\s*['"]sidebarRight['"].*<\/div>//sig
+s/<div\s+class\s*=\s*['"]sidebarRight['"].*<\/div>//sig
 s/<span\s+data-nosnippet\s*=['"]//sig
+
+FILTER: suara
+s|<div\s+id\s*=\s*"adds-top".*</div>||Usig
+s|<div\s+id\s*=\s*"parallax_swipe".*</div>||sig
+s|<i\s+id\s*=\s*"close-adds-top".*</i>||Usig
