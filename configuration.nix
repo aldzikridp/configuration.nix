@@ -13,6 +13,7 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python/python-package.nix
+      ./module/Rlang
       ./module/librewolf/librewolf.nix
       ./thinkpad.nix
     ];
