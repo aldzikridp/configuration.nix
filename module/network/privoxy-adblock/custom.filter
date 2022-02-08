@@ -3,6 +3,10 @@ s|<script.*google-analytics.*</script>||Usig
 s|<script.*googletagmanager.*</script>||Usig
 s|<script.*g\.doubleclick\.net\.*</script>||Usig
 s|<script.*connect/.facebook/.net.*</script>||Usig
+s|(<script.*)google-analytics(?=.*</script>)||sigU
+s|(<script.*)googletagmanager(?=.*</script>)||sigU
+s|(<script.*)g\.doubleclick\.net(?=.*</script>)||sigU
+s|<script async=['"]['"] src="https://www.google-analytics.com/analytics.js"></script>||sigU
 
 FILTER: hitomila
 s/(<script.*)ad_.*(.*<\/script>)//Usig
@@ -24,6 +28,7 @@ s/<ytd-display-ad-renderer.*//sig
 
 FILTER: nhentai
 s|<section class="container advertisement advt">.*</section>||sig
+s|<script>.*show_popunders\s*:\s*true.*</section>||sig
 
 FILTER: thepiratebay
 s/(<img.*)images\/epv.*//sig

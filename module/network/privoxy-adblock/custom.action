@@ -3,6 +3,7 @@
 .exosrv.com/.*\.js$
 .googletagmanager.com/.*\.js$
 .google-analytics.com/.*\.js$
+.a.adtng.com
 
 {+block{Banner} +set-image-blocker{blank} +handle-as-image}
 .torrindex.net/images/epv
