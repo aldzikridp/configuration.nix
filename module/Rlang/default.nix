@@ -1,9 +1,12 @@
 { pkgs, ... }:
+with pkgs;
 let
-  myrstudio = with pkgs; rstudioWrapper.override{ packages = with rPackages; [ ggplot2 dplyr xts ]; };
+  myRStudio = rstudioWrapper.override{ packages = with rPackages; [ ggplot2 dplyr xts ]; };
+  myRPackage = rWrapper.override{ packages = with rPackages; [ ggplot2 dplyr xts languageserver ]; };
 in
 {
   environment.systemPackages = with pkgs; [
-    myrstudio
+    myRStudio
+    myRPackage
   ];
 }

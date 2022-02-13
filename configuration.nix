@@ -8,11 +8,13 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
+      ./module/network/privoxy-adblock
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python/python-package.nix
+      ./module/Rlang
       ./module/librewolf/librewolf.nix
     ];
 
