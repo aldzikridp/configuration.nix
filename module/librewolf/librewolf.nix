@@ -1,8 +1,7 @@
 { config, pkgs, ... }:
 with import <nixpkgs> { };
 let
-  unstable = import
-    (builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/master.tar.gz){};
+  unstable = import <nixpkgs-unstable> {};
 in
 {
   environment.systemPackages = with pkgs; [
