@@ -12,7 +12,7 @@
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
-      ./module/python/python-package.nix
+      ./module/python
       ./module/Rlang
       ./module/librewolf/librewolf.nix
       ./thinkpad.nix
