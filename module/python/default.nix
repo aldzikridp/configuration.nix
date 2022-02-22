@@ -11,6 +11,7 @@ let
       numpy
       scipy
       matplotlib
+      pandas
     ]);
   };
 

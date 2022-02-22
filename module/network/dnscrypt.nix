@@ -16,7 +16,15 @@
         cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
         minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
       };
-      server_names = [ "wevpn-singapore" ];
+      server_names = [
+        "wevpn-singapore"
+        "moulticast-sg-ipv4"
+        "dnscrypt-sg-blahdns-ipv4"
+        "dnswarden-asia-uncensor-dcv4"
+        "id-gmail"
+        "saldnssg01-conoha-ipv4"
+        "sgp-dn53"
+      ];
     };
   };
 }
