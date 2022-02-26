@@ -70,6 +70,7 @@
     "steam"
     "steam-original"
     "steam-runtime"
+    "corefonts"
   ];
   programs.steam.enable = true;
 
