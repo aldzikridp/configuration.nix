@@ -11,7 +11,7 @@ let
    
    # Minify host file
    installPhase = ''
-     ${pkgs.gawk}/bin/awk '$1 == "0.0.0.0" { if (!a[$2]++) { print "address=/"$2"/0.0.0.0"}}' $custom $host1 $host2 $host3 > $out
+     ${pkgs.gawk}/bin/awk '$1 == "0.0.0.0" { if (!a[$2]++) { print "address=/"$2"/#"}}' $custom $host1 $host2 $host3 > $out
    '';
   };
 
