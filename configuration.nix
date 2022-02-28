@@ -51,6 +51,8 @@
     wget2
     transmission
     unzip
+    dnsutils
+    inetutils
     zip
     killall
     gnumake
