@@ -52,7 +52,6 @@
     transmission
     unzip
     dnsutils
-    inetutils
     zip
     killall
     gnumake
