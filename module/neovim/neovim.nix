@@ -35,7 +35,7 @@ let
           indent-blankline-nvim
           null-ls-nvim
           nvim-cmp
-          nvim-colorizer-lua
+          #nvim-colorizer-lua
           nvim-lspconfig
           nvim-lsp-ts-utils
           nvim-tree-lua
@@ -49,9 +49,9 @@ let
             plugins: unstable.pkgs.tree-sitter.allGrammars
           ))
         ];
-        opt = [
-          nvim-jdtls
-        ];
+        #opt = [
+        #  nvim-jdtls
+        #];
       };
     };
   };

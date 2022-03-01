@@ -51,6 +51,7 @@
     wget2
     transmission
     unzip
+    dnsutils
     zip
     killall
     gnumake
@@ -66,12 +67,13 @@
 
   #Games
   #nixpkgs.config.allowUnfree = true;
-  #nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-  #  "steam"
-  #  "steam-original"
-  #  "steam-runtime"
-  #];
-  #programs.steam.enable = true;
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "steam"
+    "steam-original"
+    "steam-runtime"
+    "corefonts"
+  ];
+  programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
