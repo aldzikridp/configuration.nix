@@ -4,14 +4,15 @@ let
     name = "adblockhost";
     custom = builtins.toFile"customhost"(builtins.readFile ./customblock);
     host1 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt"; });
-    host2 = (builtins.fetchurl { url = "https://block.energized.pro/ultimate/formats/hosts.txt"; });
-    host3 = (builtins.fetchurl { url = "https://block.energized.pro/assets/sources/filter/abpindo.txt"; });
+    host2 = (builtins.fetchurl { url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"; });
+    #host3 = (builtins.fetchurl { url = "https://block.energized.pro/assets/sources/filter/abpindo.txt"; });
+    #host4 = (builtins.fetchurl { url = "https://block.energized.pro/ultimate/formats/hosts.txt"; });
 
    phases = [ "installPhase" ];
    
    # Minify host file
    installPhase = ''
-     ${pkgs.gawk}/bin/awk '$1 == "0.0.0.0" { if (!a[$2]++) { print "address=/"$2"/#"}}' $custom $host1 $host2 $host3 > $out
+     ${pkgs.gawk}/bin/awk '$1 == "0.0.0.0" { if (!a[$2]++) { print "address=/"$2"/#"}}' $custom $host1 $host2 > $out
    '';
   };
 
