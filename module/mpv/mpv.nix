@@ -8,7 +8,6 @@ let
     scripts = [
       thumbnail
       mpv-playlistmanager
-      sponsorblock
     ]; };
 in
 {
