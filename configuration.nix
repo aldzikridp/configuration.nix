@@ -31,7 +31,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     btop
-    claws-mail
     gcc
     fd
     ffmpeg

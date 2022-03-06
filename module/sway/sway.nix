@@ -30,6 +30,7 @@
     wf-recorder
     slurp
     zathura
+    claws-mail
     gnome.adwaita-icon-theme
   ];
 }
