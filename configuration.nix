@@ -13,7 +13,6 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python
-      ./module/Rlang
       ./module/librewolf/librewolf.nix
     ];
 
@@ -40,6 +39,7 @@
     htop
     imagemagick
     keepassxc
+    neovim-remote
     ranger
     rclone
     ripgrep
