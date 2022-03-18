@@ -13,7 +13,6 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python
-      ./module/Rlang
       ./module/librewolf/librewolf.nix
       ./thinkpad.nix
     ];
@@ -30,7 +29,6 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     btop
-    claws-mail
     gcc
     fd
     ffmpeg
@@ -40,6 +38,7 @@
     htop
     imagemagick
     keepassxc
+    neovim-remote
     ranger
     rclone
     ripgrep

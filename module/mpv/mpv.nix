@@ -4,7 +4,11 @@ let
   unstable = import <nixpkgs-unstable>
     # reuse the current configuration
     { config = config.nixpkgs.config; };
-  mympv = mpv-with-scripts.override { scripts = [ mpvScripts.thumbnail ]; };
+  mympv = with mpvScripts; mpv-with-scripts.override {
+    scripts = [
+      thumbnail
+      mpv-playlistmanager
+    ]; };
 in
 {
   environment.systemPackages = with pkgs; [
