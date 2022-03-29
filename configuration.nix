@@ -48,12 +48,19 @@
     starship
     steam-run-native
     wget2
+    texlab
+    texlive.combined.scheme-full
     transmission
     unzip
     dnsutils
     zip
     killall
     gnumake
+    (ncmpcpp.override {
+      visualizerSupport = true;
+    })
+    mpc_cli
+    mpd
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
