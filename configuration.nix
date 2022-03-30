@@ -37,7 +37,8 @@
     htop
     imagemagick
     keepassxc
-    neovim-remote
+    ncdu
+    whois
     ranger
     rclone
     ripgrep
