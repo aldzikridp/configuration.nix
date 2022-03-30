@@ -8,6 +8,7 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
+      ./module/virtualisation
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
@@ -19,9 +20,6 @@
 
 
   services.earlyoom.enable = true;
-
-  # Enable docker service
-  virtualisation.docker.enable = true;
 
   # Set your time zone.
   time.timeZone = "Asia/Jakarta";
