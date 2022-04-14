@@ -13,7 +13,6 @@
       grim
       mako
       kitty
-      wofi
       waybar
       xwayland
     ];
