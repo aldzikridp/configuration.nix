@@ -34,6 +34,7 @@ let
         start = [
           bufferline-nvim
           cmp-buffer
+          cmp-cmdline
           cmp-nvim-lsp
           cmp-nvim-lua
           cmp-path
