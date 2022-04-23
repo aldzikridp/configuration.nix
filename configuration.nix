@@ -61,6 +61,7 @@
     })
     mpc_cli
     mpd
+    unrar-wrapper
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

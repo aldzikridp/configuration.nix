@@ -6,7 +6,6 @@ let
     { config = config.nixpkgs.config; };
   mympv = with mpvScripts; mpv-with-scripts.override {
     scripts = [
-      thumbnail
       mpv-playlistmanager
     ]; };
 in
