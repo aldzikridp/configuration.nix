@@ -8,6 +8,7 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
+      ./module/virtualisation
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
@@ -19,15 +20,13 @@
 
   services.earlyoom.enable = true;
 
-  # Enable docker service
-  virtualisation.docker.enable = true;
-
   # Set your time zone.
   time.timeZone = "Asia/Jakarta";
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bat
     btop
     gcc
     fd
@@ -38,7 +37,8 @@
     htop
     imagemagick
     keepassxc
-    neovim-remote
+    ncdu
+    whois
     ranger
     rclone
     ripgrep
@@ -48,12 +48,20 @@
     starship
     steam-run-native
     wget2
+    texlab
+    texlive.combined.scheme-full
     transmission
     unzip
     dnsutils
     zip
     killall
     gnumake
+    (ncmpcpp.override {
+      visualizerSupport = true;
+    })
+    mpc_cli
+    mpd
+    unrar-wrapper
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

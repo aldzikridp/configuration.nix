@@ -3,19 +3,29 @@ with import <nixpkgs> { };
 let
   unstable = import
     <nixpkgs-unstable>
+    #(builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/master.tar.gz)
     # reuse the current configuration
     { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
   buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
-  #"filetype-nvim" = buildVimPlugin {
-  #  name = "filetype-nvim";
-  #  src = fetchgit {
-  #    url = "https://github.com/nathom/filetype.nvim/";
-  #    rev = "c4d86b2748fda2c6bd6dfc47e75c727cf50afbb8";
-  #    sha256 = "14qx4bssifi29525i3g7ik0xaldj9d29d1cl439k2d4qxzn5zzmp";
-  #  };
-  #  dependencies = [ ];
-  #};
+  "fzf-lua" = buildVimPlugin {
+    name = "fzf-lua";
+    src = pkgs.fetchFromGitHub {
+      owner = "ibhagwan";
+      repo = "fzf-lua";
+      rev = "58320a257957e4083f866cc6458b04a72493df33";
+      sha256 = "02i4w8afdys5idm7fvxfp8fimbinp9nca9kyf3r90w2769an0q4j";
+    };
+  };
+  "filetype-nvim" = buildVimPlugin {
+    name = "filetype-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "nathom";
+      repo = "filetype.nvim";
+      rev = "25b5f7e5314d5e7739be726860253c67f7e513bf";
+      sha256 = "1qjzmcyq9dl4rqb8yijbqsk4d7vpchhj3268b0vnxbd547fc6cjj";
+    };
+  };
   myneovim = unstable.neovim.override {
     configure = {
       customRC = ''
@@ -25,11 +35,14 @@ let
         start = [
           bufferline-nvim
           cmp-buffer
+          cmp-cmdline
           cmp-nvim-lsp
           cmp-nvim-lua
           cmp-path
           cmp_luasnip
+          filetype-nvim
           friendly-snippets
+          fzf-lua
           lualine-nvim
           luasnip
           indent-blankline-nvim
@@ -42,8 +55,8 @@ let
           nvim-treesitter-refactor
           nvim-treesitter-textobjects
           nvim-web-devicons
-          telescope-fzf-native-nvim
-          telescope-nvim
+          #telescope-fzf-native-nvim
+          #telescope-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
             plugins: unstable.pkgs.tree-sitter.allGrammars
