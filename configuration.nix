@@ -31,7 +31,7 @@
     btop
     gcc
     fd
-    ffmpeg
+    ffmpeg-full
     fzf
     git
     gitui
