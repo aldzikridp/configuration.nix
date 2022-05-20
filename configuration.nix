@@ -14,7 +14,7 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python
-      ./module/librewolf/librewolf.nix
+      ./module/firefox
     ];
 
 
