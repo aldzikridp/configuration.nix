@@ -15,6 +15,7 @@
       ./module/fonts/fonts.nix
       ./module/python
       ./module/firefox
+      ./module/texlive
     ];
 
 
@@ -46,10 +47,8 @@
     rsync
     rnix-lsp
     starship
-    steam-run-native
+    #steam-run-native
     wget2
-    texlab
-    texlive.combined.scheme-full
     transmission
     unzip
     dnsutils
@@ -75,12 +74,12 @@
   #Games
   #nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "steam"
-    "steam-original"
-    "steam-runtime"
+    #"steam"
+    #"steam-original"
+    #"steam-runtime"
     "corefonts"
   ];
-  programs.steam.enable = true;
+  #programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
