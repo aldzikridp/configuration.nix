@@ -8,22 +8,13 @@ let
     { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
   buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
-  "fzf-lua" = buildVimPlugin {
-    name = "fzf-lua";
-    src = pkgs.fetchFromGitHub {
-      owner = "ibhagwan";
-      repo = "fzf-lua";
-      rev = "58320a257957e4083f866cc6458b04a72493df33";
-      sha256 = "02i4w8afdys5idm7fvxfp8fimbinp9nca9kyf3r90w2769an0q4j";
-    };
-  };
   "filetype-nvim" = buildVimPlugin {
     name = "filetype-nvim";
     src = pkgs.fetchFromGitHub {
       owner = "nathom";
       repo = "filetype.nvim";
-      rev = "25b5f7e5314d5e7739be726860253c67f7e513bf";
-      sha256 = "1qjzmcyq9dl4rqb8yijbqsk4d7vpchhj3268b0vnxbd547fc6cjj";
+      rev = "b522628a45a17d58fc0073ffd64f9dc9530a8027";
+      sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
     };
   };
   myneovim = unstable.neovim.override {
