@@ -7,16 +7,16 @@ let
     # reuse the current configuration
     { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
-  buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
-  "filetype-nvim" = buildVimPlugin {
-    name = "filetype-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "nathom";
-      repo = "filetype.nvim";
-      rev = "b522628a45a17d58fc0073ffd64f9dc9530a8027";
-      sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
-    };
-  };
+  #buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
+  #"filetype-nvim" = buildVimPlugin {
+  #  name = "filetype-nvim";
+  #  src = pkgs.fetchFromGitHub {
+  #    owner = "nathom";
+  #    repo = "filetype.nvim";
+  #    rev = "b522628a45a17d58fc0073ffd64f9dc9530a8027";
+  #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
+  #  };
+  #};
   myneovim = unstable.neovim.override {
     configure = {
       customRC = ''
@@ -31,7 +31,6 @@ let
           cmp-nvim-lua
           cmp-path
           cmp_luasnip
-          filetype-nvim
           friendly-snippets
           fzf-lua
           lualine-nvim
