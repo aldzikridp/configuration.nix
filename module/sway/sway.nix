@@ -28,8 +28,8 @@
     udiskie
     wf-recorder
     slurp
-    zathura
-    claws-mail
+    (zathura.override{useMupdf=true;})
+    thunderbird
     gnome.adwaita-icon-theme
   ];
 }
