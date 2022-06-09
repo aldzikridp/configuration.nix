@@ -21,7 +21,7 @@
 
   environment.systemPackages = with pkgs; [
     brightnessctl
-    imv
+    (imv.override{withWindowSystem="wayland";})
     jq
     pavucontrol
     polkit_gnome
