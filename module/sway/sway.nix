@@ -28,7 +28,7 @@
     udiskie
     wf-recorder
     slurp
-    (zathura.override{useMupdf=true;})
+    zathura
     thunderbird
     gnome.adwaita-icon-theme
   ];
