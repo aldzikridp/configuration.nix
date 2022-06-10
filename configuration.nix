@@ -99,9 +99,12 @@
     extraPackages = with pkgs; [
       vaapiVdpau
       libvdpau-va-gl
-      amdvlk
     ];
   };
+  hardware.opengl.package = (pkgs.mesa.overrideAttrs (oldAttrs: rec {
+        version = "22.1.1";
+        sha256 = "1w8fpki67238l4yc92hsnsh4402py9zspirbmirxp577zxjhi526";
+      })).drivers;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
