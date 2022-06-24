@@ -16,6 +16,7 @@
       ./module/python
       ./module/firefox
       ./module/texlive
+      ./module/endless-sky
     ];
 
 
@@ -75,12 +76,12 @@
   #Games
   #nixpkgs.config.allowUnfree = true;
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    #"steam"
-    #"steam-original"
-    #"steam-runtime"
+    "steam"
+    "steam-original"
+    "steam-runtime"
     "corefonts"
   ];
-  #programs.steam.enable = true;
+  programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
