@@ -1,6 +1,13 @@
 { config, pkgs, lib, ... }:
 
 {
+  nix = {
+    package = pkgs.nixFlakes; # or versioned attributes like nixVersions.nix_2_8
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+   };
+
   imports =
     [
       ./hardware-configuration.nix
@@ -15,8 +22,6 @@
       ./module/fonts/fonts.nix
       ./module/python
       ./module/firefox
-      ./module/texlive
-      ./module/endless-sky
     ];
 
 
@@ -63,6 +68,8 @@
     mpc_cli
     mpd
     unrar-wrapper
+    unstable.texlive.combined.scheme-full
+    unstable.texlab
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

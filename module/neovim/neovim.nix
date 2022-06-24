@@ -1,11 +1,5 @@
 { config, pkgs, ... }:
-with import <nixpkgs> { };
 let
-  unstable = import
-    <nixpkgs-unstable>
-    #(builtins.fetchTarball https://github.com/NixOS/nixpkgs/archive/master.tar.gz)
-    # reuse the current configuration
-    { config = config.nixpkgs.config; };
   #plugins = pkgs.callPackage ./plugin.nix { };
   #buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
   #"filetype-nvim" = buildVimPlugin {
@@ -17,12 +11,12 @@ let
   #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
   #  };
   #};
-  myneovim = unstable.neovim.override {
+  myneovim = pkgs.unstable.neovim.override {
     configure = {
       customRC = ''
         source /home/master-x/.config/nvim/init.lua
       '';
-      packages.myVimPackage = with unstable.pkgs.vimPlugins; {
+      packages.myVimPackage = with pkgs.unstable.pkgs.vimPlugins; {
         start = [
           bufferline-nvim
           cmp-buffer
@@ -49,7 +43,7 @@ let
           #telescope-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
-            plugins: unstable.pkgs.tree-sitter.allGrammars
+            plugins: pkgs.unstable.pkgs.tree-sitter.allGrammars
           ))
         ];
         #opt = [
