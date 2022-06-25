@@ -29,17 +29,9 @@
               nixpkgs.overlays = [
                 overlay-unstable
                 overlay-old
-                (self: super: {
-                  mesa = super.mesa.overrideAttrs (old: {
-                    version = "22.1.1";
-                    src = super.fetchurl {
-                      urls = [
-                        "https://mesa.freedesktop.org/archive/mesa-22.1.1.tar.xz"
-                      ];
-                      sha256 =  "1w8fpki67238l4yc92hsnsh4402py9zspirbmirxp577zxjhi526";
-                    };
-                  });
-                })
+                (self: super: { mesa = pkgs.old.mesa; })
+                (self: super: { wlroots = pkgs.old.wlroots; })
+                (self: super: { sway-unwrapped = pkgs.old.sway-unwrapped; })
               ];
             })
             ./configuration.nix
