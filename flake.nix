@@ -22,9 +22,10 @@
     in
     {
       nixosConfigurations = {
-        EVA-02 = nixpkgs.lib.nixosSystem {
+        EVA-01 = nixpkgs.lib.nixosSystem {
           system = system;
           modules = [
+            ({networking.hostName = "EVA-01";})
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [
                 overlay-unstable
@@ -35,6 +36,25 @@
               ];
             })
             ./configuration.nix
+            ./module/thinkpad.nix
+          ];
+          
+        };
+        EVA-02 = nixpkgs.lib.nixosSystem {
+          system = system;
+          modules = [
+            ({networking.hostName = "EVA-02";})
+            ({ config, pkgs, ... }: {
+              nixpkgs.overlays = [
+                overlay-unstable
+                overlay-old
+                (self: super: { mesa = pkgs.old.mesa; })
+                (self: super: { wlroots = pkgs.old.wlroots; })
+                (self: super: { sway-unwrapped = pkgs.old.sway-unwrapped; })
+              ];
+            })
+            ./configuration.nix
+            ./module/eva02-hardware-configuration.nix
           ];
         };
       };

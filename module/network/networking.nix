@@ -1,6 +1,5 @@
 { config, ... }:
 {
-  networking.hostName = "EVA-02"; # Define your hostname.
   networking.networkmanager.enable = true;
 
   # Firewall.

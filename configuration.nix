@@ -10,7 +10,6 @@
 
   imports =
     [
-      ./hardware-configuration.nix
       ./module/systemd-boot/boot.nix
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
