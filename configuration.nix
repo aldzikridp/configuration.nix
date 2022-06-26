@@ -111,10 +111,11 @@
   };
   #hardware.opengl.package = pkgs.old.mesa.drivers;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.master-x = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "video" "audio" "networkmanager" ];
+    #Generate hashed password with "mkpasswd -m sha-512"
+    hashedPassword = "$6$WoF9RxiLei5iC5zp$UyckvU7P3yhaptLOKyPohWkXNcfd7UuQEWif5jjyOVRcz7qiPv3B47ap4LV5OChS8QeV1xehzYJMk.mI7S2rf0";
   };
 
   # This value determines the NixOS release with which your system is to be
