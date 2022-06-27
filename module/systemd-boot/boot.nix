@@ -16,8 +16,8 @@ in
         configurationLimit = 4;
         secureBoot = {
           enable = true;
-          keyPath = secrets.secure-boot.key;
-          certPath = secrets.secure-boot.cert;
+          keyPath = "/home/master-x/configuration.nix/secrets/boot-key/DB.key";
+          certPath = "/home/master-x/configuration.nix/secrets/boot-key/DB.crt";
         };
       };
       #efi.canTouchEfiVariables = true;
