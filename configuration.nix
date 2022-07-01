@@ -55,7 +55,6 @@
     rnix-lsp
     starship
     #steam-run-native
-    wget2
     transmission
     unzip
     dnsutils
