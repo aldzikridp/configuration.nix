@@ -37,6 +37,7 @@
     bat
     btop
     gcc
+    chezmoi
     fd
     ffmpeg-full
     fzf
