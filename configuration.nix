@@ -60,6 +60,7 @@
     dnsutils
     zip
     killall
+    nix-serve
     gnumake
     (ncmpcpp.override {
       visualizerSupport = true;
