@@ -29,14 +29,11 @@
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [
                 overlay-unstable
-                overlay-old
-                (self: super: { mesa = pkgs.old.mesa; })
-                (self: super: { wlroots = pkgs.old.wlroots; })
-                (self: super: { sway-unwrapped = pkgs.old.sway-unwrapped; })
               ];
             })
             ./configuration.nix
             ./module/thinkpad.nix
+            ./module/eva01-hardware-configuration.nix
           ];
           
         };

@@ -16,11 +16,11 @@ in
         configurationLimit = 4;
         secureBoot = {
           enable = true;
-          keyPath = "/home/master-x/configuration.nix/secrets/boot-key/DB.key";
-          certPath = "/home/master-x/configuration.nix/secrets/boot-key/DB.crt";
+          keyPath = "/DB.key";
+          certPath = "/DB.crt";
         };
       };
-      #efi.canTouchEfiVariables = true;
+      efi.canTouchEfiVariables = true;
     };
     #supportedFilesystems = [ "ntfs" ];
   };
