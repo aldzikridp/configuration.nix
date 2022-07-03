@@ -31,6 +31,5 @@
     zathura
     thunderbird
     gnome.adwaita-icon-theme
-    unstable.endless-sky
   ];
 }
