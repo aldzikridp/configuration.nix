@@ -52,6 +52,7 @@
             })
             ./configuration.nix
             ./module/eva02-hardware-configuration.nix
+            ./module/games
           ];
         };
       };

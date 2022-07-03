@@ -88,7 +88,6 @@
     "steam-runtime"
     "corefonts"
   ];
-  programs.steam.enable = true;
 
 
   # Enable the OpenSSH daemon.
