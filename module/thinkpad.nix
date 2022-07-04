@@ -5,8 +5,8 @@
       enable = true;
       settings = {
         SATA_LINKPWR_ON_BAT="max_performance";
-        START_CHARGE_THRESH_BAT0=31;
-        STOP_CHARGE_THRESH_BAT0=81;
+        START_CHARGE_THRESH_BAT0=99;
+        STOP_CHARGE_THRESH_BAT0=100;
         DEVICES_TO_DISABLE_ON_STARTUP="bluetooth";
     };
    # xserver.xkbModel = "thinkpad60";
