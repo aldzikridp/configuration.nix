@@ -2,7 +2,7 @@
 {
   services = {
     tlp = {
-      enable = true;
+      enable = false;
       settings = {
         SATA_LINKPWR_ON_BAT="max_performance";
         START_CHARGE_THRESH_BAT0=99;
