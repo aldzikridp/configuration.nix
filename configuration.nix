@@ -43,7 +43,6 @@
     fzf
     git
     gitui
-    unstable.google-chrome
     htop
     imagemagick
     keepassxc
