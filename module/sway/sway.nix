@@ -15,6 +15,7 @@
       kitty
       waybar
       xwayland
+      wdisplays
     ];
   };
   nixpkgs.config.pulseaudio = true; #pulse support for waybar
