@@ -18,7 +18,7 @@
       wdisplays
     ];
   };
-  nixpkgs.config.pulseaudio = true; #pulse support for waybar
+  nixpkgs.config.pipewire = true; #pipewire support for waybar
 
   environment.systemPackages = with pkgs; [
     brightnessctl

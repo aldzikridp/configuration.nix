@@ -33,43 +33,42 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    #steam-run-native
+    (ncmpcpp.override { visualizerSupport = true; })
     _7zz
     bat
     btop
-    gcc
     chezmoi
+    dnsutils
     fd
     ffmpeg-full
     fzf
+    gcc
     git
     gitui
+    gnumake
     htop
     imagemagick
     keepassxc
+    killall
+    mpc_cli
+    mpd
     ncdu
-    whois
+    nix-serve
+    pamixer
     ranger
     rclone
     ripgrep
-    rsync
     rnix-lsp
+    rsync
     starship
-    #steam-run-native
     transmission
-    unzip
-    dnsutils
-    zip
-    killall
-    nix-serve
-    gnumake
-    (ncmpcpp.override {
-      visualizerSupport = true;
-    })
-    mpc_cli
-    mpd
     unrar-wrapper
-    unstable.texlive.combined.scheme-full
     unstable.texlab
+    unstable.texlive.combined.scheme-full
+    unzip
+    whois
+    zip
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -98,8 +97,17 @@
   #services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  #sound.enable = true;
+  #hardware.pulseaudio.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+  };
 
   hardware.opengl = {
     enable = true;
