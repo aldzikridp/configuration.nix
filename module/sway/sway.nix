@@ -34,5 +34,6 @@
     gnome.adwaita-icon-theme
     unstable.google-chrome
     unstable.onlyoffice-bin
+    unstable.tdesktop
   ];
 }
