@@ -45,8 +45,8 @@
               nixpkgs.overlays = [
                 overlay-unstable
                 (self: super: { mesa = super.mesa.overrideAttrs(old: {
-                  version = "22.1.3";
-                  sha256 = "0mp28z72yi9grsj5hab36p9yyk8x80pb2f40zjspq8kijn9qkhvf";
+                  version = "22.1.4";
+                  sha256 = "0ihpffd5zm3c1wwjqgcv95x4vi1p6q0v4ylzcqypsp9pl02f1gbd";
                 }); })
               ];
             })
