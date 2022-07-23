@@ -28,6 +28,7 @@
     polkit_gnome
     udiskie
     wf-recorder
+    xdragon
     slurp
     zathura
     thunderbird
@@ -35,5 +36,6 @@
     unstable.google-chrome
     unstable.onlyoffice-bin
     unstable.tdesktop
+    unstable.ungoogled-chromium
   ];
 }
