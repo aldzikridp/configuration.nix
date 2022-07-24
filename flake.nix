@@ -44,10 +44,10 @@
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [
                 overlay-unstable
-                (self: super: { mesa = super.mesa.overrideAttrs(old: {
-                  version = "22.1.4";
-                  sha256 = "0ihpffd5zm3c1wwjqgcv95x4vi1p6q0v4ylzcqypsp9pl02f1gbd";
-                }); })
+                overlay-old
+                (self: super: { mesa = pkgs.old.mesa;})
+                (self: super: { wlroots = pkgs.old.wlroots;})
+                (self: super: { sway-unwrapped = pkgs.old.sway-unwrapped;})
               ];
             })
             ./configuration.nix

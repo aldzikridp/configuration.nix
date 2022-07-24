@@ -20,7 +20,6 @@
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/python
-      ./module/firefox
     ];
 
 
