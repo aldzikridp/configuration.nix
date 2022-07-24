@@ -32,6 +32,7 @@
               ];
             })
             ./configuration.nix
+            #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/thinkpad.nix
             ./module/eva01-hardware-configuration.nix
           ];
@@ -51,6 +52,7 @@
               ];
             })
             ./configuration.nix
+            #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/eva02-hardware-configuration.nix
             ./module/games
           ];

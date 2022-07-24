@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
   security.polkit.enable = true;
   environment.pathsToLink = [ "/libexec" ];
