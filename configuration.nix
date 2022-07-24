@@ -22,7 +22,7 @@
       ./module/python
     ];
 
-
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.earlyoom.enable = true;
 
