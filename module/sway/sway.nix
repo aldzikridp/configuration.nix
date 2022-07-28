@@ -1,4 +1,19 @@
 { pkgs, ... }:
+let 
+  chromiumArgs = [
+    "--enable-features=UseOzonePlatform"
+    "--ozone-platform=wayland"
+    "--ignore-gpu-blocklist"
+    "--enable-gpu-rasterization"
+    "--enable-zero-copy"
+    "--disable-gpu-driver-bug-workarounds"
+    "--enable-accelerated-video-decode"
+    "--enable-features=VaapiVideoDecoder"
+    "--use-gl=egl"
+    "--show-avatar-button=never"
+    "--hide-sidepanel-button=enable"
+  ];
+in
 {
   #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
@@ -34,23 +49,12 @@
     zathura
     thunderbird
     gnome.adwaita-icon-theme
-    unstable.google-chrome
-    unstable.onlyoffice-bin
     unstable.tdesktop
+    (unstable.google-chrome.override{
+      commandLineArgs = chromiumArgs;
+    })
     (unstable.ungoogled-chromium.override{
-      commandLineArgs = [
-        "--enable-features=UseOzonePlatform"
-        "--ozone-platform=wayland"
-        "--ignore-gpu-blocklist"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--disable-gpu-driver-bug-workarounds"
-        "--enable-accelerated-video-decode"
-        "--enable-features=VaapiVideoDecoder"
-        "--use-gl=egl"
-        "--show-avatar-button=never"
-        "--hide-sidepanel-button=enable"
-      ];
+      commandLineArgs = chromiumArgs;
     })
   ];
 }
