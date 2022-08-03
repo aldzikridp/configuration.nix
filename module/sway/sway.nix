@@ -53,8 +53,8 @@ in
     (unstable.google-chrome.override{
       commandLineArgs = chromiumArgs;
     })
-    (unstable.ungoogled-chromium.override{
-      commandLineArgs = chromiumArgs;
-    })
+    #(unstable.ungoogled-chromium.override{
+    #  commandLineArgs = chromiumArgs;
+    #})
   ];
 }

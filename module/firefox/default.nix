@@ -1,7 +1,7 @@
 { pkgs, ...}:
 
 let
-myFirefox = pkgs.firefox.override {
+myFirefox = pkgs.librewolf.override {
 
   extraPolicies =
     import ./policy.nix;

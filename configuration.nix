@@ -19,6 +19,7 @@
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
+      ./module/firefox
       ./module/python
     ];
 
