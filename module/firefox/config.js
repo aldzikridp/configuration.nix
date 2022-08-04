@@ -175,6 +175,15 @@ pref( 'security.OCSP.require', true );
 pref( 'security.ssl.enable_ocsp_stapling', true );
 pref( 'security.ssl.treat_unsafe_negotiation_as_broken', true );
 
+pref("privacy.clearOnShutdown.cookies", false);
+pref("privacy.clearOnShutdown.cache", true);
+pref("privacy.clearOnShutdown.downloads", false);
+pref("privacy.clearOnShutdown.history", false);
+pref("privacy.clearOnShutdown.formData", false);
+pref("privacy.clearOnShutdown.offlineApps", false);
+pref("privacy.clearOnShutdown.sessions", false);
+pref("privacy.clearOnShutdown.siteSettings", false);
+
 
 
 
@@ -214,3 +223,9 @@ pref( 'browser.fixup.alternate.enabled', false );
 pref( 'browser.fixup.hide_user_pass', false );
 
 pref( 'browser.uitour.enabled', false );
+
+
+////
+//// ipv6
+////
+pref( 'network.dns.disableIPv6', false );

@@ -46,9 +46,10 @@
               nixpkgs.overlays = [
                 overlay-unstable
                 overlay-old
-                (self: super: { mesa = pkgs.old.mesa;})
-                (self: super: { wlroots = pkgs.old.wlroots;})
-                (self: super: { sway-unwrapped = pkgs.old.sway-unwrapped;})
+                (self: super: { mesa = super.mesa.overrideAttrs(old:{
+                  version = "22.1.5";
+                  sha256 = "1hs2idwninycs82j42dv8lf19gfkhrfpfarjc905sfggyxghf1cw";
+                });})
               ];
             })
             ./configuration.nix
