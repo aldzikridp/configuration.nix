@@ -16,7 +16,7 @@ let
       customRC = ''
         source /home/master-x/.config/nvim/init.lua
       '';
-      packages.myVimPackage = with pkgs.unstable.pkgs.vimPlugins; {
+      packages.myVimPackage = with pkgs.vimPlugins; {
         start = [
           bufferline-nvim
           cmp-buffer
@@ -41,6 +41,7 @@ let
           nvim-web-devicons
           #telescope-fzf-native-nvim
           #telescope-nvim
+          plenary-nvim
           tokyonight-nvim
           (nvim-treesitter.withPlugins (
             plugins: pkgs.unstable.pkgs.tree-sitter.allGrammars
