@@ -4,10 +4,11 @@
   #virtualisation.docker.enable = true;
 
   # Virt-manager
-  #virtualisation.libvirtd.enable = true;
-  #programs.dconf.enable = true;
-  #environment.systemPackages = with pkgs; [ virt-manager ];
-  #users.users.master-x.extraGroups = [ "libvirtd" ];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemu.runAsRoot = false;
+  programs.dconf.enable = true;
+  environment.systemPackages = with pkgs; [ virt-manager ];
+  users.users.master-x.extraGroups = [ "libvirtd" ];
   #services.dnsmasq.extraConfig = ''
   #  interface=lo
   #  interface=enp8s0

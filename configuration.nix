@@ -21,6 +21,7 @@
       ./module/fonts/fonts.nix
       ./module/firefox
       ./module/python
+      ./module/virtualisation
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

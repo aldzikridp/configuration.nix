@@ -45,12 +45,6 @@
             ({ config, pkgs, ... }: {
               nixpkgs.overlays = [
                 overlay-unstable
-                overlay-old
-                #(final: prev: {zutty = final.callPackage ./pkgs/zutty/default.nix { };})
-                (self: super: { mesa = super.mesa.overrideAttrs(old:{
-                  version = "22.1.5";
-                  sha256 = "1hs2idwninycs82j42dv8lf19gfkhrfpfarjc905sfggyxghf1cw";
-                });})
               ];
             })
             ./configuration.nix
