@@ -65,8 +65,6 @@
     starship
     transmission
     unrar-wrapper
-    unstable.texlab
-    unstable.texlive.combined.scheme-full
     unzip
     whois
     zip

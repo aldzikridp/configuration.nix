@@ -57,5 +57,6 @@ in
 {
   environment.systemPackages = with pkgs; [
     myneovim
+    neovim-remote
   ];
 }
