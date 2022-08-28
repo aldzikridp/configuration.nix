@@ -22,6 +22,8 @@
         "sgp-dn53-ipv6"
         "dnscrypt-sg-blahdns-ipv6"
         "id-gmail-ipv6"
+        "jp.tiar.app-ipv6"
+        "adguard-dns-unfiltered-ipv6"
         "wevpn-singapore"
         "moulticast-sg-ipv4"
         "dnscrypt-sg-blahdns-ipv4"
