@@ -31,6 +31,7 @@
                 overlay-unstable
               ];
             })
+            ./module/virtualisation
             ./configuration.nix
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/thinkpad.nix

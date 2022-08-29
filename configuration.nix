@@ -14,14 +14,12 @@
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
-      ./module/virtualisation
       ./module/neovim/neovim.nix
       ./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/firefox
       #./module/python
-      ./module/virtualisation
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
