@@ -13,6 +13,7 @@
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.kernelParams = [ "iommu=pt" ];
+  services.fstrim.enable = true;
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/ab1ca319-ea26-4fca-bef2-823ce6135266";
