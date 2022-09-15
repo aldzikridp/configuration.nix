@@ -43,4 +43,5 @@
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  services.fstrim.enable = true;
 }
