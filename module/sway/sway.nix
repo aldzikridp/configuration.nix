@@ -1,5 +1,5 @@
 { pkgs, ... }:
-let 
+let
   chromiumArgs = [
     "--enable-features=UseOzonePlatform"
     "--ozone-platform=wayland"
@@ -13,6 +13,18 @@ let
     "--show-avatar-button=never"
     "--hide-sidepanel-button=enable"
   ];
+  dbus-sway-environment = pkgs.writeTextFile {
+    name = "dbus-sway-environment";
+    destination = "/bin/dbus-sway-environment";
+    executable = true;
+
+    text = ''
+      dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+      systemctl --user stop pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
+      systemctl --user start pipewire pipewire-media-session xdg-desktop-portal xdg-desktop-portal-wlr
+    '';
+  };
+
 in
 {
   #security.chromiumSuidSandbox.enable = true;
@@ -38,7 +50,7 @@ in
 
   environment.systemPackages = with pkgs; [
     brightnessctl
-    (imv.override{withWindowSystem="wayland";})
+    (imv.override { withWindowSystem = "wayland"; })
     jq
     pavucontrol
     polkit_gnome
@@ -50,11 +62,20 @@ in
     thunderbird
     gnome.adwaita-icon-theme
     unstable.tdesktop
-    (unstable.google-chrome.override{
+    dbus-sway-environment
+    (unstable.google-chrome.override {
       commandLineArgs = chromiumArgs;
     })
-    (unstable.ungoogled-chromium.override{
+    (unstable.ungoogled-chromium.override {
       commandLineArgs = chromiumArgs;
     })
   ];
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    # gtk portal needed to make gtk apps happy
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    gtkUsePortal = true;
+  };
 }
