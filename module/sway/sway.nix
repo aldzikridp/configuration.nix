@@ -27,6 +27,11 @@ let
 
 in
 {
+  # Flatpak
+  services.flatpak.enable = true;
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
   security.polkit.enable = true;
@@ -66,9 +71,9 @@ in
     (unstable.google-chrome.override {
       commandLineArgs = chromiumArgs;
     })
-    (unstable.ungoogled-chromium.override {
-      commandLineArgs = chromiumArgs;
-    })
+    #(unstable.ungoogled-chromium.override{
+    #  commandLineArgs = chromiumArgs;
+    #})
   ];
 
   xdg.portal = {
