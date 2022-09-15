@@ -29,8 +29,6 @@ in
 {
   # Flatpak
   services.flatpak.enable = true;
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
@@ -77,6 +75,7 @@ in
   ];
 
   xdg.portal = {
+    enable = true;
     wlr.enable = true;
     # gtk portal needed to make gtk apps happy
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
