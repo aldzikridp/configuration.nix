@@ -15,6 +15,11 @@ let
   ];
 in
 {
+  # Flatpak
+  services.flatpak.enable = true;
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
   security.polkit.enable = true;
