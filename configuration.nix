@@ -38,6 +38,7 @@
     btop
     chezmoi
     dnsutils
+    inetutils
     fd
     ffmpeg-full
     fzf
