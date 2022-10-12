@@ -33,6 +33,7 @@
   environment.systemPackages = with pkgs; [
     #steam-run-native
     (ncmpcpp.override { visualizerSupport = true; })
+    (libsForQt5.callPackage ./pkgs/qqsp/default.nix { })
     _7zz
     bat
     btop
