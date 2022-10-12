@@ -6,11 +6,11 @@
     vpcs
     ubridge
     dynamips
+    qemu
   ];
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemu.runAsRoot = false;
   programs.dconf.enable = true;
-  environment.systemPackages = with pkgs; [ virt-manager qemu ];
   users.users.master-x.extraGroups = [ "libvirtd" ];
 
   ## Modify .config/GNS3/2.2/gns3_server.config
