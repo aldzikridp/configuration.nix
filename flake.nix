@@ -52,6 +52,7 @@
             ./configuration.nix
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/eva02-hardware-configuration.nix
+            ./module/gns3
             ./module/games
           ];
         };
