@@ -8,7 +8,7 @@
     dynamips
     qemu
   ];
-  virtualisation.libvirtd.enable = true;
+  #virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemu.runAsRoot = false;
   programs.dconf.enable = true;
   users.users.master-x.extraGroups = [ "libvirtd" ];
