@@ -69,6 +69,7 @@ in
     (unstable.google-chrome.override {
       commandLineArgs = chromiumArgs;
     })
+    unstable.liferea
     #(unstable.ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
     #})

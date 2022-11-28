@@ -75,7 +75,7 @@ pref( 'pref.general.disable_button.default_browser', true );
 
 pref( 'widget.non-native-theme.gtk.scrollbar.allow-buttons', true );
 
-pref( 'toolkit.tabbox.switchByScrolling', true );
+pref( 'toolkit.tabbox.switchByScrolling', false );
 
 pref( 'security.insecure_password.ui.enabled', true );
 pref( 'security.insecure_field_warning.contextual.enabled', true );
