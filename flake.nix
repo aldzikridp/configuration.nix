@@ -1,11 +1,10 @@
 {
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixos-22.05;
-    nixpkgs-old.url = github:NixOS/nixpkgs/nixos-21.11;
     nixpkgs-unstable.url = github:NixOS/nixpkgs/nixpkgs-unstable;
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, nixpkgs-old, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, ... }:
     let
       system = "x86_64-linux";
       overlay-unstable = final: prev: {
@@ -15,9 +14,6 @@
           inherit system;
           config.allowUnfree = true;
         };
-      };
-      overlay-old = final: prev: {
-        old = nixpkgs-old.legacyPackages.${prev.system};
       };
     in
     {
