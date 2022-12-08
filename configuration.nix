@@ -83,6 +83,7 @@
     "steam"
     "steam-original"
     "steam-runtime"
+    "steam-run"
     "corefonts"
   ];
 
@@ -106,6 +107,8 @@
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
+  
+  services.udisks2.enable = true;
 
   hardware.opengl = {
     enable = true;
