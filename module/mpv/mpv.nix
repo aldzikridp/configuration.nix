@@ -4,11 +4,11 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "marzzzello";
       repo = "mpv_thumbnail_script";
-      rev = "b2e58ad45e8b7b59b34c34648bc611b0b8816db4";
-      sha256 = "1x131yywnply0k5gyl48ynrzpbc45zs7ggj2pa17lksaziz9h446";
+      rev = "933a396f82847451911f5ba76cad4fcade69c37c";
+      sha256 = "0k7mxd9c38igaqghq0rdwl3m7lg3567yc80886zms6jhy8ymskcn";
     };
   });
-  mympv = (pkgs.mpv-with-scripts.override {
+  mympv = (pkgs.mpv.override {
     scripts = [
       thumbnail-fork
     ];
