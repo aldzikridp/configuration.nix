@@ -27,9 +27,6 @@ let
 
 in
 {
-  # Flatpak
-  services.flatpak.enable = true;
-
   #security.chromiumSuidSandbox.enable = true;
   # Sway polkit
   security.polkit.enable = true;
@@ -80,6 +77,5 @@ in
     wlr.enable = true;
     # gtk portal needed to make gtk apps happy
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    gtkUsePortal = true;
   };
 }
