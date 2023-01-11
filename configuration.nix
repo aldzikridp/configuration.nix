@@ -34,6 +34,7 @@
     #steam-run-native
     (ncmpcpp.override { visualizerSupport = true; })
     (libsForQt5.callPackage ./pkgs/qqsp/default.nix { })
+    (pkgs.callPackage ./pkgs/fzf-tab/default.nix { })
     _7zz
     bat
     btop
