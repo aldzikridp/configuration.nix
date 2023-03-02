@@ -4,12 +4,12 @@ let
     name = "adblockhost";
     custom = builtins.toFile"customhost"(builtins.readFile ./customblock);
     host1 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/e25fb4e2ee148e0a7aaa835f3f8f7b85c47cb510/hostnames.txt";
-      sha256 = "0qyk7jb0d2q05xyrh5n3hb0x9mdjlsnns94xlyrqc0x9c5amdi37";
+      url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/1ae68b1ed4d32f6e875171af5395a1e411e55551/hostnames.txt";
+      sha256 = "0hdrd2dfskrip8drfxr9nlkpx48c4pm7q3sb61shsnjy0k9lgq5a";
     });
     host2 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/StevenBlack/hosts/4e4077236545cfa20ff43e07bbd6b73018bc8021/hosts";
-      sha256 = "0p3szhnfn3bb479pcwnwdgvansdgwmkcxk432fl1bm7gcqwpgzfh";
+      url = "https://raw.githubusercontent.com/StevenBlack/hosts/b6d5cce60ac99ae572c56ef8d2b2dc01530707e1/hosts";
+      sha256 = "0j7mdiajbwjapgj4sabmhri65lwiryqbadpkb7k8ah56lx4nbn97";
     });
     #host3 = (builtins.fetchurl { url = "https://block.energized.pro/assets/sources/filter/abpindo.txt"; });
     #host4 = (builtins.fetchurl { url = "https://block.energized.pro/ultimate/formats/hosts.txt"; });
