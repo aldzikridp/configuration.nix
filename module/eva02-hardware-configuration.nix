@@ -12,7 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "iommu=pt" ];
+  boot.kernelParams = [ "iommu=active" ];
   services.fstrim.enable = true;
 
   fileSystems."/" =
