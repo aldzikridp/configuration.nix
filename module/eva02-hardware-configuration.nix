@@ -12,7 +12,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "iommu=active" ];
+  boot.kernelParams = [ "iommu=active" "amdgpu.ignore_crat=1" ];
   services.fstrim.enable = true;
 
   fileSystems."/" =
