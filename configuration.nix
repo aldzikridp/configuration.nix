@@ -63,7 +63,7 @@
     rnix-lsp
     rsync
     starship
-    transmission
+    (transmission.override { enableCli = false; })
     unrar-wrapper
     unzip
     whois
