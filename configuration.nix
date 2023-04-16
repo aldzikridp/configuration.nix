@@ -57,7 +57,8 @@
     ncdu
     nix-serve
     pamixer
-    ranger
+    joshuto
+    file
     rclone
     ripgrep
     rnix-lsp
