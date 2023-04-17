@@ -55,10 +55,15 @@
     mpc_cli
     mpd
     ncdu
-    nix-serve
     pamixer
-    joshuto
+
+    ### File Manager ###
+    lf
+    pistol
     file
+    ffmpegthumbnailer
+    ###################
+    
     rclone
     ripgrep
     rnix-lsp
