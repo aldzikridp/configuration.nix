@@ -62,6 +62,7 @@
     pistol
     file
     ffmpegthumbnailer
+    (pkgs.callPackage ./pkgs/rifle/default.nix { })
     ###################
     
     rclone
