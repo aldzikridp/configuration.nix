@@ -60,7 +60,9 @@
     ### File Manager ###
     lf
     file
-    ffmpegthumbnailer
+    ffmpegthumbnailer # video thumbnail
+    atool             # archive preview
+    poppler_utils     # pdf preview
     (pkgs.callPackage ./pkgs/rifle/default.nix { })
     (pkgs.callPackage ./pkgs/ctpv/default.nix { })
     ###################
