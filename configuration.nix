@@ -59,7 +59,6 @@
 
     ### File Manager ###
     lf
-    pistol
     file
     ffmpegthumbnailer
     (pkgs.callPackage ./pkgs/rifle/default.nix { })
