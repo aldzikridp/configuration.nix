@@ -63,6 +63,7 @@
     file
     ffmpegthumbnailer
     (pkgs.callPackage ./pkgs/rifle/default.nix { })
+    (pkgs.callPackage ./pkgs/ctpv/default.nix { })
     ###################
     
     rclone
