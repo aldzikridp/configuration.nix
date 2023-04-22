@@ -6,13 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fzf-tab-completion";
-  version = "0874776b0565ed869671c3170fc1ba7c551a75c2";
+  version = "f123b36c72ef3ad3e0247a0eabd59fb76872fe72";
 
   src = fetchFromGitHub {
     owner = "lincheney";
     repo = "fzf-tab-completion";
     rev = version;
-    sha256 = "1rnf68d8hks2883cj69g2knymjcy2m97s5cd5v0q9pk5nsdjbvmh";
+    #sha256 = lib.fakeSha256;
+    sha256 = "sha256-CCopiRRy+I/X1zWEoJIhTzGea6FOilL13z6yF8Y7MUw=";
   };
 
   outputs = [ "out" ];
