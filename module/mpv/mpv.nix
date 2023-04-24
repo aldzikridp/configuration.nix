@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  thumbnail-fork = pkgs.mpvScripts.thumbnail.overrideAttrs (oldAttrs: rec {
+  thumbnail-fork = pkgs.mpvScripts.thumbnail.overrideAttrs (oldAttrs: {
     src = pkgs.fetchFromGitHub {
       owner = "marzzzello";
       repo = "mpv_thumbnail_script";

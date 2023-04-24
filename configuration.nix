@@ -37,6 +37,7 @@
     (pkgs.callPackage ./pkgs/fzf-tab/default.nix { })
     #_7zz
     p7zip
+    nil
     bat
     btop
     chezmoi
@@ -70,7 +71,6 @@
     
     rclone
     ripgrep
-    rnix-lsp
     rsync
     starship
     (transmission.override { enableCli = false; })
