@@ -58,7 +58,7 @@ in
     wf-recorder
     xdragon
     slurp
-    sioyek
+    unstable.sioyek
     thunderbird
     gnome.adwaita-icon-theme
     unstable.tdesktop
@@ -67,6 +67,7 @@ in
       commandLineArgs = chromiumArgs;
     })
     unstable.liferea
+    unstable.rssguard
     #(unstable.ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
     #})
