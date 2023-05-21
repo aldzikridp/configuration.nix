@@ -140,6 +140,15 @@
   users.users.root.hashedPassword = "!";
   users.mutableUsers = false;
 
+  services = {
+    syncthing = {
+        enable = true;
+        user = "master-x";
+        dataDir = "/home/master-x/Syncthing/Data";    # Default folder for new synced folders
+        configDir = "/home/master-x/Syncthing/.config/";   # Folder for Syncthing's settings and keys
+    };
+};
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
