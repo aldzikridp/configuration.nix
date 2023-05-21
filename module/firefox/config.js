@@ -1,6 +1,5 @@
 pref( 'browser.aboutConfig.showWarning', false );
-
-
+pref( 'browser.urlbar.resultMenu', false );
 
 ////
 //// Performanc tuning
