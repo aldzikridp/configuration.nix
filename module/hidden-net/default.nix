@@ -9,5 +9,6 @@
       http.enable = true;
     };
     enableIPv6 = true;
+    port = 17341;
   };
 }
