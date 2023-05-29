@@ -69,6 +69,7 @@
     (pkgs.callPackage ./pkgs/ctpv/default.nix { })
     ###################
     
+    kopia
     rclone
     ripgrep
     rsync
