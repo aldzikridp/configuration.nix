@@ -1,17 +1,17 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 let
   adblockhost = pkgs.stdenv.mkDerivation {
     name = "adblockhost";
     custom = builtins.toFile"customhost"(builtins.readFile ./customblock);
     host1 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/c1ac9910387e7871e225bc35ccccbe200d8a1bde/hostnames.txt";
+      url = "https://raw.githubusercontent.com/notracking/hosts-blocklists/e3c782a94dd950e92cb28d1967b7c67ce180a09c/hostnames.txt";
       #sha256 = lib.fakeSha256;
-      sha256 = "1qnkq3n1w2h9fskb6dhqa54iv4zdv88nlx4vwpfk2p5zrdxwqsvh";
+      sha256 = "0s4h87ni8n8hyyd02h9pnbpcdbkkiw7drb8flbpyx8xb9gm3gpxg";
     });
     host2 = (builtins.fetchurl {
-      url = "https://raw.githubusercontent.com/StevenBlack/hosts/ee692bbaa3097bd847f11e5230a6999a3bc01e97/hosts";
+      url = "https://raw.githubusercontent.com/StevenBlack/hosts/7b45134c8d9e7104a200739e030aa5d8a467c6cb/hosts";
       #sha256 = lib.fakeSha256;
-      sha256 = "1qw053pv7h7a07vyyjb7aw3s8jhckiy3laxyf6hcfsx52x8gwf9l";
+      sha256 = "06gf3crslifnxhxz5a9d2d1d29xjp18f19k36d35xcp0syd76pwa";
     });
     #host3 = (builtins.fetchurl { url = "https://block.energized.pro/assets/sources/filter/abpindo.txt"; });
     #host4 = (builtins.fetchurl { url = "https://block.energized.pro/ultimate/formats/hosts.txt"; });
