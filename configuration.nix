@@ -47,7 +47,6 @@
     inetutils
     fd
     ffmpeg-full
-    fzf
     gcc
     git
     gitui
@@ -75,7 +74,8 @@
     ripgrep
     rsync
     starship
-    (transmission.override { enableCli = false; })
+    #(transmission.override { enableCli = false; })
+    (pkgs.callPackage ./pkgs/transmission/default.nix { })
     unrar-wrapper
     unzip
     whois
@@ -85,6 +85,8 @@
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.zsh.enable = true;
+  programs.fzf.fuzzyCompletion = true;
+  programs.fzf.keybindings = true;
   programs.gnupg.agent = {
     enable = true;
     pinentryFlavor = "gnome3";
@@ -155,6 +157,6 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 
 }

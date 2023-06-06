@@ -8,7 +8,7 @@ in
       ./systemd-boot.nix
     ];
   boot = {
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
     loader = {
       timeout = 2;
       systemd-boot = {

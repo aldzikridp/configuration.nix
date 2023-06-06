@@ -27,14 +27,16 @@ let
 in {
   services.dnsmasq = {
     enable = true;
-    servers = ["127.0.0.1#5300"]; #dnscrypt-proxy2 port
     resolveLocalQueries = false;
-    extraConfig = ''
-      conf-file="${adblockhost}"
-      conf-file="${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf"
-      cache-size=1000
-      domain-needed
-      bogus-priv
-    '';
+    settings = {
+      server = ["127.0.0.1#5300"]; #dnscrypt-proxy2 port
+      conf-file = [
+        "${adblockhost}" 
+        "${pkgs.dnsmasq}/share/dnsmasq/trust-anchors.conf"
+      ];
+      cache-size = 1000;
+      domain-needed = true;
+      bogus-priv = true;
+    };
   };
 }
