@@ -1,4 +1,16 @@
 { config, pkgs, ... }:
+let
+  myquickemu = pkgs.quickemu.override (quickemuOld: {
+    spice-gtk = quickemuOld.spice-gtk.overrideAttrs (attrs: {
+      buildInputs = attrs.buildInputs ++ [
+        pkgs.gst_all_1.gstreamer
+        pkgs.gst_all_1.gst-plugins-bad
+        pkgs.gst_all_1.gst-plugins-base
+        pkgs.gst_all_1.gst-plugins-good
+      ];
+    });
+  });
+in
 {
   # Enable docker service
   #virtualisation.docker.enable = true;
@@ -18,7 +30,7 @@
 
   # Quickemu
   environment.systemPackages = with pkgs; [ 
-    quickemu
+    myquickemu
     samba
   ];
 }
