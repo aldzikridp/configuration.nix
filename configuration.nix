@@ -7,6 +7,15 @@
       experimental-features = nix-command flakes
     '';
    };
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+    };
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 7d";
+    };
+  };
 
   imports =
     [
