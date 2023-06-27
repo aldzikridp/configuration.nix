@@ -58,7 +58,7 @@ in
     wf-recorder
     xdragon
     slurp
-    unstable.sioyek
+    zathura
     thunderbird
     gnome.adwaita-icon-theme
     unstable.tdesktop
