@@ -67,6 +67,7 @@
     mpd
     ncdu
     pamixer
+    parallel
 
     ### File Manager ###
     lf
