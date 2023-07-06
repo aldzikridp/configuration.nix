@@ -58,7 +58,7 @@
     ffmpeg-full
     gcc
     git
-    gitui
+    lazygit
     gnumake
     htop
     imagemagick
