@@ -4,6 +4,7 @@
   DisablePocket    = true;
   DisableTelemetry = true;
   DisableFirefoxAccounts = true;
+  PasswordManagerEnabled = false;
 
 
   HardwareAcceleration    = true;

@@ -112,7 +112,7 @@ pref( 'browser.send_pings', false );
 pref( 'browser.send_pings.require_same_host', true );
 
 pref( 'dom.battery.enabled', false );
-pref( 'dom.enable_performance', false );
+//pref( 'dom.enable_performance', false );
 pref( 'dom.webnotifications.enabled', false );
 pref( 'dom.enable_user_timing', false );
 pref( 'dom.netinfo.enabled', false );
