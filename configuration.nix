@@ -45,7 +45,11 @@
     (ncmpcpp.override { visualizerSupport = true; })
     (libsForQt5.callPackage ./pkgs/qqsp/default.nix { })
     (pkgs.callPackage ./pkgs/fzf-tab/default.nix { })
-    (pass.withExtensions (ext: with ext; [ pass-audit pass-import pass-update ]))
+    (pass.withExtensions (ext: with ext; [
+      #pass-audit
+      #pass-import
+      pass-update
+    ]))
     #_7zz
     p7zip
     nil
