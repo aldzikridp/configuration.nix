@@ -1,4 +1,4 @@
-{ config, pkgs, ... }@inputs:
+{ pkgs, ... }:
 let
   #plugins = pkgs.callPackage ./plugin.nix { };
   #buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
@@ -11,13 +11,7 @@ let
   #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
   #  };
   #};
-  myneovim = pkgs.neovim.override {
-    configure = {
-      customRC = ''
-        source $HOME/.config/nvim/init.lua
-      '';
-      packages.myVimPackage = with pkgs.vimPlugins; {
-        start = [
+  myPluginList = with pkgs.unstable.pkgs.vimPlugins;[          
           bufferline-nvim
           cmp-buffer
           cmp-cmdline
@@ -32,20 +26,25 @@ let
           indent-blankline-nvim
           null-ls-nvim
           nvim-cmp
-          #nvim-colorizer-lua
           nvim-lspconfig
           nvim-lsp-ts-utils
           nvim-tree-lua
           nvim-treesitter-refactor
           nvim-treesitter-textobjects
           nvim-web-devicons
-          #telescope-fzf-native-nvim
-          #telescope-nvim
           plenary-nvim
+          rest-nvim
           tokyonight-nvim
-          (nvim-treesitter.withPlugins (
-            plugins: pkgs.tree-sitter.allGrammars
-          ))
+          nvim-treesitter.withAllGrammars
+  ];
+  myneovim = pkgs.unstable.pkgs.neovim.override {
+    configure = {
+      customRC = ''
+        source $HOME/.config/nvim/init.lua
+      '';
+      packages.myVimPackage = {
+        start = [
+          myPluginList
         ];
         #opt = [
         #  nvim-jdtls
@@ -57,48 +56,22 @@ in
 {
   environment.systemPackages = with pkgs; [
     neovim-remote
+    myneovim
   ];
-  programs.neovim = {
-    enable = true;
-    configure = {
-      customRC = ''
-        source $HOME/.config/nvim/init.lua
-      '';
-      packages.myVimPackage = with pkgs.vimPlugins; {
-        start = [
-          bufferline-nvim
-          cmp-buffer
-          cmp-cmdline
-          cmp-nvim-lsp
-          cmp-nvim-lua
-          cmp-path
-          cmp_luasnip
-          friendly-snippets
-          fzf-lua
-          lualine-nvim
-          luasnip
-          indent-blankline-nvim
-          null-ls-nvim
-          nvim-cmp
-          #nvim-colorizer-lua
-          nvim-lspconfig
-          nvim-lsp-ts-utils
-          nvim-tree-lua
-          nvim-treesitter-refactor
-          nvim-treesitter-textobjects
-          nvim-web-devicons
-          #telescope-fzf-native-nvim
-          #telescope-nvim
-          plenary-nvim
-          tokyonight-nvim
-          (nvim-treesitter.withPlugins (
-            plugins: pkgs.tree-sitter.allGrammars
-          ))
-        ];
-        #opt = [
-        #  nvim-jdtls
-        #];
-      };
-    };
-  };
+  #programs.neovim = {
+  #  enable = false;
+  #  configure = {
+  #    customRC = ''
+  #      source $HOME/.config/nvim/init.lua
+  #    '';
+  #    packages.myVimPackage = {
+  #      start = [
+  #        myPluginList
+  #      ];
+  #      #opt = [
+  #      #  nvim-jdtls
+  #      #];
+  #    };
+  #  };
+  #};
 }
