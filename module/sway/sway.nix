@@ -59,6 +59,7 @@ in
     xdragon
     slurp
     zathura
+    #xournalpp
     thunderbird
     gnome.adwaita-icon-theme
     unstable.tdesktop
