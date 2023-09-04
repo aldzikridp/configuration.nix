@@ -72,6 +72,9 @@ in
     #(unstable.ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
     #})
+
+    ### Work
+    slack
   ];
 
   xdg.portal = {
