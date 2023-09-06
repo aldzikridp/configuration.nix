@@ -51,6 +51,7 @@
       #pass-audit
       #pass-import
       pass-update
+      pass-otp
     ]))
     #_7zz
     p7zip
