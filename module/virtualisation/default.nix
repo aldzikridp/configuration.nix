@@ -14,6 +14,11 @@ in
 {
   # Enable docker service
   #virtualisation.docker.enable = true;
+  # rootless docker
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 
   # Virt-manager
   #virtualisation.libvirtd.enable = true;
