@@ -10,6 +10,12 @@ let
       ];
     });
   });
+  customQemuConfFlags = [ "--enable-gtk-clipboard" ];
+  quickemuWithClipboard = pkgs.quickemu.override (quickemuOld: {
+    qemu = quickemuOld.qemu.overrideAttrs (attrs: {
+      configureFlags = attrs.configureFlags ++ customQemuConfFlags;
+    });
+  });
 in
 {
   # Enable docker service
@@ -42,7 +48,7 @@ in
 
   # Quickemu
   environment.systemPackages = with pkgs; [ 
-    myquickemu
+    quickemuWithClipboard
     samba
     fuse-overlayfs # for minikube with podman driver
   ];
