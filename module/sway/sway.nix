@@ -64,9 +64,10 @@ in
     gnome.adwaita-icon-theme
     unstable.tdesktop
     dbus-sway-environment
-    (unstable.google-chrome.override {
-      commandLineArgs = chromiumArgs;
-    })
+    #(unstable.google-chrome.override {
+    #  commandLineArgs = chromiumArgs;
+    #})
+    unstable.google-chrome
     unstable.liferea
     unstable.rssguard
     #(unstable.ungoogled-chromium.override{
@@ -76,6 +77,8 @@ in
     ### Work
     slack
   ];
+
+  services.dbus.enable = true;
 
   xdg.portal = {
     enable = true;
