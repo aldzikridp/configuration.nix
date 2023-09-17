@@ -13,12 +13,19 @@ let
 in
 {
   # Enable docker service
-  #virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
   # rootless docker
-  virtualisation.docker.rootless = {
-    enable = true;
-    setSocketVariable = true;
-  };
+  #virtualisation.docker.rootless = {
+  #  enable = true;
+  #  setSocketVariable = true;
+  #};
+  #virtualisation.podman = {
+  #  enable = true;
+  #  dockerCompat = true;
+  #  defaultNetwork.settings = {
+  #    dns_enabled = true;
+  #  };
+  #};
 
   # Virt-manager
   #virtualisation.libvirtd.enable = true;
@@ -37,5 +44,6 @@ in
   environment.systemPackages = with pkgs; [ 
     myquickemu
     samba
+    fuse-overlayfs # for minikube with podman driver
   ];
 }
