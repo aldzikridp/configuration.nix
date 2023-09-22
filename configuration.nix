@@ -71,10 +71,6 @@
     imagemagick
     killall
 
-    ### kubernetes things
-    kubectl
-    minikube
-
     mpc_cli
     mpd
     ncdu
