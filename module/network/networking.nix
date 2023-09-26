@@ -1,6 +1,10 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
   networking.networkmanager.enable = true;
+  networking.networkmanager.plugins = [
+   #(pkgs.callPackage ../../pkgs/networkmanger-libreswan/default.nix { } )
+   #(pkgs.callPackage ../../pkgs/networkmanger-libreswan/stronswan.nix { } )
+  ];
 
   # Firewall.
   #networking.firewall.allowedTCPPorts = [ 51413 38692 15441 ];

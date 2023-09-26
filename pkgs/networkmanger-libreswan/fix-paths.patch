@@ -1,0 +1,31 @@
+--- a/shared/utils.c
++++ b/shared/utils.c
+@@ -337,13 +337,7 @@ const char *
+ nm_libreswan_find_helper_bin (const char *progname, GError **error)
+ {
+ 	static const char *paths[] = {
+-		PREFIX "/sbin/",
+-		PREFIX "/bin/",
+-		"/sbin/",
+-		"/usr/sbin/",
+-		"/usr/local/sbin/",
+-		"/usr/bin/",
+-		"/usr/local/bin/",
++		"@libreswan@/bin/",
+ 		NULL,
+ 	};
+ 
+@@ -354,12 +348,7 @@ const char *
+ nm_libreswan_find_helper_libexec (const char *progname, GError **error)
+ {
+ 	static const char *paths[] = {
+-		PREFIX "/libexec/ipsec/",
+-		PREFIX "/lib/ipsec/",
+-		"/usr/libexec/ipsec/",
+-		"/usr/local/libexec/ipsec/",
+-		"/usr/lib/ipsec/",
+-		"/usr/local/lib/ipsec/",
++		"@libreswan@/libexec/ipsec/",
+ 		NULL,
+ 	};
+ 
