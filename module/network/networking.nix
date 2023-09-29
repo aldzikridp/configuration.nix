@@ -3,7 +3,6 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.plugins = [
    #(pkgs.callPackage ../../pkgs/networkmanger-libreswan/default.nix { } )
-   #(pkgs.callPackage ../../pkgs/networkmanger-libreswan/stronswan.nix { } )
   ];
 
   # Firewall.

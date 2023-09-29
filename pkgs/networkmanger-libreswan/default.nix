@@ -20,10 +20,10 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-libreswan";
-  version = "1.6.0";
+  version = "1.2.16";
 
   src = fetchurl {
-    url = "https://download.gnome.org/sources/NetworkManager-libreswan/1.2/NetworkManager-libreswan-1.2.16.tar.xz";
+    url = "https://download.gnome.org/sources/NetworkManager-libreswan/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-xrfvcfZYfZwJ437ObCC0xKVFb4DJDlyetuyJ6Ow45lQ=";
   };
 
