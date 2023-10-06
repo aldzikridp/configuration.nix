@@ -67,15 +67,12 @@ in
     #(unstable.google-chrome.override {
     #  commandLineArgs = chromiumArgs;
     #})
-    unstable.google-chrome
+    #unstable.google-chrome
     unstable.liferea
     unstable.rssguard
-    #(unstable.ungoogled-chromium.override{
-    #  commandLineArgs = chromiumArgs;
-    #})
-
-    ### Work
-    slack
+    (unstable.ungoogled-chromium.override{
+      commandLineArgs = chromiumArgs;
+    })
   ];
 
   services.dbus.enable = true;
