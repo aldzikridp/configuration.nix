@@ -150,7 +150,7 @@
     isNormalUser = true;
     extraGroups = [ 
       "wheel" 
-      "docker" 
+      #"docker" 
       #"podman"
       "video" 
       "audio" 

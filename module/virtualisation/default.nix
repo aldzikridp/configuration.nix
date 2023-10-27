@@ -19,19 +19,19 @@ let
 in
 {
   # Enable docker service
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
   # rootless docker
   #virtualisation.docker.rootless = {
   #  enable = true;
   #  setSocketVariable = true;
   #};
-  #virtualisation.podman = {
-  #  enable = true;
-  #  dockerCompat = true;
-  #  defaultNetwork.settings = {
-  #    dns_enabled = true;
-  #  };
-  #};
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings = {
+      dns_enabled = true;
+    };
+  };
 
   # Virt-manager
   #virtualisation.libvirtd.enable = true;
