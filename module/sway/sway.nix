@@ -59,6 +59,7 @@ in
     xdragon
     slurp
     zathura
+    luakit
     #xournalpp
     thunderbird
     gnome.adwaita-icon-theme
@@ -70,7 +71,7 @@ in
     #unstable.google-chrome
     unstable.liferea
     unstable.rssguard
-    (unstable.ungoogled-chromium.override{
+    (ungoogled-chromium.override{
       commandLineArgs = chromiumArgs;
     })
   ];
