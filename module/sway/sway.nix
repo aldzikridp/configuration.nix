@@ -59,7 +59,7 @@ in
     xdragon
     slurp
     zathura
-    luakit
+    #luakit
     #xournalpp
     thunderbird
     gnome.adwaita-icon-theme
