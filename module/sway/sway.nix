@@ -71,9 +71,9 @@ in
     #unstable.google-chrome
     unstable.liferea
     unstable.rssguard
-    (ungoogled-chromium.override{
-      commandLineArgs = chromiumArgs;
-    })
+    #(ungoogled-chromium.override{
+    #  commandLineArgs = chromiumArgs;
+    #})
   ];
 
   services.dbus.enable = true;
