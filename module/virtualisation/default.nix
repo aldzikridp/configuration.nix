@@ -48,7 +48,7 @@ in
 
   # Quickemu
   environment.systemPackages = with pkgs; [ 
-    quickemuWithClipboard
+    #quickemuWithClipboard
     samba
     fuse-overlayfs # for minikube with podman driver
   ];
