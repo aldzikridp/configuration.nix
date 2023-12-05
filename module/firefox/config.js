@@ -1,5 +1,6 @@
 pref( 'browser.aboutConfig.showWarning', false );
 pref( 'browser.urlbar.resultMenu', false );
+pref( 'browser.urlbar.resultMenu.keyboardAccessible', false);
 
 ////
 //// Performanc tuning
