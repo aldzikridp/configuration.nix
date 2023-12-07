@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       (nerdfonts.override { fonts = [ "JetBrainsMono" "RobotoMono" ]; })
       roboto
       corefonts

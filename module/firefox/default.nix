@@ -2,7 +2,7 @@
 
 let
 myLibrewofl = pkgs.librewolf.override {
-  extraNativeMessagingHosts = [ pkgs.ff2mpv ];
+  nativeMessagingHosts = [ pkgs.ff2mpv ];
 
   extraPolicies =
     import ./policy.nix;
@@ -12,7 +12,7 @@ myLibrewofl = pkgs.librewolf.override {
 
 };
 myFirefox = pkgs.firefox.override {
-  extraNativeMessagingHosts = [ pkgs.ff2mpv ];
+  nativeMessagingHosts = [ pkgs.ff2mpv ];
 
   extraPolicies =
     import ./policy.nix;

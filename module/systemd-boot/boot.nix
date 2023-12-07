@@ -3,10 +3,10 @@ let
 in
 {
   # Use the systemd-boot EFI boot loader.
-  imports =
-    [
-      ./systemd-boot.nix
-    ];
+  #imports =
+  #  [
+  #    ./systemd-boot.nix
+  #  ];
   boot = {
     tmp.cleanOnBoot = true;
     loader = {
@@ -14,11 +14,11 @@ in
       systemd-boot = {
         enable = true;
         configurationLimit = 4;
-        secureBoot = {
-          enable = true;
-          keyPath = "/DB.key";
-          certPath = "/DB.crt";
-        };
+        #secureBoot = {
+        #  enable = true;
+        #  keyPath = "/DB.key";
+        #  certPath = "/DB.crt";
+        #};
       };
       efi.canTouchEfiVariables = true;
     };
