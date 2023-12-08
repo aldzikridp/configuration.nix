@@ -12,22 +12,39 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "iommu=active" "amdgpu.ignore_crat=1" ];
-  services.fstrim.enable = true;
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/ab1ca319-ea26-4fca-bef2-823ce6135266";
+    { device = "/dev/disk/by-uuid/7d7a4ced-ae0f-4cb5-8697-6fde339d09fd";
       fsType = "btrfs";
-      options = [ "subvol=nixos" ];
+      options = [ "subvol=root" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/7d7a4ced-ae0f-4cb5-8697-6fde339d09fd";
+      fsType = "btrfs";
+      options = [ "subvol=home" ];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/7d7a4ced-ae0f-4cb5-8697-6fde339d09fd";
+      fsType = "btrfs";
+      options = [ "subvol=nix" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/2256-7F67";
+    { device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/cc685c16-cc76-42bf-983c-87a1c7dc1ab0"; }
-    ];
+  swapDevices = [ ];
 
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
