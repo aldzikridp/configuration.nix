@@ -39,7 +39,8 @@
 
 
   EnableTrackingProtection =
-  { Value          = true;
+  {
+    Value          = true;
     Cryptomining   = true;
     Fingerprinting = true;
   };
@@ -48,6 +49,7 @@
   {
     Autoplay = {
       Default = "block-audio-video";
+      Locked = true;
     };
   };
 
