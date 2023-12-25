@@ -20,6 +20,7 @@
   imports =
     [
       ./module/systemd-boot/boot.nix
+      ./module/bash
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock

@@ -26,6 +26,7 @@ extensions = {
   "cliget@zaidabdulla.com" = "cliget";
   "ff2mpv@yossarian.net" = "ff2mpv";
   "7esoorv3@alefvanoon.anonaddy.me" = "libredirect";
+  "jid1-BoFifL9Vbdl2zQ@jetpack" = "decentraleyes";
 };
 
 in {
