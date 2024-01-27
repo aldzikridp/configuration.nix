@@ -50,6 +50,6 @@ in
   environment.systemPackages = with pkgs; [ 
     quickemuWithClipboard
     samba
-    fuse-overlayfs # for minikube with podman driver
+    #fuse-overlayfs # for minikube with podman driver
   ];
 }
