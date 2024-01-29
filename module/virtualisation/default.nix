@@ -10,11 +10,19 @@ let
       ];
     });
   });
-  customQemuConfFlags = [ "--enable-gtk-clipboard" ];
+  customQemuConfFlags = [ 
+   "--enable-gtk-clipboard"
+  ];
   quickemuWithClipboard = pkgs.quickemu.override (quickemuOld: {
     qemu = (quickemuOld.qemu.overrideAttrs (attrs: {
       configureFlags = attrs.configureFlags ++ customQemuConfFlags;
-    })).override{hostCpuOnly = true;};
+    })).override{
+      hostCpuOnly = true;
+      smbdSupport = true;
+    };
+  });
+  quickemuHostCPUOnly = pkgs.quickemu.override (quickemuOld: {
+    qemu = pkgs.qemu_kvm.override{ smbdSupport = true; };
   });
 in
 {
@@ -49,6 +57,8 @@ in
   # Quickemu
   environment.systemPackages = with pkgs; [ 
     quickemuWithClipboard
+    #quickemuHostCPUOnly
+    #quickemu
     samba
     #fuse-overlayfs # for minikube with podman driver
   ];
