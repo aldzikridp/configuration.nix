@@ -64,14 +64,14 @@ in
     #xournalpp
     thunderbird
     gnome.adwaita-icon-theme
-    unstable.tdesktop
+    tdesktop
     dbus-sway-environment
     #(unstable.google-chrome.override {
     #  commandLineArgs = chromiumArgs;
     #})
     #unstable.google-chrome
-    unstable.liferea
-    unstable.rssguard
+    #unstable.liferea
+    #unstable.rssguard
     #(ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
     #})

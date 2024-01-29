@@ -8,7 +8,7 @@ let
       sha256 = "0k7mxd9c38igaqghq0rdwl3m7lg3567yc80886zms6jhy8ymskcn";
     };
   });
-  mympv = (pkgs.unstable.pkgs.mpv.override {
+  mympv = (pkgs.mpv.override {
     scripts = [
       thumbnail-fork
     ];

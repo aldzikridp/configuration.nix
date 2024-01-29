@@ -11,7 +11,7 @@ let
   #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
   #  };
   #};
-  myPluginList = with pkgs.unstable.pkgs.vimPlugins;[          
+  myPluginList = with pkgs.vimPlugins;[          
           bufferline-nvim
           cmp-buffer
           cmp-cmdline
@@ -37,7 +37,7 @@ let
           tokyonight-nvim
           nvim-treesitter.withAllGrammars
   ];
-  myneovim = pkgs.unstable.pkgs.neovim.override {
+  myneovim = pkgs.neovim.override {
     configure = {
       customRC = ''
         source $HOME/.config/nvim/init.lua

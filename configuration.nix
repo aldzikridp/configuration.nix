@@ -86,7 +86,7 @@
     ripgrep
     rsync
     starship
-    (unstable.transmission_4.override { enableCli = false; })
+    (transmission_4.override { enableCli = false; })
     unrar-wrapper
     unzip
     whois
