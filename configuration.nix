@@ -50,6 +50,7 @@
     p7zip
     nil
     bat
+    buku
     btop
     chezmoi
     dnsutils

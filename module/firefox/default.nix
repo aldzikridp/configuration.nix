@@ -17,7 +17,7 @@ gopassff-host = pkgs.passff-host.overrideAttrs (oldAttrs: {
   '';
 });
 extensions = {
-  # only need these two extensions, others will sync after login.
+  # Can use extension https://github.com/mkaply/queryamoid to query amo
   "Tab-Session-Manager@sienori" = "tab-session-manager";
   "uBlock0@raymondhill.net" = "ublock-origin";
   "passff@invicem.pro" = "passff";
@@ -27,6 +27,7 @@ extensions = {
   "ff2mpv@yossarian.net" = "ff2mpv";
   "7esoorv3@alefvanoon.anonaddy.me" = "libredirect";
   "jid1-BoFifL9Vbdl2zQ@jetpack" = "decentraleyes";
+  "bukubrow@samhh.com" = "bukubrow";
 };
 
 in {
@@ -40,6 +41,7 @@ in {
     nativeMessagingHosts.packages = [
       pkgs.ff2mpv
       gopassff-host
+      pkgs.bukubrow
     ];
     #preferences = import ./policy-firefox.nix;
     autoConfig = builtins.readFile ./config-firefox.js;
