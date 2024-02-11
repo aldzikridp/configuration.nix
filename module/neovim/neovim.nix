@@ -36,6 +36,7 @@ let
           rest-nvim
           tokyonight-nvim
           nvim-treesitter.withAllGrammars
+          gitsigns-nvim
   ];
   myneovim = pkgs.neovim.override {
     configure = {
