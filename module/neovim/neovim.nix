@@ -24,10 +24,8 @@ let
           lualine-nvim
           luasnip
           indent-blankline-nvim
-          null-ls-nvim
           nvim-cmp
           nvim-lspconfig
-          nvim-lsp-ts-utils
           nvim-tree-lua
           nvim-treesitter-refactor
           nvim-treesitter-textobjects
