@@ -38,6 +38,7 @@ in {
   ];
   programs.firefox = {
     enable = true;
+    package = pkgs.firefox;
     nativeMessagingHosts.packages = [
       pkgs.ff2mpv
       gopassff-host
