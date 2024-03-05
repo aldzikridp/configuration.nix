@@ -28,6 +28,7 @@ extensions = {
   "7esoorv3@alefvanoon.anonaddy.me" = "libredirect";
   "jid1-BoFifL9Vbdl2zQ@jetpack" = "decentraleyes";
   "bukubrow@samhh.com" = "bukubrow";
+  "addon@fastforward.team" = "fastforwardteam";
 };
 
 in {
