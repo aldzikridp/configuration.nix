@@ -60,6 +60,7 @@
     gcc
     git
     gopass
+    pwgen
     lazygit
     gnumake
     htop
