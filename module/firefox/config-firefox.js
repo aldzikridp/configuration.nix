@@ -170,9 +170,9 @@ pref( 'network.cookie.thirdparty.sessionOnly', true );
 
 pref( 'network.IDN_show_punycode', true );
 
-pref( 'security.OCSP.enabled', 1 );
-pref( 'security.OCSP.require', true );
-pref( 'security.ssl.enable_ocsp_stapling', true );
+#pref( 'security.OCSP.enabled', 1 );
+#pref( 'security.OCSP.require', true );
+#pref( 'security.ssl.enable_ocsp_stapling', true );
 pref( 'security.ssl.treat_unsafe_negotiation_as_broken', true );
 
 pref("privacy.clearOnShutdown.cookies", false);
