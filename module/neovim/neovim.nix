@@ -53,24 +53,24 @@ let
   };
 in
 {
-  environment.systemPackages = with pkgs; [
-    neovim-remote
-    myneovim
-  ];
-  #programs.neovim = {
-  #  enable = false;
-  #  configure = {
-  #    customRC = ''
-  #      source $HOME/.config/nvim/init.lua
-  #    '';
-  #    packages.myVimPackage = {
-  #      start = [
-  #        myPluginList
-  #      ];
-  #      #opt = [
-  #      #  nvim-jdtls
-  #      #];
-  #    };
-  #  };
-  #};
+  #environment.systemPackages = with pkgs; [
+  #  neovim-remote
+  #  myneovim
+  #];
+  programs.neovim = {
+    enable = true;
+    configure = {
+      customRC = ''
+        source $HOME/.config/nvim/init.lua
+      '';
+      packages.myVimPackage = {
+        start = [
+          myPluginList
+        ];
+        #opt = [
+        #  nvim-jdtls
+        #];
+      };
+    };
+  };
 }
