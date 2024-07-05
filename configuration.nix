@@ -80,7 +80,8 @@
     atool             # archive preview
     poppler_utils     # pdf preview
     (pkgs.callPackage ./pkgs/rifle/default.nix { })
-    (pkgs.callPackage ./pkgs/ctpv/default.nix { })
+    #(pkgs.callPackage ./pkgs/ctpv/default.nix { })
+    ctpv
     ###################
     
     kopia
