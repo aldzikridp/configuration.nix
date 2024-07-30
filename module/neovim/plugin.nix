@@ -1,48 +1,29 @@
-{ pkgs, vimUtils, fetchgit }:
+{ pkgs, vimUtils, fetchFromGitHub }:
 
-with vimUtils;
 
 let
-  buildVimPlugin = pkgs.vimUtils.buildVimPlugin;
+  buildVimPlugin = pkgs.unstable.pkgs.vimUtils.buildVimPlugin;
 in
 {
-  "tokyonight" = buildVimPlugin {
-    name = "tokyonight";
-    src = fetchgit {
-      url = "https://github.com/folke/tokyonight.nvim";
-      rev = "eede574f9ef57137e6d7e4bab37b09db636c5a56";
-      sha256 = "06hhg5n8k9iri3mlgbf80hwz9qwjkvvl6x5f6kjih7klzcx6x04j";
-    };
-    dependencies = [ ];
-  };
-
-  cmp-nvim-lsp = buildVimPlugin {
-    name = "cmp-nvim-lsp";
-    src = fetchgit {
-      url = "https://github.com/hrsh7th/cmp-nvim-lsp";
-      rev = "899f70af0786d4100fb29987b9ab03eac7eedd6a";
-      sha256 = "1gw478b77smkn3k42h2q3ddq2kcd7vm6mnmjmksvbsfv5xp9pln0";
+  "kulala_nvim" = buildVimPlugin {
+    name = "kulala_nvim";
+    src = fetchFromGitHub {
+      owner = "mistweaverco";
+      repo = "kulala.nvim";
+      rev = "v2.7.0";
+      hash = "sha256-GFaTFQ0jPvyJgkG83+HAeZqTzr7CMIHDJ8q9V6ljdS8=";
     };
   };
 
- cmp_luasnip = buildVimPlugin {
-    name = "cmp_luasnip";
-    src = fetchgit {
-      url = "https://github.com/saadparwaiz1/cmp_luasnip/";
-      rev = "fc033ce441b29f1755fd2314125772d21e5c5127";
-      sha256 = "1np6x7wybh7w1m06h03sczv35a7ag3j37a8sk0yjcm95vysmwikd";
+  "curl_nvim" = buildVimPlugin {
+    name = "curl_nvim";
+    src = fetchFromGitHub {
+      owner = "oysandvik94";
+      repo = "curl.nvim";
+      rev = "cafd091aabfa531a6f7a0631f2e6d22cff4b8c91";
+      hash = "sha256-O+zIvD2jMg2VOFBTetCYriB4kZKGWQ8paqkIPGpkkW4=";
     };
   };
-
-  nvim-cmp = buildVimPlugin {
-    name = "nvim-cmp";
-    src = fetchgit {
-      url = "https://github.com/hrsh7th/nvim-cmp/";
-      rev = "f3a54918944d2c8778e6f13e2fc3ec4251863afb";
-      sha256 = "0zjmvpxx46dy1q7jg1a7r51nqc7wzqa8vjzd8ff8nphs0j5zlvfn";
-    };
-  };
-
 
   #"DyeVim" = buildVimPlugin {
   #  name = "DyeVim";

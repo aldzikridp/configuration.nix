@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  #plugins = pkgs.callPackage ./plugin.nix { };
+  plugins = pkgs.callPackage ./plugin.nix { };
   #buildVimPlugin = unstable.pkgs.vimUtils.buildVimPlugin;
   #"filetype-nvim" = buildVimPlugin {
   #  name = "filetype-nvim";
@@ -11,7 +11,7 @@ let
   #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
   #  };
   #};
-  myPluginList = with pkgs.vimPlugins;[          
+  myPluginList = with pkgs.unstable.pkgs.vimPlugins;[          
           bufferline-nvim
           cmp-buffer
           cmp-cmdline
@@ -31,12 +31,15 @@ let
           nvim-treesitter-textobjects
           nvim-web-devicons
           plenary-nvim
-          rest-nvim
           tokyonight-nvim
           nvim-treesitter.withAllGrammars
           gitsigns-nvim
   ];
-  myneovim = pkgs.neovim.override {
+  myOtherPluginList = with plugins;[
+    kulala_nvim
+    #curl_nvim
+  ];
+  myneovim = pkgs.unstable.pkgs.neovim.override {
     configure = {
       customRC = ''
         source $HOME/.config/nvim/init.lua
@@ -44,6 +47,7 @@ let
       packages.myVimPackage = {
         start = [
           myPluginList
+          myOtherPluginList
         ];
         #opt = [
         #  nvim-jdtls
@@ -53,12 +57,12 @@ let
   };
 in
 {
-  #environment.systemPackages = with pkgs; [
-  #  neovim-remote
-  #  myneovim
-  #];
+  environment.systemPackages = with pkgs; [
+    neovim-remote
+    myneovim
+  ];
   programs.neovim = {
-    enable = true;
+    enable = false;
     configure = {
       customRC = ''
         source $HOME/.config/nvim/init.lua
@@ -66,6 +70,7 @@ in
       packages.myVimPackage = {
         start = [
           myPluginList
+          myOtherPluginList
         ];
         #opt = [
         #  nvim-jdtls
