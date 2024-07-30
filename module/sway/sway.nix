@@ -70,7 +70,7 @@ in
     #  commandLineArgs = chromiumArgs;
     #})
     #unstable.google-chrome
-    #unstable.liferea
+    liferea
     #unstable.rssguard
     #(ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
