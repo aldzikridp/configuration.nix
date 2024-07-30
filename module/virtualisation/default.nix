@@ -14,11 +14,10 @@ let
    "--enable-gtk-clipboard"
   ];
   quickemuWithClipboard = pkgs.quickemu.override (quickemuOld: {
-    qemu = (quickemuOld.qemu.overrideAttrs (attrs: {
+    qemu_full = (quickemuOld.qemu_full.overrideAttrs (attrs: {
       configureFlags = attrs.configureFlags ++ customQemuConfFlags;
     })).override{
       hostCpuOnly = true;
-      smbdSupport = true;
     };
   });
   quickemuHostCPUOnly = pkgs.quickemu.override (quickemuOld: {
@@ -59,7 +58,7 @@ in
     quickemuWithClipboard
     #quickemuHostCPUOnly
     #quickemu
-    samba
+    #samba
     #fuse-overlayfs # for minikube with podman driver
   ];
 }
