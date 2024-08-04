@@ -11,7 +11,7 @@ let
   #    sha256 = "0l2cg7r78qbsbc6n5cvwl5m5lrzyfvazs5z3gf54hspw120nzr87";
   #  };
   #};
-  myPluginList = with pkgs.unstable.pkgs.vimPlugins;[          
+  nixPlugins = with pkgs.vimPlugins;[          
           bufferline-nvim
           cmp-buffer
           cmp-cmdline
@@ -35,9 +35,9 @@ let
           nvim-treesitter.withAllGrammars
           gitsigns-nvim
   ];
-  myOtherPluginList = with plugins;[
-    kulala_nvim
-    #curl_nvim
+  customPlugins = with plugins;[
+    #kulala_nvim
+    curl_nvim
   ];
   myneovim = pkgs.unstable.pkgs.neovim.override {
     configure = {
@@ -46,8 +46,8 @@ let
       '';
       packages.myVimPackage = {
         start = [
-          myPluginList
-          myOtherPluginList
+          nixPlugins
+          customPlugins
         ];
         #opt = [
         #  nvim-jdtls
@@ -57,20 +57,20 @@ let
   };
 in
 {
-  environment.systemPackages = with pkgs; [
-    neovim-remote
-    myneovim
-  ];
+  #environment.systemPackages = with pkgs; [
+  #  neovim-remote
+  #  myneovim
+  #];
   programs.neovim = {
-    enable = false;
+    enable = true;
     configure = {
       customRC = ''
         source $HOME/.config/nvim/init.lua
       '';
       packages.myVimPackage = {
         start = [
-          myPluginList
-          myOtherPluginList
+          nixPlugins
+          customPlugins
         ];
         #opt = [
         #  nvim-jdtls

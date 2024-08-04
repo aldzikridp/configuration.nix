@@ -2,7 +2,7 @@
 
 
 let
-  buildVimPlugin = pkgs.unstable.pkgs.vimUtils.buildVimPlugin;
+  buildVimPlugin = pkgs.vimUtils.buildVimPlugin;
 in
 {
   "kulala_nvim" = buildVimPlugin {
@@ -13,6 +13,10 @@ in
       rev = "v2.7.0";
       hash = "sha256-GFaTFQ0jPvyJgkG83+HAeZqTzr7CMIHDJ8q9V6ljdS8=";
     };
+    dependencies = with pkgs;[
+      libxml2
+      jq
+    ];
   };
 
   "curl_nvim" = buildVimPlugin {
@@ -23,6 +27,9 @@ in
       rev = "cafd091aabfa531a6f7a0631f2e6d22cff4b8c91";
       hash = "sha256-O+zIvD2jMg2VOFBTetCYriB4kZKGWQ8paqkIPGpkkW4=";
     };
+    dependencies = with pkgs;[ 
+      vimPlugins.plenary-nvim
+    ];
   };
 
   #"DyeVim" = buildVimPlugin {
