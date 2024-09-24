@@ -71,6 +71,7 @@ in
     #})
     #unstable.google-chrome
     liferea
+    xournalpp
     #unstable.rssguard
     #(ungoogled-chromium.override{
     #  commandLineArgs = chromiumArgs;
