@@ -59,7 +59,7 @@ in
     wf-recorder
     xdragon
     slurp
-    zathura
+    #zathura
     #luakit
     #xournalpp
     thunderbird

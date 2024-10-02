@@ -20,13 +20,13 @@
   imports =
     [
       ./module/systemd-boot/boot.nix
-      ./module/bash
+      #./module/bash
       ./module/network/networking.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
       ./module/polkit
       ./module/neovim/neovim.nix
-      ./module/mpv/mpv.nix
+      #./module/mpv/mpv.nix
       ./module/sway/sway.nix
       ./module/fonts/fonts.nix
       ./module/firefox
@@ -43,7 +43,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     #steam-run-native
-    (ncmpcpp.override { visualizerSupport = true; })
+    #(ncmpcpp.override { visualizerSupport = true; })
     (libsForQt5.callPackage ./pkgs/qqsp/default.nix { })
     (pkgs.callPackage ./pkgs/fzf-tab/default.nix { })
     #_7zz
@@ -67,8 +67,8 @@
     imagemagick
     killall
 
-    mpc_cli
-    mpd
+    #mpc_cli
+    #mpd
     ncdu
     pamixer
     parallel
@@ -81,15 +81,15 @@
     poppler_utils     # pdf preview
     (pkgs.callPackage ./pkgs/rifle/default.nix { })
     #(pkgs.callPackage ./pkgs/ctpv/default.nix { })
-    ctpv
+    #ctpv
     ###################
     
     kopia
     rclone
     ripgrep
     rsync
-    starship
-    (transmission_4.override { enableCli = false; })
+    #starship
+    #(transmission_4.override { enableCli = false; })
     unrar-wrapper
     unzip
     whois
@@ -137,6 +137,7 @@
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
+  services.pipewire.wireplumber.enable = true;
   
   services.udisks2.enable = true;
 
