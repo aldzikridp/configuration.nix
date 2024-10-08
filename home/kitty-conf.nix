@@ -3,7 +3,6 @@
   programs.kitty = {
     enable = true; # required for the default Hyprland config
     font = {
-      package = pkgs.nerdfonts;
       name = "JetBrainsMono Nerd Font";
       size = 11;
     };

@@ -27,9 +27,9 @@
       ./module/polkit
       ./module/neovim/neovim.nix
       #./module/mpv/mpv.nix
-      ./module/sway/sway.nix
+      #./module/sway/sway.nix
       ./module/fonts/fonts.nix
-      ./module/firefox
+      #./module/firefox
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -140,6 +140,8 @@
   services.pipewire.wireplumber.enable = true;
   
   services.udisks2.enable = true;
+
+  security.pam.services.swaylock = {};
 
   hardware.opengl = {
     enable = true;

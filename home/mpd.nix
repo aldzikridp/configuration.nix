@@ -2,6 +2,9 @@
 {
   services.mpd = {
     enable = true;
+    network = {
+      startWhenNeeded = true;
+    };
     dataDir = "${config.home.homeDirectory}/.mpd";
     musicDirectory = "${config.xdg.userDirs.music}";
     #playlistDirectory = "~/Music/mpd_playlist";

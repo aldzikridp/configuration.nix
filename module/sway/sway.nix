@@ -55,16 +55,9 @@ in
     jq
     pavucontrol
     polkit_gnome
-    udiskie
-    wf-recorder
-    xdragon
-    slurp
     #zathura
     #luakit
     #xournalpp
-    thunderbird
-    gnome.adwaita-icon-theme
-    tdesktop
     dbus-sway-environment
     #(unstable.google-chrome.override {
     #  commandLineArgs = chromiumArgs;

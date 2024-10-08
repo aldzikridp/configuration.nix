@@ -11,16 +11,23 @@ function launch() {
 }
 
 function set_cover() {
-kitty @ send-text \
-    --match title:cover \
-    "clear && kitty icat --align=center --transfer-mode=stream '$COVER' \r"
+  if [[ -z $COVER ]]
+  then
+    kitty @ send-text \
+        --match title:cover \
+        "clear && echo 'NO COVER' \r"
+  else
+    kitty @ send-text \
+        --match title:cover \
+        "clear && kitty icat --align=center --transfer-mode=stream \"$COVER\" \r"
+  fi
 }
 
 function get_cover() {
     music_dir="$HOME/Music/"
     mpd_host="localhost"
     mpd_port=6600
-    current_music="$(mpc --host="$mpd_host" --format %file% current)"
+    current_music="$(mpc --host="$mpd_host" --port="$mpd_port" --format %file% current)"
     current_music_dir="$music_dir$(dirname "$current_music")"
 
     COVER="$(fd -e png -e jpg cover -1 "$current_music_dir")"
@@ -29,16 +36,16 @@ function get_cover() {
         return 0
     fi
 
-    ffmpeg -i "$music_dir$current_music" "/tmp/cover" -y &> /dev/null
+    ffmpeg -i "$music_dir$current_music" "/tmp/cover.png" -y &> /dev/null
     STATUS=$?
 
     if [[ $STATUS -eq 0 ]]
     then
-        COVER="/tmp/cover"
+        COVER="/tmp/cover.png"
         return 0
     fi
 
-    COVER="$HOME/.config/ncmpcpp/art.png"
+    #COVER="$HOME/.config/ncmpcpp/art.png"
 }
 
 

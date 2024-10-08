@@ -31,7 +31,7 @@
 
         dragon = ''
           &{{
-            ${pkgs.dragon}/bin/dragon --and-exit -A $fx
+            ${pkgs.xdragon}/bin/dragon --and-exit -A $fx
           }}
         '';
 
