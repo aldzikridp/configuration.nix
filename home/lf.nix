@@ -104,14 +104,14 @@
       }
       # audio/video
       {
-        # no gui
-        condition = "mime ^audio/ogg$, has mpv, terminal";
-        command = ''${pkgs.mpv}/bin/mpv -- "$@"'';
-      }
-      {
         # with gui
         condition = "mime ^video|^audio, has mpv, env WAYLAND_DISPLAY, flag f";
-        command = ''${pkgs.mpv}/bin/mpv -- "$@"'';
+        command = ''mpv --force-window=yes --fs -- "$@"'';
+      }
+      {
+        # no gui
+        condition = "mime ^audio/ogg$, has mpv, terminal";
+        command = ''mpv --force-window=yes -- "$@"'';
       }
       # images
       {

@@ -11,9 +11,6 @@
       EDITOR = "nvim";
     };
     initExtra = ''
-      export FZF_DEFAULT_COMMAND="printf \"%s\0\" */ | parallel -0 'find {}' 2>/dev/null"
-      export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-      export FZF_ALT_C_COMMAND="printf \"%s\0\" */ | parallel -0 'find {} -type d' 2>/dev/null"
       set -o vi
       
       if command -v fzf-tab-bash >/dev/null; then

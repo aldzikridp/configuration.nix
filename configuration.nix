@@ -44,64 +44,33 @@
   environment.systemPackages = with pkgs; [
     #steam-run-native
     #(ncmpcpp.override { visualizerSupport = true; })
-    (libsForQt5.callPackage ./pkgs/qqsp/default.nix { })
-    (pkgs.callPackage ./pkgs/fzf-tab/default.nix { })
     #_7zz
-    p7zip
-    nil
-    bat
-    buku
-    btop
-    chezmoi
     dnsutils
     inetutils
-    fd
-    ffmpeg-full
     gcc
     git
-    gopass
-    pwgen
-    lazygit
     gnumake
-    htop
-    imagemagick
     killall
 
     #mpc_cli
     #mpd
     ncdu
-    pamixer
-    parallel
 
     ### File Manager ###
-    lf
     file
-    ffmpegthumbnailer # video thumbnail
     atool             # archive preview
-    poppler_utils     # pdf preview
-    (pkgs.callPackage ./pkgs/rifle/default.nix { })
+    #(pkgs.callPackage ./pkgs/rifle/default.nix { })
     #(pkgs.callPackage ./pkgs/ctpv/default.nix { })
     #ctpv
     ###################
     
-    kopia
-    rclone
-    ripgrep
-    rsync
     #starship
     #(transmission_4.override { enableCli = false; })
-    unrar-wrapper
-    unzip
-    whois
-    zbar #for QR
-    zip
   ];
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
   # programs.zsh.enable = true;
-  programs.fzf.fuzzyCompletion = true;
-  programs.fzf.keybindings = true;
   programs.gnupg.agent = {
     enable = true;
     pinentryPackage = pkgs.pinentry-gnome3;

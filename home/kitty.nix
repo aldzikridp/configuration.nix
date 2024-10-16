@@ -1,10 +1,12 @@
-{ pkgs, ... }:
 {
   programs.kitty = {
     enable = true; # required for the default Hyprland config
     font = {
       name = "JetBrainsMono Nerd Font";
       size = 11;
+    };
+    shellIntegration = {
+      enableBashIntegration = true;
     };
     settings = {
       "background_opacity" = "0.7";

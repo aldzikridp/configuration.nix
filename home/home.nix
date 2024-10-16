@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   imports = [
-    ./kitty-conf.nix
+    ./kitty.nix
     ./sway
     ./lf.nix
     ./mpv.nix
@@ -9,9 +9,36 @@
     ./ncmpcpp
     ./zathura.nix
     ./bash.nix
+    ./fzf.nix
     ./firefox
   ];
   home.packages = with pkgs;[
+    gopass
+    pwgen
+    ffmpeg-full
+    ffmpegthumbnailer # video thumbnail
+    kopia
+    ripgrep
+    rsync
+    rclone
+    (pkgs.callPackage ../pkgs/fzf-tab/default.nix { })
+    (libsForQt5.callPackage ../pkgs/qqsp/default.nix { })
+    pamixer
+    unrar-wrapper
+    unzip
+    whois
+    zbar #for QR
+    zip
+    parallel
+    bat 
+    fd
+    imagemagick
+    lazygit
+    nil
+    buku
+    p7zip
+    btop
+    chezmoi
     jq
     brightnessctl
     pavucontrol
