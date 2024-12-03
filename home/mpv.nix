@@ -4,8 +4,15 @@
   programs.mpv = {
    enable = true;
    scripts = with pkgs.mpvScripts;[
-    thumbnail
+    thumbfast
+    quality-menu
+    uosc
    ];
+   scriptOpts = {
+    thumbfast = {
+      network = true;
+    };
+   };
    config = {
     osc = "no";
     hwdec = "yes";
