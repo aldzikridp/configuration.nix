@@ -37,7 +37,7 @@ in
     wl-clipboard
     wf-recorder
     wdisplays
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     slurp
     imv
   ];
