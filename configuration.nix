@@ -25,7 +25,7 @@
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
       ./module/polkit
-      ./module/neovim/neovim.nix
+      #./module/neovim/neovim.nix
       #./module/mpv/mpv.nix
       #./module/sway/sway.nix
       ./module/fonts/fonts.nix

@@ -11,6 +11,7 @@
     ./bash.nix
     ./fzf.nix
     ./firefox
+    ./neovim
   ];
   home.packages = with pkgs;[
     gopass
