@@ -19,6 +19,8 @@ extensions = {
   "jid1-BoFifL9Vbdl2zQ@jetpack" = "decentraleyes";
   "bukubrow@samhh.com" = "bukubrow";
   "addon@fastforward.team" = "fastforwardteam";
+  "{0da2e603-21ba-4422-8049-b6d9e013ed84}" = "image-reverse-search";
+  "{4c421bb7-c1de-4dc6-80c7-ce8625e34d24}" = "load-reddit-images-directly";
 };
 
 in
