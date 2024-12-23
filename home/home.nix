@@ -47,6 +47,7 @@
     wl-clipboard
     xdragon
     grim
+    openttd
     thunderbird
     tdesktop
     liferea
