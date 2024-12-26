@@ -2,6 +2,7 @@
 {
   imports = [
     ./kitty.nix
+    ./foot.nix
     ./sway
     ./lf.nix
     ./mpv.nix
