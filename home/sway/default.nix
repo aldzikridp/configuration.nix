@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  MYTERM = "${pkgs.kitty}/bin/kitty";
+  MYTERM = "exec ${pkgs.foot}/bin/footclient";
   EXEC_TERM = "exec ${MYTERM} --single-instance";
   FZF_LAUNCHER = ''
     ${MYTERM} \
@@ -86,10 +86,10 @@ in
         let modifier = config.wayland.windowManager.sway.config.modifier;
         in
         lib.mkOptionDefault {
-          "${modifier}+Return"="${EXEC_TERM}";
+          "${modifier}+Return"="${MYTERM}";
           "${modifier}+d"="exec wofi";
           #"${modifier}+p"="exec ${FZF_LAUNCHER} _fzf_pass";
-          "${modifier}+Shift+m"="${LAUNCH_MUSIC}";
+          #"${modifier}+Shift+m"="${LAUNCH_MUSIC}";
           "${modifier}+Ctrl+l"="${LOCK_SCREEN}";
           "${modifier}+Ctrl+s"="${SUSPEND}";
           "XF86AudioRaiseVolume"="exec pamixer -i 1";

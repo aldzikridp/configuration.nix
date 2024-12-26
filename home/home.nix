@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   imports = [
-    ./kitty.nix
     ./foot.nix
     ./sway
     ./lf.nix
@@ -21,6 +20,7 @@
     ffmpegthumbnailer # video thumbnail
     kopia
     ripgrep
+    rmpc
     rsync
     rclone
     (pkgs.callPackage ../pkgs/fzf-tab/default.nix { })

@@ -1,6 +1,7 @@
 {
   programs.bash = {
     enable = true;
+    enableVteIntegration = true;
     shellAliases = {
       ssh = "kitty +kitten ssh";
       icat = "kitty +kitten icat";
