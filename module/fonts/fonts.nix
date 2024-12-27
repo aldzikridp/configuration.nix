@@ -3,8 +3,9 @@
   fonts = {
     packages = with pkgs; [
       #(nerdfonts.override { fonts = [ "JetBrainsMono" "RobotoMono" ]; })
+      noto-fonts
+      noto-fonts-color-emoji
       nerdfonts
-      emojione
       roboto
       corefonts
     ];
