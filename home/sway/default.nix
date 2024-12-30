@@ -31,7 +31,7 @@ in
   imports = [
     ./waybar.nix
     ./mako.nix
-    ./wofi.nix
+    ./fuzzel.nix
   ];
   home.packages = with pkgs;[
     wl-clipboard
@@ -87,7 +87,7 @@ in
         in
         lib.mkOptionDefault {
           "${modifier}+Return"="${MYTERM}";
-          "${modifier}+d"="exec wofi";
+          "${modifier}+d"="exec fuzzle";
           #"${modifier}+p"="exec ${FZF_LAUNCHER} _fzf_pass";
           #"${modifier}+Shift+m"="${LAUNCH_MUSIC}";
           "${modifier}+Ctrl+l"="${LOCK_SCREEN}";

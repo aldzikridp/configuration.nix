@@ -2,6 +2,7 @@
 {
   programs.neovim = {
     enable = true;
+    defaultEditor = true;
     #extraConfig = ''
     #  source $HOME/.config/nvim/myinit.lua
     #'';
