@@ -60,6 +60,9 @@ in
     checkConfig = false; #Check fail when setting wallpaper
     wrapperFeatures.gtk = true;
     config = {
+      startup = [
+        { command = "${pkgs.foot}/bin/foot -s"; }
+      ];
       defaultWorkspace = "workspace number 1";
       bars = [ {
         command = "${pkgs.waybar}/bin/waybar";
