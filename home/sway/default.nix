@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 let
-  MYTERM = "exec ${pkgs.foot}/bin/footclient";
+  MYTERM = "exec ${pkgs.foot}/bin/footclient -E";
   EXEC_TERM = "exec ${MYTERM} --single-instance";
   FZF_LAUNCHER = ''
     ${MYTERM} \
@@ -87,7 +87,7 @@ in
         in
         lib.mkOptionDefault {
           "${modifier}+Return"="${MYTERM}";
-          "${modifier}+d"="exec fuzzle";
+          "${modifier}+d"="exec fuzzel";
           #"${modifier}+p"="exec ${FZF_LAUNCHER} _fzf_pass";
           #"${modifier}+Shift+m"="${LAUNCH_MUSIC}";
           "${modifier}+Ctrl+l"="${LOCK_SCREEN}";
