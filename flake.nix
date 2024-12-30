@@ -31,7 +31,7 @@
                 overlay-unstable
               ];
             })
-            ./module/virtualisation
+            #./module/virtualisation
             ./configuration.nix
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/thinkpad.nix
@@ -48,7 +48,7 @@
                 overlay-unstable
               ];
             })
-            ./module/virtualisation
+            #./module/virtualisation
             ./configuration.nix
             home-manager.nixosModules.home-manager
             {
