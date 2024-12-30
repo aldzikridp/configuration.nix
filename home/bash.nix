@@ -11,6 +11,11 @@
     #  VISUAL = "nvim";
     #  EDITOR = "nvim";
     #};
+    historyControl = [ "ignoreboth" ];
+    historyIgnore = [
+      "sway"
+      "ls"
+    ];
     initExtra = ''
       set -o vi
       
@@ -18,41 +23,26 @@
         source "$(fzf-tab-bash)"
         bind -x '"\t": fzf_bash_completion'
       fi
-      shopt -s histappend
-      # Store bash history immediatly (history -a)
-      # Up key show local terminal history rather than globally (history -n)
-      #export PROMPT_COMMAND='$PROMPT_COMMAND;history -a;history -n'
-      PROMPT_COMMAND='history -a; history -n'
       
-      # CONTROL BASH HISTORY
-      # ignorespace = don’t save lines which begin with a <space> character
-      # ignoredups = don’t save lines matching the previous history entry
-      # ignoreboth = use both ‘ignorespace’ and ‘ignoredups’
-      # erasedups = eliminate duplicates across the whole history
-      HISTCONTROL=ignorespace:erasedups
-      
-      # Ignore specific commands
-      #HISTIGNORE='ls *:ls:cd *:cd:ranger *:ranger:rm *:sway *:clear *'
-      HISTIGNORE='sway *:clear *'
-
     '';
-    #bashrcExtra = ''
-    #  osc7_cwd() {
-    #      local strlen=''${#PWD}
-    #      local encoded=""
-    #      local pos c o
-    #      for (( pos=0; pos<strlen; pos++ )); do
-    #          c=''${PWD:''$pos:1}
-    #          case "''$c" in
-    #              [-/:_.!\'\(\)~[:alnum:]] ) o="''${c}" ;;
-    #              * ) printf -v o '%%%02X' "''\'''${c}" ;;
-    #          esac
-    #          encoded+="''${o}"
-    #      done
-    #      printf '\e]7;file://%s%s\e\\' "''${HOSTNAME}" "''${encoded}"
-    #  }
-    #  PROMPT_COMMAND=''${PROMPT_COMMAND:+''${PROMPT_COMMAND%;}; }osc7_cwd
-    #'';
+    bashrcExtra = ''
+      osc7_cwd() {
+          local strlen=''${#PWD}
+          local encoded=""
+          local pos c o
+          for (( pos=0; pos<strlen; pos++ )); do
+              c=''${PWD:''$pos:1}
+              case "''$c" in
+                  [-/:_.!\'\(\)~[:alnum:]] ) o="''${c}" ;;
+                  * ) printf -v o '%%%02X' "''\'''${c}" ;;
+              esac
+              encoded+="''${o}"
+          done
+          printf '\e]7;file://%s%s\e\\' "''${HOSTNAME}" "''${encoded}"
+      }
+      #PROMPT_COMMAND=''${PROMPT_COMMAND:+''${PROMPT_COMMAND%;}; }osc7_cwd
+      starship_precmd_user_func="osc7_cwd"
+    '';
   };
   programs.starship = {
     enable = true;
