@@ -1,12 +1,12 @@
 {
-  services.mako = {
+  services.mako.settings = {
    enable = true;
-   maxVisible = 3;
-   defaultTimeout = 15000;
+   max-visible = 3;
+   default-timeout = 15000;
    anchor = "top-center";
    font = "Roboto 10";
-   backgroundColor = "#000000";
-   textColor = "#FFFFFF";
-   borderSize = 0;
+   background-color = "#000000";
+   text-color = "#FFFFFF";
+   border-size = 0;
   };
 }

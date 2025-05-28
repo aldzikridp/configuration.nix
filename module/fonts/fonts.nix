@@ -1,14 +1,16 @@
 { pkgs, lib, ... }:
+let
+  nerdfonts = builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+in
 {
   fonts = {
-    packages = with pkgs; [
+    packages = [
       #(nerdfonts.override { fonts = [ "JetBrainsMono" "RobotoMono" ]; })
-      noto-fonts
-      noto-fonts-color-emoji
-      nerdfonts
-      roboto
-      corefonts
-    ];
+      pkgs.noto-fonts
+      pkgs.noto-fonts-color-emoji
+      pkgs.roboto
+      pkgs.corefonts
+    ] ++ nerdfonts ;
     fontDir.enable = true;
   };
 }
