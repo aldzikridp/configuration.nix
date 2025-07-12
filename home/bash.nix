@@ -41,15 +41,15 @@
           printf '\e]7;file://%s%s\e\\' "''${HOSTNAME}" "''${encoded}"
       }
       #PROMPT_COMMAND=''${PROMPT_COMMAND:+''${PROMPT_COMMAND%;}; }osc7_cwd
-      #starship_precmd_user_func="osc7_cwd"
+      starship_precmd_user_func="osc7_cwd"
     '';
   };
   programs.starship = {
-    enable = false;
+    enable = true;
     enableBashIntegration = true;
   };
   programs.oh-my-posh = {
-    enable = true;
+    enable = false;
     enableBashIntegration = true;
     useTheme = "multiverse-neon";
   };
