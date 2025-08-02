@@ -54,6 +54,7 @@
     tdesktop
     liferea
     xournalpp
+    qownnotes
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
     (transmission_4.override { enableCli = false; })
   ];
