@@ -1,39 +1,41 @@
 { pkgs, lib, ... }:
 let
   
-gopassff-host = pkgs.passff-host.overrideAttrs (oldAttrs: {
-  patchPhase = ''
-    sed -i 's#COMMAND = "pass"#COMMAND = "${pkgs.gopass}/bin/gopass"#' src/passff.py
-  '';
-});
+  #gopassff-host = pkgs.passff-host.overrideAttrs (oldAttrs: {
+  #  patchPhase = ''
+  #    sed -i 's#COMMAND = "pass"#COMMAND = "${pkgs.gopass}/bin/gopass"#' src/passff.py
+  #  '';
+  #});
 extensions = {
   # Can use extension https://github.com/mkaply/queryamoid to query amo
   "Tab-Session-Manager@sienori" = "tab-session-manager";
   "uBlock0@raymondhill.net" = "ublock-origin";
-  "passff@invicem.pro" = "passff";
+    #"passff@invicem.pro" = "passff";
   "@testpilot-containers" = "multi-account-containers";
   "@contain-facebook" = "facebook-container";
   "cliget@zaidabdulla.com" = "cliget";
   "ff2mpv@yossarian.net" = "ff2mpv";
   #"7esoorv3@alefvanoon.anonaddy.me" = "libredirect";
   "jid1-BoFifL9Vbdl2zQ@jetpack" = "decentraleyes";
-  "bukubrow@samhh.com" = "bukubrow";
+    #"bukubrow@samhh.com" = "bukubrow";
   "addon@fastforward.team" = "fastforwardteam";
   "{0da2e603-21ba-4422-8049-b6d9e013ed84}" = "image-reverse-search";
   "{4c421bb7-c1de-4dc6-80c7-ce8625e34d24}" = "load-reddit-images-directly";
+  "{eec37db0-22ad-4bf1-9068-5ae08df8c7e9}" = "gopass-bridge";
 };
 
 in
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox.override {
-    # Passff doesn't work when inserted in programs.firefox.nativeMessagingHosts
-        nativeMessagingHosts = [ gopassff-host ];
-      };
+    #package = pkgs.firefox.override {
+    #  # Passff doesn't work when inserted in programs.firefox.nativeMessagingHosts
+    #      nativeMessagingHosts = [ gopassff-host ];
+    #};
     nativeMessagingHosts = [
       pkgs.ff2mpv
-      pkgs.bukubrow
+      #pkgs.bukubrow
+      pkgs.gopass-jsonapi
     ];
     policies = {
       ExtensionSettings =
