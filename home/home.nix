@@ -68,7 +68,11 @@
   };
   # Optional, hint Electron apps to use Wayland:
   fonts.fontconfig.enable = true;
-  services.gpg-agent.enable = true;
+  services.gpg-agent = {
+    enable = true;
+    defaultCacheTtl = 43200;
+    maxCacheTtl = 43200;
+  };
   services.udiskie.enable = true;
   home.sessionVariables.NIXOS_OZONE_WL = "1";
   home.stateVersion = "24.05";
