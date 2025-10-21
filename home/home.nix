@@ -46,12 +46,13 @@
     brightnessctl
     pavucontrol
     ctpv
-    wl-clipboard
     xdragon
     grim
     openttd
     thunderbird
     tdesktop
+    tor-browser
+    ayugram-desktop
     liferea
     xournalpp
     qownnotes

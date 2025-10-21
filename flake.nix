@@ -48,7 +48,7 @@
                 overlay-unstable
               ];
             })
-            #./module/virtualisation
+            ./module/virtualisation
             ./configuration.nix
             home-manager.nixosModules.home-manager
             {

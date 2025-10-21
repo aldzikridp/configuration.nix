@@ -126,7 +126,7 @@
     extraGroups = [ 
       "wheel" 
       #"docker" 
-      #"podman"
+      "podman"
       "video" 
       "audio" 
       "networkmanager"

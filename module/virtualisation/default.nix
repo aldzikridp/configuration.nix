@@ -32,13 +32,13 @@ in
   #  enable = true;
   #  setSocketVariable = true;
   #};
-  #virtualisation.podman = {
-  #  enable = true;
-  #  dockerCompat = true;
-  #  defaultNetwork.settings = {
-  #    dns_enabled = true;
-  #  };
-  #};
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+    defaultNetwork.settings = {
+      dns_enabled = true;
+    };
+  };
 
   # Virt-manager
   #virtualisation.libvirtd.enable = true;
@@ -55,7 +55,8 @@ in
 
   # Quickemu
   environment.systemPackages = with pkgs; [ 
-    quickemuWithClipboard
+    #quickemuWithClipboard
+    podman-compose
     #quickemuHostCPUOnly
     #quickemu
     #samba

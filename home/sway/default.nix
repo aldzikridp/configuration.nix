@@ -55,6 +55,7 @@ in
   programs.swaylock = {
     enable = true;
   };
+  services.clipman.enable = true;
   wayland.windowManager.sway = {
     enable = true;
     checkConfig = false; #Check fail when setting wallpaper
