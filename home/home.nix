@@ -37,7 +37,8 @@
     fd
     imagemagick
     lazygit
-    nil
+    lua-language-server
+    nixd
     buku
     p7zip
     btop
