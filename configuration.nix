@@ -144,7 +144,17 @@
         dataDir = "/home/master-x/Syncthing/Data";    # Default folder for new synced folders
         configDir = "/home/master-x/Syncthing/.config/";   # Folder for Syncthing's settings and keys
     };
-};
+    suwayomi-server = {
+      enable = true;
+      openFirewall = true;
+      package = pkgs.unstable.pkgs.suwayomi-server;
+    };
+    settings = {
+      server = {
+        extensionRepos = [ "services.suwayomi-server.settings.server.extensionRepos" ];
+      };
+    };
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

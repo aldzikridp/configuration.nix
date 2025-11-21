@@ -22,6 +22,7 @@ extensions = {
   "{0da2e603-21ba-4422-8049-b6d9e013ed84}" = "image-reverse-search";
   "{4c421bb7-c1de-4dc6-80c7-ce8625e34d24}" = "load-reddit-images-directly";
   "{eec37db0-22ad-4bf1-9068-5ae08df8c7e9}" = "gopass-bridge";
+    #"adnauseam@rednoise.org" = "adnauseam";
 };
 
 in
