@@ -103,7 +103,7 @@ pref( 'browser.safebrowsing.downloads.enabled', false );
 pref( 'browser.safebrowsing.malware.enabled', false );
 pref( 'browser.safebrowsing.downloads.remote.block_potentially_unwanted', false );
 
-pref( 'dom.event.clipboardevents.enabled', false );
+//pref( 'dom.event.clipboardevents.enabled', false );
 pref( 'dom.security.featurePolicy.experimental.enabled', true );
 
 pref( 'geo.enabled', false );
