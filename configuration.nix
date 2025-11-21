@@ -151,7 +151,7 @@
     };
     settings = {
       server = {
-        extensionRepos = [ "services.suwayomi-server.settings.server.extensionRepos" ];
+        extensionRepos = [ "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json" ];
       };
     };
   };
