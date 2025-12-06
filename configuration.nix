@@ -148,10 +148,14 @@
       enable = true;
       openFirewall = true;
       package = pkgs.unstable.pkgs.suwayomi-server;
-    };
-    settings = {
-      server = {
-        extensionRepos = [ "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json" ];
+      settings = {
+        server = {
+          extensionRepos = [ "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json" ];
+          excludeUnreadChapters = false;
+          excludeNotStarted = false;
+          excludeCompleted = false;
+          updateMangas = true;
+        };
       };
     };
   };
