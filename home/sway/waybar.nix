@@ -29,7 +29,7 @@
         };
         tooltip-format = "MPD (connected)";
         tooltip-format-disconnected = "MPD (disconnected)";
-        on-click = "${pkgs.mpc_cli}/bin/mpc --host localhost --port 6600 toggle";
+        on-click = "${pkgs.mpc}/bin/mpc --host localhost --port 6600 toggle";
     };
     idle_inhibitor = {
         format = "{icon}";

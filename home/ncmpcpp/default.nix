@@ -2,7 +2,7 @@
 {
   home.packages = with pkgs;[
     (writeShellScriptBin "on_song_change_ncmpcpp" (builtins.readFile ./on_song_change_ncmpcpp.sh))
-    mpc_cli
+    mpc
   ];
   programs.ncmpcpp = {
     enable = true;

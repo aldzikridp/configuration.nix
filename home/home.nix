@@ -47,16 +47,15 @@
     brightnessctl
     pavucontrol
     ctpv
-    xdragon
+    dragon-drop
     grim
     openttd
     thunderbird
-    tdesktop
+    telegram-desktop
     tor-browser
     ayugram-desktop
     liferea
     xournalpp
-    qownnotes
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
     (transmission_4.override { enableCli = false; })
   ];

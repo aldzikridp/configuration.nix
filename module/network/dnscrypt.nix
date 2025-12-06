@@ -1,7 +1,7 @@
 { config, ... }:
 {
   # Enable dnscrypt client
-  services.dnscrypt-proxy2 = {
+  services.dnscrypt-proxy = {
     enable = true;
     settings = {
       listen_addresses = ["127.0.0.1:5300"];
