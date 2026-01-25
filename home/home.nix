@@ -57,7 +57,8 @@
     liferea
     xournalpp
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
-    (transmission_4.override { enableCli = false; })
+    #(transmission_4.override { enableCli = false; })
+    transmission_4
   ];
   programs = {
     lazygit.enable = true;
