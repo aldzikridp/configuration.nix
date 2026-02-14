@@ -58,7 +58,7 @@ in
     #quickemuWithClipboard
     podman-compose
     #quickemuHostCPUOnly
-    #quickemu
+    quickemu
     #samba
     #fuse-overlayfs # for minikube with podman driver
   ];
