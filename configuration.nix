@@ -150,7 +150,11 @@
       package = pkgs.unstable.pkgs.suwayomi-server;
       settings = {
         server = {
-          extensionRepos = [ "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json" "https://raw.githubusercontent.com/yuzono/manga-repo/repo/index.min.json" ];
+          extensionRepos = [
+            "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"
+            "https://raw.githubusercontent.com/yuzono/manga-repo/repo/index.min.json"
+            "https://raw.githubusercontent.com/yuzono/cursed-manga-repo/repo/index.min.json"
+          ];
           excludeUnreadChapters = false;
           excludeNotStarted = false;
           excludeCompleted = false;
