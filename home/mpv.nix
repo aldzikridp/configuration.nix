@@ -17,7 +17,7 @@
     osc = "no";
     hwdec = "yes";
     gpu-api = "vulkan";
-    #ytdl-format = "[ext=mp4]";
+    ytdl-format = "bestvideo[height<=?1080][vcodec^=vp9]+bestaudio/best";
     script-opts = "ytdl_hook-ytdl_path=yt-dlp";
    };
    defaultProfiles = [
