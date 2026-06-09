@@ -3,6 +3,7 @@
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    sideloadInitLua = true;
     #extraConfig = ''
     #  source $HOME/.config/nvim/myinit.lua
     #'';
@@ -22,7 +23,7 @@
       nvim-cmp
       nvim-lspconfig
       nvim-tree-lua
-      nvim-treesitter-refactor
+      #nvim-treesitter-refactor
       nvim-treesitter-textobjects
       nvim-web-devicons
       plenary-nvim
