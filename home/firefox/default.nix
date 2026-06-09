@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 let
   
   #gopassff-host = pkgs.passff-host.overrideAttrs (oldAttrs: {
@@ -33,6 +33,7 @@ in
     #  # Passff doesn't work when inserted in programs.firefox.nativeMessagingHosts
     #      nativeMessagingHosts = [ gopassff-host ];
     #};
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
     nativeMessagingHosts = [
       pkgs.ff2mpv
       #pkgs.bukubrow
