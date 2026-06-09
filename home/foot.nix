@@ -10,7 +10,7 @@
       cursor = {
         #color = "c8d3f5 2d3f76";
       };
-      colors = {
+      colors-dark = {
         #background = "000000";
         #alpha = 0.8;
 
