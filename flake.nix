@@ -10,7 +10,6 @@
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
-      username = "master-x";
       system = "x86_64-linux";
       overlay-unstable = final: prev: {
         #unstable = nixpkgs-unstable.legacyPackages.${prev.system};
@@ -32,8 +31,8 @@
                 overlay-unstable
               ];
             })
-          #./module/virtualisation
-          ./configuration.nix { inherit username; }
+            #./module/virtualisation
+            ./configuration.nix
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/thinkpad.nix
             ./module/eva01-hardware-configuration.nix
@@ -49,14 +48,14 @@
                 overlay-unstable
               ];
             })
-          ./module/virtualisation { inherit username; }
-          ./configuration.nix { inherit username; }
+            ./module/virtualisation
+            ./configuration.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users."${username}" = import ./home/home.nix;
+              home-manager.users.master-x = import ./home/home.nix;
             }
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/eva02-hardware-configuration.nix
