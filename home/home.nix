@@ -59,6 +59,9 @@
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
     #(transmission_4.override { enableCli = false; })
     transmission_4
+    opencode
+    context7-mcp
+    rtk
   ];
   programs = {
     lazygit.enable = true;
