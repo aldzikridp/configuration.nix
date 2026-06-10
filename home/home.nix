@@ -67,6 +67,7 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
+    setSessionVariables = false;
   };
   # Optional, hint Electron apps to use Wayland:
   fonts.fontconfig.enable = true;
