@@ -4,7 +4,7 @@
     ./foot.nix
     ./sway
     ./lf.nix
-    ./yazi.nix
+    #./yazi.nix
     ./mpv.nix
     ./mpd.nix
     ./ncmpcpp
