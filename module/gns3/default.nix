@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 {
   environment.systemPackages = with pkgs; [
     gns3-server
@@ -12,14 +12,14 @@
   #virtualisation.libvirtd.enable = true;
   #virtualisation.libvirtd.qemu.runAsRoot = false;
   #programs.dconf.enable = true;
-  users.users.master-x.extraGroups = [ "libvirtd" ];
+  users.users."${username}".extraGroups = [ "libvirtd" ];
 
   ## Modify .config/GNS3/2.2/gns3_server.config
   ## then change ubridge_path to /run/wrappers/bin/ubridge
   security.wrappers.ubridge = {
     source = "${pkgs.ubridge}/bin/ubridge";
     capabilities = "cap_net_admin+eip cap_net_raw+eip";
-    owner = "master-x";
+    owner = username;
     group = "users";
     permissions = "u+rx,g+x";
   };

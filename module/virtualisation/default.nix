@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 let
   myquickemu = pkgs.quickemu.override (quickemuOld: {
     spice-gtk = quickemuOld.spice-gtk.overrideAttrs (attrs: {
@@ -45,7 +45,7 @@ in
   #virtualisation.libvirtd.qemu.runAsRoot = false;
   #programs.dconf.enable = true;
   #environment.systemPackages = with pkgs; [ virt-manager ];
-  #users.users.master-x.extraGroups = [ "libvirtd" ];
+  users.users."${username}".extraGroups = [ "libvirtd" ];
   #virtualisation.podman.enable = true;
   #services.dnsmasq.extraConfig = ''
   #  interface=lo

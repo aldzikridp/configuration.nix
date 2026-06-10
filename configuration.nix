@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, username, ... }:
 
 {
   nix = {
@@ -121,7 +121,7 @@
   };
   #hardware.opengl.package = pkgs.old.mesa.drivers;
 
-  users.users.master-x = {
+  users.users."${username}" = {
     isNormalUser = true;
     extraGroups = [ 
       "wheel" 
@@ -140,9 +140,9 @@
   services = {
     syncthing = {
         enable = true;
-        user = "master-x";
-        dataDir = "/home/master-x/Syncthing/Data";    # Default folder for new synced folders
-        configDir = "/home/master-x/Syncthing/.config/";   # Folder for Syncthing's settings and keys
+        user = username;
+        dataDir = "/home/${username}/Syncthing/Data";    # Default folder for new synced folders
+        configDir = "/home/${username}/Syncthing/.config/";   # Folder for Syncthing's settings and keys
     };
     suwayomi-server = {
       enable = true;
