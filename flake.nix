@@ -11,6 +11,7 @@
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
     let
       system = "x86_64-linux";
+      myUsername = "master-x";
       overlay-unstable = final: prev: {
         #unstable = nixpkgs-unstable.legacyPackages.${prev.system};
         # use this variant if unfree packages are needed:
@@ -41,6 +42,7 @@
         };
         EVA-02 = nixpkgs.lib.nixosSystem {
           system = system;
+          specialArgs = { inherit myUsername; };
           modules = [
             ({networking.hostName = "EVA-02";})
             ({ config, pkgs, ... }: {
@@ -55,7 +57,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.master-x = import ./home/home.nix;
+              home-manager.users.${myUsername} = import ./home/home.nix;
             }
             #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
             ./module/eva02-hardware-configuration.nix
