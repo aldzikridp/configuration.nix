@@ -8,14 +8,36 @@
         source = "${pkgs.ctpv}/bin/ctpv";
       };
       commands = {
-        open = "$set -f; rifle -p 0 $fx";
+        open = ''
+          ''\&{{
+            for file in $fx; do
+               mime=$(file --mime-type -Lb "$file")
+               ext="''${file##*.}"
 
-        open-with = ''
-          ''${{
-            set -f
-            rifle -l $fx
-            read -p "Open with: " method
-            rifle -p $method $fx
+               if [[ "$mime" == "text/html" ]]; then
+                firefox "$file" &
+              elif [[ "$ext" == "pdf" || "$ext" == "epub" || "$ext" == "cbz" || "$ext" == "cbr" ]]; then
+                zathura "$file" &
+              elif [[ "$ext" == "docx" || "$ext" == "pptx" || "$ext" == "xlsx" || "$ext" == "odt" || "$ext" == "odp" || "$ext" == "ods" ]]; then
+                libreoffice "$file" &
+              elif [[ "$mime" == "image/"* ]]; then
+                imv "$file" &
+              elif [[ "$mime" == "video/"* || "$mime" == "audio/"* ]]; then
+                if [[ "$mime" == "audio/ogg" ]]; then
+                  mpv --no-terminal --force-window=yes "$file" &
+                else
+                  mpv --no-terminal --force-window=yes --fs "$file" &
+                fi
+              elif [[ "$mime" == "text/"* || "$ext" =~ ^(xml|json|csv|tex|py|pl|rb|rs|js|sh|php|dart)$ ]]; then
+                ''${VISUAL:-$EDITOR} "$file"
+              elif [[ "$ext" =~ ^(7z|ace|ar|arc|bz2|cab|cpio|cpt|deb|dgc|dmg|gz|iso|jar|msi|pkg|rar|shar|tar|tgz|xar|xpi|xz|zip)$ ]]; then
+                ${pkgs.atool}/bin/atool --list --each -- "$file" | $PAGER
+              elif [[ "$mime" == *"font"* ]]; then
+                fontforge "$file" &
+              else
+                ${pkgs.xdg-utils}/bin/xdg-open "$file" &
+              fi
+            done
           }}
         '';
 
@@ -48,23 +70,33 @@
               esac
           }}
         '';
+
+        copypath = ''
+          &{{
+            if [ -n "$fx" ]; then
+              printf "%s\n" $fx | wl-copy
+            else
+              wl-copy "$f"
+            fi
+          }}
+        '';
       };
       keybindings = {
         o = "open";
-        O = "open-with";
         ad = ":push %mkdir<space>";
         af = ":push %touch<space>";
         D = "dragon";
+        Y = "copypath";
       };
       settings = {
-       shell = "sh";
-       drawbox = true;
-       relativenumber = true;
-       icons = true;
-       shellopts = "-eu";
-       ifs = "\n";
-       scrolloff = 10;
-       cleaner = "${pkgs.ctpv}/bin/ctpv";
+        shell = "sh";
+        drawbox = true;
+        relativenumber = true;
+        icons = true;
+        shellopts = "-eu";
+        ifs = "\n";
+        scrolloff = 10;
+        cleaner = "${pkgs.ctpv}/bin/ctpv";
       };
       extraConfig = ''
         &${pkgs.ctpv}/bin/ctpv -s $id
@@ -72,118 +104,5 @@
         set cleaner ${pkgs.ctpv}/bin/ctpvclear
       '';
     };
-    ranger.enable = true;
-    ranger.rifle = [
-    {
-      condition = "ext x?html?, has firefox,env WAYLAND_DISPLAY, flag f";
-      command = ''firefox -- "$@"'';
-    }
-    
-      # misc
-      {
-        condition = "mime ^text, label editor";
-        command = ''''${VISUAL:-$EDITOR} -- "$@"'';
-      }
-      {
-        condition = "mime ^text, label pager";
-        command = ''$PAGER -- "$@"'';
-      }
-      {
-        condition =
-          "!mime ^text, label editor, ext xml|json|csv|tex|py|pl|rb|rs|js|sh|php|dart";
-        command = ''''${VISUAL:-$EDITOR} -- "$@"'';
-      }
-      {
-        condition =
-          "!mime ^text, label pager, ext xml|json|csv|tex|py|pl|rb|rs|js|sh|php|dart";
-        command = ''$PAGER -- "$@"'';
-      }
-      {
-        condition = "ext 1";
-        command = ''man "$1"'';
-      }
-      # audio/video
-      {
-        # with gui
-        condition = "mime ^video|^audio, has mpv, env WAYLAND_DISPLAY, flag f";
-        command = ''mpv --force-window=yes --fs -- "$@"'';
-      }
-      {
-        # no gui
-        condition = "mime ^audio/ogg$, has mpv, terminal";
-        command = ''mpv --force-window=yes -- "$@"'';
-      }
-      # images
-      {
-        condition = "mime ^image, has imv, env WAYLAND_DISPLAY, flag f";
-        command = ''${pkgs.imv}/bin/imv -- "$@"'';
-      }
-      # documents
-      {
-        condition = "ext pdf|docx|epub|cb[rz], has zathura, env WAYLAND_DISPLAY, flag f";
-        command = ''${pkgs.zathura}/bin/zathura -- "$@"'';
-      }
-      {
-        condition = "ext docx?, has catdoc, terminal";
-        command = ''${pkgs.catdoc}/bin/catdoc -- "$@" | $PAGER'';
-      }
-      {
-        condition =
-          "ext pptx?|od[dfgpst]|docx?|sxc|xlsx?|xlt|xlw|gnm|gnumeric, has libreoffice, env WAYLAND_DISPLAY, flag f";
-        command = ''${pkgs.libreoffice}/bin/libreoffice -- "$@"'';
-      }
-
-      # archives
-      {
-        condition = "ext 7z, has 7z";
-        command = ''${pkgs.p7zip}/bin/7z -p l "$@" | $PAGER'';
-      }
-      # ext ace|ar|arc|bz2?|cab|cpio|cpt|deb|dgc|dmg|gz,     has atool = atool --list --each -- "$@" | $PAGER
-      # ext iso|jar|msi|pkg|rar|shar|tar|tgz|xar|xpi|xz|zip, has atool = atool --list --each -- "$@" | $PAGER
-      # ext 7z|ace|ar|arc|bz2?|cab|cpio|cpt|deb|dgc|dmg|gz,  has atool = atool --extract --each -- "$@"
-      # ext iso|jar|msi|pkg|rar|shar|tar|tgz|xar|xpi|xz|zip, has atool = atool --extract --each -- "$@"
-      {
-        condition =
-          "ext ace|ar|arc|bz2?|cab|cpio|cpt|deb|dgc|dmg|gz, has atool";
-        command = ''${pkgs.atool}/bin/atool --list --each -- "$@" | $PAGER'';
-      }
-      {
-        condition =
-          "ext iso|jar|msi|pkg|rar|shar|tar|tgz|xar|xpi|xz|zip, has atool";
-        command = ''${pkgs.atool}/bin/atool --list --each -- "$@" | $PAGER'';
-      }
-      {
-        condition =
-          "ext 7z|ace|ar|arc|bz2?|cab|cpio|cpt|deb|dgc|dmg|gz, has atool";
-        command = ''${pkgs.atool}/bin/atool --extract --each -- "$@"'';
-      }
-      {
-        condition =
-          "ext iso|jar|msi|pkg|rar|shar|tar|tgz|xar|xpi|xz|zip, has atool";
-        command = ''${pkgs.atool}/bin/atool --extract --each -- "$@"'';
-      }
-
-      # fonts
-      {
-        condition = "mine ^font, has fontforge, env WAYLAND_DISPLAY, flag f";
-        command = ''${pkgs.fontforge}/bin/fontforge "$@"'';
-      }
-
-      # generic
-      {
-        condition = "label open, has xdg-open";
-        command = ''${pkgs.xdg-utils}/bin/xdg-open "$@"'';
-      }
-      {
-        condition =
-          "label editor, !mime ^text, !ext xml|json|csv|tex|py|pl|rb|rs|js|sh|php|dart";
-        command = ''''${VISUAL:-$EDITOR} -- "$@"'';
-      }
-      {
-        condition =
-          "label pager, !mime ^text, !ext xml|json|csv|tex|py|pl|rb|rs|js|sh|php|dart";
-        command = ''$PAGER -- "$@"'';
-      }
-    ];
   };
 }
