@@ -61,6 +61,7 @@
     ### File Manager ###
     file
     atool             # archive preview
+    xdg-utils
     #(pkgs.callPackage ./pkgs/rifle/default.nix { })
     #(pkgs.callPackage ./pkgs/ctpv/default.nix { })
     #ctpv
@@ -112,6 +113,18 @@
   
   services.udisks2.enable = true;
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-wlr ];
+    config = {
+      common = {
+        default = "gtk";
+        "org.freedesktop.impl.portal.Screenshot" = "wlr";
+        "org.freedesktop.impl.portal.ScreenCast" = "wlr";
+      };
+    };
+  };
+
   security.pam.services.swaylock = {};
 
   hardware.graphics = {
@@ -150,7 +163,13 @@
     suwayomi-server = {
       enable = true;
       openFirewall = true;
-      package = pkgs.unstable.pkgs.suwayomi-server;
+      package = pkgs.suwayomi-server.overrideAttrs (oldAttrs: {
+        version = "2.2.2100";
+        src = pkgs.fetchurl {
+          url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.2.2100/suwayomi-server-v2.2.2100.jar";
+          sha256 = "0pph649vf3mf98dbqkzz8y881g81mbwxrnwg1jdrb6zs7fj3509w";
+        };
+      });
       settings = {
         server = {
           extensionRepos = [
