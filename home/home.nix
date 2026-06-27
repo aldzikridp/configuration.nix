@@ -3,7 +3,7 @@
   imports = [
     ./foot.nix
     ./sway
-    ./lf.nix
+    ./lf
     #./yazi.nix
     ./mpv.nix
     ./mpd.nix
@@ -46,8 +46,6 @@
     jq
     brightnessctl
     pavucontrol
-    ctpv
-    dragon-drop
     grim
     openttd
     thunderbird

@@ -1,11 +1,16 @@
 { pkgs, ... }:
 {
+  home.packages = with pkgs; [
+    poppler-utils
+    chafa
+    dragon-drop
+  ];
   programs = {
     lf = {
       enable = true;
       previewer = {
         keybinding = "i";
-        source = "${pkgs.ctpv}/bin/ctpv";
+        source = "${./lf-previewer.sh}";
       };
       commands = {
         open = ''
@@ -88,21 +93,20 @@
         D = "dragon";
         Y = "copypath";
       };
-      settings = {
-        shell = "sh";
-        drawbox = true;
-        relativenumber = true;
-        icons = true;
-        shellopts = "-eu";
-        ifs = "\n";
-        scrolloff = 10;
-        cleaner = "${pkgs.ctpv}/bin/ctpv";
-      };
-      extraConfig = ''
-        &${pkgs.ctpv}/bin/ctpv -s $id
-        cmd on-quit %${pkgs.ctpv}/bin/ctpv -e $id
-        set cleaner ${pkgs.ctpv}/bin/ctpvclear
-      '';
+       settings = {
+         shell = "sh";
+         drawbox = true;
+         relativenumber = true;
+         icons = true;
+         shellopts = "-eu";
+         ifs = "\n";
+         scrolloff = 10;
+       };
+       extraConfig = ''
+         set previewer ${./lf-previewer.sh}
+       '';
+
+
     };
   };
 }
