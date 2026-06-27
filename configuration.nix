@@ -51,6 +51,8 @@
     git
     gnumake
     killall
+    man-pages
+    man-pages-posix
 
     #mpc_cli
     #mpd
@@ -136,6 +138,7 @@
   };
   users.users.root.hashedPassword = "!";
   users.mutableUsers = false;
+  documentation.dev.enable = true;
 
   services = {
     syncthing = {
