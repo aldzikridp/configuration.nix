@@ -33,6 +33,7 @@ in
     ./mako.nix
     ./fuzzel.nix
   ];
+  home.sessionVariables.XDG_CURRENT_DESKTOP = "sway";
   home.packages = with pkgs;[
     wl-clipboard
     wf-recorder
