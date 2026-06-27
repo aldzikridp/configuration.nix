@@ -23,23 +23,23 @@
     in
     {
       nixosConfigurations = {
-        EVA-01 = nixpkgs.lib.nixosSystem {
-          system = system;
-          modules = [
-            ({networking.hostName = "EVA-01";})
-            ({ config, pkgs, ... }: {
-              nixpkgs.overlays = [
-                overlay-unstable
-              ];
-            })
-            #./module/virtualisation
-            ./configuration.nix
-            #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
-            ./module/thinkpad.nix
-            ./module/eva01-hardware-configuration.nix
-          ];
-          
-        };
+        #EVA-01 = nixpkgs.lib.nixosSystem {
+        #  system = system;
+        #  modules = [
+        #    ({networking.hostName = "EVA-01";})
+        #    ({ config, pkgs, ... }: {
+        #      nixpkgs.overlays = [
+        #        overlay-unstable
+        #      ];
+        #    })
+        #    #./module/virtualisation
+        #    ./configuration.nix
+        #    #(nixpkgs + "/nixos/modules/profiles/hardened.nix")
+        #    ./module/thinkpad.nix
+        #    ./module/eva01-hardware-configuration.nix
+        #  ];
+        #  
+        #};
         EVA-02 = nixpkgs.lib.nixosSystem {
           system = system;
           specialArgs = { inherit myUsername; };
