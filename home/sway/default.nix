@@ -102,7 +102,10 @@ in
           "XF86AudioMicMute"="exec pamixer --source 46 -t";
           "XF86MonBrightnessUp"="exec brightnessctl set +5%";
           "XF86MonBrightnessDown"="exec brightnessctl set 5%-";
-
+          "Print"="exec grim -g \"$(slurp)\" ~/Pictures/$(date +'%Y-%m-%d-%H%M%S_Screenshot.png')";
+          "Ctrl+Print"="exec wf-recorder --audio -f ~/Videos/$(date +\"%Y-%m-%d_%H:%M:%S_Screenrecord.mp4\")";
+          "Ctrl+Shift+Print"="exec wf-recorder --audio -g \"$(slurp)\" -f ~/Videos/$(date +\"%Y-%m-%d_%H:%M:%S_Screenrecord.mp4\")";
+          "Ctrl+Shift+BackSpace"="exec killall -s SIGINT wf-recorder";
         };
       input = {
         "type:touchpad" = {
@@ -114,29 +117,25 @@ in
       };
       output = {
         "*" = {
-          bg = "${config.xdg.userDirs.pictures}/.wallpaper fill";
+          bg = "~/.config/sway/wallpaper.jpg fill";
         };
+      };
+      floating = {
+        criteria = [
+          { app_id = "pavucontrol"; }
+          { app_id = "keepassxc"; }
+          { app_id = "mpv"; }
+          { app_id = "termfloat"; }
+          { app_id = "xdg-desktop-portal-gtk"; }
+          { app_id = "nm-connection-editor"; }
+        ];
       };
     };
     extraConfig = ''
-      for_window [app_id="fzf-launcher"] focus, floating enabled, border pixel 0
-      for_window [app_id="pavucontrol"] floating enable
-      for_window [app_id="keepassxc"] floating enable
-      for_window [app_id="mpv"] floating enable
-      for_window [app_id="termfloat"] floating enable
-      for_window [app_id="xdg-desktop-portal-gtk"] floating enable
-      for_window [app_id="nm-connection-editor"] floating enable
+      for_window [app_id="fzf-launcher"] focus, floating enable, border pixel 0
       client.focused #FFFFFFFF #FFFFFFFF #000000FF #FFFFFFFF
       client.focused_inactive #000000B3 #000000B3 #FFFFFFFF #000000B3
       client.unfocused #000000B3 #000000B3 #FFFFFF66 #000000B3
-
-      bindsym Print exec grim -g "$(slurp)" ~/Pictures/$(date +'%Y-%m-%d-%H%M%S_Screenshot.png')
-
-      bindsym Ctrl+Print exec wf-recorder --audio -f ~/Videos/$(date +"%Y-%m-%d_%H:%M:%S_Screenrecord.mp4")
-      bindsym Ctrl+Shift+Print exec wf-recorder --audio -g "$$(slurp)" -f ~/Videos/$(date +"%Y-%m-%d_%H:%M:%S_Screenrecord.mp4")
-      bindsym Ctrl+Shift+BackSpace exec killall -s SIGINT wf-recorder
-
-      output * bg ~/.config/sway/wallpaper.jpg fill
     '';
   };
 }
