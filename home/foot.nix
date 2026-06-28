@@ -40,4 +40,6 @@
       };
     };
   };
+
+  xdg.configFile."bat/config".text = "--theme=\"Catppuccin Mocha\"\n";
 }
