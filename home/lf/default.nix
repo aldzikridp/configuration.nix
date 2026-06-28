@@ -4,6 +4,8 @@
     poppler-utils
     chafa
     dragon-drop
+    xxhash
+    ffmpegthumbnailer
   ];
   programs = {
     lf = {

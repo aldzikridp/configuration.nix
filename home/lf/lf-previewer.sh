@@ -13,10 +13,21 @@ case "$MIME" in
         chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$FILE_PATH"
         ;;
     video/*)
-        # Extract frame at 1s and pipe to chafa for Sixel thumbnail
-        #ffmpeg -i "$FILE_PATH" -ss 00:00:01 -vframes 1 -f image2pipe -vcodec ppm - 2>/dev/null | \
-        ffmpeg -ss 00:00:01 -i "$FILE_PATH" -vframes 1 -q:v 2 -f image2pipe - 2>/dev/null | \
-        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on
+        # Cache configuration
+        CACHE_DIR="$HOME/.cache/lf-thumbnails"
+        mkdir -p "$CACHE_DIR"
+        
+        # Key: hash of path and modification time
+        FILE_HASH=$(printf "%s:%s" "$FILE_PATH" "$(stat -c %Y "$FILE_PATH")" | xxhsum | cut -d' ' -f1)
+        CACHE_FILE="$CACHE_DIR/$FILE_HASH.jpg"
+
+        # Generate thumbnail if missing or stale
+        if [ ! -f "$CACHE_FILE" ]; then
+            ffmpegthumbnailer -i "$FILE_PATH" -o "$CACHE_FILE" -s 0 -q 10 -t 10% 2>/dev/null
+        fi
+
+        # Render cached image with chafa
+        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$CACHE_FILE"
         ;;
     application/pdf)
         # Extract first 10 pages of text
