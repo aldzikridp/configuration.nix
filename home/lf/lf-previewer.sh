@@ -31,7 +31,10 @@ case "$MIME" in
         ;;
     application/pdf)
         # Extract first 10 pages of text
-        pdftotext -l 10 "$FILE_PATH" -
+        #pdftotext -l 10 "$FILE_PATH" -
+        # Create image preview
+        pdftoppm -f 1 -l 1 -scale-to-x 1920 -scale-to-y -1 -singlefile -jpeg -tiffcompression jpeg -- "$FILE_PATH" | \
+        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on
         ;;
     application/zip|application/x-tar|application/x-gzip|application/x-bzip2|application/x-7z-compressed|application/x-rar)
         # List archive contents
