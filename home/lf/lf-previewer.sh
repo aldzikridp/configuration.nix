@@ -5,38 +5,48 @@ FILE_PATH="$1"
 PV_WIDTH="$2"
 PV_HEIGHT="$3"
 
+# Cache configuration
+CACHE_DIR="$HOME/.cache/lf-thumbnails"
+mkdir -p "$CACHE_DIR"
+
 MIME=$(file --mime-type -Lb "$FILE_PATH")
+
+get_cache() {
+    # Key: hash of path and modification time
+    FILE_HASH=$(printf "%s:%s" "$1" "$(stat -c %Y "$1")" | xxhsum | cut -d' ' -f1)
+    CACHE_FILE="$CACHE_DIR/$FILE_HASH"
+    echo $CACHE_FILE
+}
+
+render_preview() {
+    chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$1"
+}
 
 case "$MIME" in
     image/*)
         # Use chafa for Sixel image previews
-        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$FILE_PATH"
+        render_preview "$FILE_PATH"
         ;;
     video/*)
-        # Cache configuration
-        CACHE_DIR="$HOME/.cache/lf-thumbnails"
-        mkdir -p "$CACHE_DIR"
-        
-        # Key: hash of path and modification time
-        FILE_HASH=$(printf "%s:%s" "$FILE_PATH" "$(stat -c %Y "$FILE_PATH")" | xxhsum | cut -d' ' -f1)
-        CACHE_FILE="$CACHE_DIR/$FILE_HASH.jpg"
-
         # Generate thumbnail if missing or stale
-        if [ ! -f "$CACHE_FILE" ]; then
-            ffmpegthumbnailer -i "$FILE_PATH" -o "$CACHE_FILE" -s 0 -q 10 -t 10% 2>/dev/null
+        CACHE_FILE=$(get_cache $FILE_PATH)
+        if [ ! -f "$CACHE_FILE.jpg" ]; then
+            ffmpegthumbnailer -i "$FILE_PATH" -o "$CACHE_FILE.jpg" -s 0 -q 10 -t 10% 2>/dev/null
         fi
-
         # Render cached image with chafa
-        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$CACHE_FILE"
+        render_preview "$CACHE_FILE.jpg"
         ;;
     application/pdf)
-        # Extract first 10 pages of text
-        #pdftotext -l 10 "$FILE_PATH" -
-        # Create image preview
-        pdftoppm -f 1 -l 1 -scale-to-x 1920 -scale-to-y -1 -singlefile -jpeg -tiffcompression jpeg -- "$FILE_PATH" | \
-        chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on
+        # Generate thumbnail if missing or stale
+        CACHE_FILE=$(get_cache $FILE_PATH)
+        if [ ! -f "$CACHE_FILE.jpg" ]; then
+            # Create image preview from the first page
+            pdftoppm -f 1 -l 1 -scale-to-x 1920 -scale-to-y -1 -singlefile -jpeg -tiffcompression jpeg "$FILE_PATH" "$CACHE_FILE"
+        fi
+        # Render cached image with chafa
+        render_preview "$CACHE_FILE.jpg"
         ;;
-    application/zip|application/x-tar|application/x-gzip|application/x-bzip2|application/x-7z-compressed|application/x-rar)
+    application/zip|application/gzip|application/x-7z-compressed|application/vnd.rar)
         # List archive contents
         atool --list "$FILE_PATH"
         ;;
