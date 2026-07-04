@@ -57,7 +57,7 @@
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
     #(transmission_4.override { enableCli = false; })
     transmission_4
-    opencode
+    unstable.opencode
     context7-mcp
     rtk
   ];
