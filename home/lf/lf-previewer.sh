@@ -19,7 +19,13 @@ get_cache() {
 }
 
 render_preview() {
-    chafa -f sixel -s "${PV_WIDTH}x${PV_HEIGHT}" --animate off --polite on "$1"
+    chafa \
+    --clear \
+    -f sixel \
+    -s "${PV_WIDTH}x${PV_HEIGHT}" \
+    --work 1 \
+    --animate off --polite on \
+    "$1"
 }
 
 case "$MIME" in
