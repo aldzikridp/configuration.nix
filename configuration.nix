@@ -164,15 +164,15 @@
       enable = true;
       openFirewall = true;
       package = pkgs.suwayomi-server.overrideAttrs (oldAttrs: {
-        version = "2.2.2100";
+        version = "2.3.2232";
         src = pkgs.fetchurl {
-          url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.2.2100/suwayomi-server-v2.2.2100.jar";
-          sha256 = "0pph649vf3mf98dbqkzz8y881g81mbwxrnwg1jdrb6zs7fj3509w";
+          url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.3.2232/Suwayomi-Server-v2.3.2232.jar";
+          sha256 = "117h57i25x26nm42m3w91y2zjgihv23f95w4rivw2cccj4idi37z";
         };
       });
       settings = {
         server = {
-          extensionRepos = [
+          extensionStores = [
             "https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json"
             "https://raw.githubusercontent.com/yuzono/manga-repo/repo/index.min.json"
             "https://raw.githubusercontent.com/yuzono/cursed-manga-repo/repo/index.min.json"
