@@ -35,7 +35,7 @@ case "$MIME" in
         ;;
     video/*)
         # Generate thumbnail if missing or stale
-        CACHE_FILE=$(get_cache $FILE_PATH)
+        CACHE_FILE=$(get_cache "$FILE_PATH")
         if [ ! -f "$CACHE_FILE.jpg" ]; then
             ffmpegthumbnailer -i "$FILE_PATH" -o "$CACHE_FILE.jpg" -s 0 -q 10 -t 10% 2>/dev/null
         fi
@@ -44,7 +44,7 @@ case "$MIME" in
         ;;
     application/pdf)
         # Generate thumbnail if missing or stale
-        CACHE_FILE=$(get_cache $FILE_PATH)
+        CACHE_FILE=$(get_cache "$FILE_PATH")
         if [ ! -f "$CACHE_FILE.jpg" ]; then
             # Create image preview from the first page
             pdftoppm -f 1 -l 1 -scale-to-x 1920 -scale-to-y -1 -singlefile -jpeg -tiffcompression jpeg "$FILE_PATH" "$CACHE_FILE"
