@@ -70,7 +70,16 @@
     createDirectories = true;
     setSessionVariables = false;
   };
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "firefox.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+    };
+  };
   # Optional, hint Electron apps to use Wayland:
+
   fonts.fontconfig.enable = true;
   services.gpg-agent = {
     enable = true;
