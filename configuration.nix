@@ -164,10 +164,10 @@
       enable = true;
       openFirewall = true;
       package = pkgs.suwayomi-server.overrideAttrs (oldAttrs: {
-        version = "2.3.2232";
+        version = "2.3.2243";
         src = pkgs.fetchurl {
-          url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.3.2232/Suwayomi-Server-v2.3.2232.jar";
-          sha256 = "117h57i25x26nm42m3w91y2zjgihv23f95w4rivw2cccj4idi37z";
+          url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v2.3.2243/Suwayomi-Server-v2.3.2243.jar";
+          sha256 = "1mcdx50axdgb690mzzw34g97pw6qgrbyvpybsc14l38p5srl24c2";
         };
       });
       settings = {
