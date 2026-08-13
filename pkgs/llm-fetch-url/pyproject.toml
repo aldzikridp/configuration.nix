@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-fetch-url"
+version = "0.1.0"
+description = "LLM plugin providing a fetch_url tool (ported from aichat)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "ported from aichat" }]
+keywords = ["llm", "llm-plugin", "fetch", "url", "curl", "pandoc", "tools"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "llm>=0.26",
+    "trafilatura>=1.6",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+# Entry point that tells llm how to load this plugin.
+# Left-hand side ("fetch_url") is the plugin name shown by `llm plugins`.
+# Right-hand side ("llm_fetch_url") is the importable module that contains
+# the @llm.hookimpl def register_tools(register): function.
+[project.entry-points.llm]
+fetch_url = "llm_fetch_url"
+
+[tool.setuptools]
+py-modules = ["llm_fetch_url"]

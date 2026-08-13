@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-ctx7"
+version = "0.1.0"
+description = "LLM plugin providing a ctx7_search tool (ported from aichat)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "ported from aichat" }]
+keywords = ["llm", "llm-plugin", "ctx7", "tools", "documentation"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "llm>=0.26",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+# Entry point that tells llm how to load this plugin.
+# Left-hand side ("ctx7") is the plugin name shown by `llm plugins`.
+# Right-hand side ("llm_ctx7") is the importable module that contains the
+# @llm.hookimpl def register_tools(register): function.
+[project.entry-points.llm]
+ctx7 = "llm_ctx7"
+
+[tool.setuptools]
+py-modules = ["llm_ctx7"]
