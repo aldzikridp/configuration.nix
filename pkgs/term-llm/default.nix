@@ -11,10 +11,12 @@ buildGoModule rec {
     owner = "SamSaffron";
     repo = "term-llm";
     rev = "v${version}";
-    hash = lib.fakeHash;
+    #hash = lib.fakeHash;
+    hash = "sha256-VSFUcrcddVaFireMtgq7TZ/7Xq1IE8+SruIgwraKW1Y=";
   };
 
-  vendorHash = lib.fakeHash;
+  #vendorHash = lib.fakeHash;
+  vendorHash = "sha256-3i7u5s+uMFDleJgymcX6J/QZrSXMNeOQBPHHUJfFTyk=";
 
   subPackages = [ "." ];
 

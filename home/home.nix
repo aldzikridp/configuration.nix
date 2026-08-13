@@ -62,6 +62,7 @@
     unstable.opencode
     context7-mcp
     rtk
+    (pkgs.callPackage ../pkgs/term-llm/default.nix { })
   ];
   programs = {
     lazygit.enable = true;
