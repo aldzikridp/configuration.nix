@@ -13,6 +13,8 @@
     ./fzf.nix
     ./firefox
     ./neovim
+    ./aichat
+    ./llm.nix
   ];
   home.packages = with pkgs;[
     gopass
