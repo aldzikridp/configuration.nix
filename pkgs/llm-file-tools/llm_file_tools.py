@@ -2,17 +2,22 @@
 llm-file-tools
 ==============
 
-A plugin for Simon Willison's `llm` CLI that exposes eight file-manipulation
+A plugin for Simon Willison's `llm` CLI that exposes thirteen file-manipulation
 tools to any chat model that supports tool calling:
 
-* ``read_file``    – read a file (optionally a slice of it, with optional line numbers)
-* ``write_file``   – write or overwrite a file (atomic, with create_only guard)
-* ``create_dir``   – create a directory (optional parents, optional exist_ok)
-* ``patch_file``   – search-and-replace a single block inside an existing file
-* ``apply_diff``   – apply a unified diff to a file
-* ``list_dir``     – list the contents of a directory (one level deep)
-* ``grep_file``    – search file contents using ripgrep (with grep fallback)
-* ``git_apply``    – apply a unified diff via `git apply` (creates commits, validates context)
+* ``read_file``     – read a file (optionally a slice of it, with optional line numbers)
+* ``write_file``    – write or overwrite a file (atomic, with create_only guard)
+* ``create_dir``    – create a directory (optional parents, optional exist_ok)
+* ``patch_file``    – search-and-replace a single block inside an existing file
+* ``apply_diff``    – apply a unified diff to a file
+* ``list_dir``      – list the contents of a directory (one level deep)
+* ``grep_file``     – search file contents using ripgrep (with grep fallback)
+* ``git_apply``     – apply a unified diff via `git apply` (creates commits, validates context)
+* ``delete_file``   – move a file to the trash (reversible via ``restore_file``)
+* ``delete_dir``    – move a directory to the trash (recursive or empty-only)
+* ``restore_file``  – restore the most recently trashed entry matching a path
+* ``list_trash``    – list entries currently in the trash
+* ``empty_trash``   – permanently purge old trash entries
 
 All paths are resolved against a *base directory* which defaults to the
 current working directory. Reads and writes that escape the base directory
@@ -39,6 +44,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -48,7 +54,7 @@ except Exception:  # pragma: no cover - llm is only required at runtime
     llm = None  # type: ignore
 
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 __all__ = [
     "FileTools",
@@ -60,6 +66,11 @@ __all__ = [
     "list_dir",
     "grep_file",
     "git_apply",
+    "delete_file",
+    "delete_dir",
+    "restore_file",
+    "list_trash",
+    "empty_trash",
     "_resolve_under_base",
 ]
 
@@ -922,6 +933,501 @@ def git_apply(
 
 
 # ---------------------------------------------------------------------------
+# Trash-can helpers
+# ---------------------------------------------------------------------------
+
+TRASH_DIR_NAME = ".llm-trash"
+_TRASH_TS_FORMAT = "%Y-%m-%d_%H-%M-%S"
+
+
+def _trash_dir(base: Path) -> Path:
+    """Return the trash directory path for a given base directory."""
+    return base / TRASH_DIR_NAME
+
+
+def _make_trash_name(rel_path: str) -> str:
+    """Build a trash entry filename: ``<timestamp>__<path-with-seps-as-__>``."""
+    timestamp = datetime.now().strftime(_TRASH_TS_FORMAT)
+    # Normalise both POSIX and native separators to ``__`` so the trash
+    # directory stays flat (no nested subdirs to manage).
+    safe = rel_path.replace("/", "__").replace(os.sep, "__")
+    # Strip leading ./ if present
+    safe = safe.lstrip("_") if safe.startswith("_.") else safe
+    if not safe:
+        safe = "_root_"
+    return f"{timestamp}__{safe}"
+
+
+def _parse_trash_entry(name: str) -> tuple[Optional[datetime], str] | None:
+    """Parse a trash entry filename into (timestamp, original_relative_path).
+
+    Returns None if the filename doesn't match the expected format.
+    """
+    parts = name.split("__", 1)
+    if len(parts) != 2:
+        return None
+    ts_str, path_part = parts
+    try:
+        ts = datetime.strptime(ts_str, _TRASH_TS_FORMAT)
+    except ValueError:
+        return None
+    # Reverse the separator replacement. This is ambiguous if the original
+    # path contained ``__``, but restore_file uses the user-supplied path
+    # to compute the expected suffix — so the ambiguity doesn't matter
+    # in practice. We only use this for display in list_trash.
+    orig = path_part.replace("__", "/")
+    return (ts, orig)
+
+
+def _prune_trash(base: Path, max_age_days: int = 7, max_entries: int = 100) -> int:
+    """Remove old/excess entries from the trash. Returns count pruned.
+
+    Called automatically after every delete_file / delete_dir call so the
+    trash never grows without bound. Both knobs are configurable via env:
+      - LLM_FILE_TOOLS_TRASH_MAX_AGE_DAYS   (default 7)
+      - LLM_FILE_TOOLS_TRASH_MAX_ENTRIES    (default 100)
+    """
+    trash = _trash_dir(base)
+    if not trash.exists():
+        return 0
+
+    try:
+        max_age_days = int(os.environ.get("LLM_FILE_TOOLS_TRASH_MAX_AGE_DAYS", max_age_days))
+        max_entries = int(os.environ.get("LLM_FILE_TOOLS_TRASH_MAX_ENTRIES", max_entries))
+    except ValueError:
+        pass  # fall back to defaults if env var is malformed
+
+    # Collect (timestamp, entry_path) pairs
+    entries: list[tuple[datetime, Path]] = []
+    for entry in trash.iterdir():
+        parsed = _parse_trash_entry(entry.name)
+        if parsed is None:
+            continue
+        ts, _ = parsed
+        entries.append((ts, entry))
+
+    if not entries:
+        return 0
+
+    entries.sort(key=lambda x: x[0])  # oldest first
+    cutoff = datetime.now() - timedelta(days=max_age_days)
+
+    pruned = 0
+    # Prune by age
+    for ts, entry in list(entries):
+        if ts < cutoff:
+            if _safe_remove(entry):
+                pruned += 1
+                entries.remove((ts, entry))
+
+    # Prune by count (keep newest `max_entries`)
+    while len(entries) > max_entries:
+        ts, entry = entries.pop(0)  # oldest
+        if _safe_remove(entry):
+            pruned += 1
+
+    return pruned
+
+
+def _safe_remove(path: Path) -> bool:
+    """Remove a file or directory tree, ignoring errors. Returns True on success."""
+    try:
+        if path.is_dir() and not path.is_symlink():
+            shutil.rmtree(path, ignore_errors=True)
+        else:
+            path.unlink(missing_ok=True)
+        return not path.exists()
+    except OSError:
+        return False
+
+
+# ---------------------------------------------------------------------------
+# delete_file
+# ---------------------------------------------------------------------------
+
+def delete_file(path: str) -> str:
+    """
+    Move a file to the trash (reversible via ``restore_file``).
+
+    This is the *safe* alternative to ``os.unlink``. The file disappears
+    from its original location but its bytes are preserved in
+    ``<base_dir>/.llm-trash/`` for up to 7 days (or until the trash
+    exceeds 100 entries, whichever comes first). Use ``restore_file`` to
+    undo a delete, or ``list_trash`` to see what's recoverable.
+
+    Use this tool when the model is confident a file is no longer needed
+    but you want a safety net in case of prompt injection or
+    misjudgement. For permanent deletion, call ``empty_trash`` after.
+
+    Args:
+        path: File to delete. Resolved against the sandbox base directory;
+            paths that escape the sandbox are refused.
+
+    Returns:
+        ``"Moved <path> to trash (.llm-trash/<entry>)"`` on success, or
+        ``"Error: ..."`` on failure.
+    """
+    base = _env_base_dir() or Path.cwd()
+    try:
+        target = _resolve_under_base(path, base)
+    except PermissionError as exc:
+        return f"Error: {exc}"
+
+    if not target.exists():
+        return f"Error: file does not exist: {path}"
+    if target.is_dir() and not target.is_symlink():
+        return f"Error: {path} is a directory; use delete_dir instead"
+    if not target.is_file() and not target.is_symlink():
+        return f"Error: not a regular file: {path}"
+
+    trash = _trash_dir(base)
+    try:
+        trash.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        return f"Error creating trash directory: {exc}"
+
+    try:
+        rel = str(target.relative_to(base))
+    except ValueError:
+        rel = target.name
+
+    trash_name = _make_trash_name(rel)
+    trash_path = trash / trash_name
+
+    # Handle same-second collisions (multiple deletes in one second)
+    counter = 2
+    while trash_path.exists():
+        trash_path = trash / f"{trash_name}_{counter}"
+        counter += 1
+
+    try:
+        # os.replace is atomic when source and destination are on the same
+        # filesystem (which they are, since trash is inside the sandbox).
+        os.replace(target, trash_path)
+    except OSError as exc:
+        return f"Error moving file to trash: {exc}"
+
+    pruned = _prune_trash(base)
+    msg = f"Moved {path} to trash (.llm-trash/{trash_path.name})"
+    if pruned:
+        msg += f"; pruned {pruned} old entr(y|ies) from trash"
+    return msg
+
+
+# ---------------------------------------------------------------------------
+# delete_dir
+# ---------------------------------------------------------------------------
+
+def delete_dir(path: str, recursive: bool = False) -> str:
+    """
+    Move a directory to the trash (reversible via ``restore_file``).
+
+    Two modes:
+
+    - ``recursive=False`` (default): only succeeds if the directory is
+      empty. Safer — refuses to nuke a directory tree by accident.
+    - ``recursive=True``: moves the entire directory tree (including all
+      files and subdirectories) to the trash.
+
+    Like ``delete_file``, the move is atomic (same filesystem) and the
+    directory can be restored with ``restore_file``. The trash is
+    auto-pruned after each call.
+
+    Args:
+        path: Directory to delete. Resolved against the sandbox base
+            directory; paths that escape the sandbox are refused.
+        recursive: If True, delete the directory even if it contains
+            files or subdirectories. Default False.
+
+    Returns:
+        ``"Moved <path> to trash (.llm-trash/<entry>)"`` on success, or
+        ``"Error: ..."`` on failure.
+    """
+    base = _env_base_dir() or Path.cwd()
+    try:
+        target = _resolve_under_base(path, base)
+    except PermissionError as exc:
+        return f"Error: {exc}"
+
+    if not target.exists():
+        return f"Error: directory does not exist: {path}"
+    if not target.is_dir() or target.is_symlink():
+        return f"Error: not a directory: {path}"
+
+    # Check if non-empty
+    try:
+        is_empty = not any(target.iterdir())
+    except OSError as exc:
+        return f"Error reading directory: {exc}"
+
+    if not is_empty and not recursive:
+        return (
+            f"Error: directory {path} is not empty; "
+            f"pass recursive=True to delete it anyway"
+        )
+
+    trash = _trash_dir(base)
+    try:
+        trash.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        return f"Error creating trash directory: {exc}"
+
+    try:
+        rel = str(target.relative_to(base))
+    except ValueError:
+        rel = target.name
+
+    trash_name = _make_trash_name(rel)
+    trash_path = trash / trash_name
+
+    counter = 2
+    while trash_path.exists():
+        trash_path = trash / f"{trash_name}_{counter}"
+        counter += 1
+
+    try:
+        # Directories need shutil.move (recursive), not os.replace.
+        shutil.move(str(target), str(trash_path))
+    except OSError as exc:
+        return f"Error moving directory to trash: {exc}"
+
+    pruned = _prune_trash(base)
+    msg = f"Moved {path} to trash (.llm-trash/{trash_path.name})"
+    if pruned:
+        msg += f"; pruned {pruned} old entr(y|ies) from trash"
+    return msg
+
+
+# ---------------------------------------------------------------------------
+# restore_file
+# ---------------------------------------------------------------------------
+
+def restore_file(path: str, force: bool = False) -> str:
+    """
+    Restore the most recently trashed entry matching ``path``.
+
+    Looks in the trash for entries whose original-path suffix matches
+    ``path`` and restores the newest one. If multiple deletes of the
+    same path happened, the most recent is restored first.
+
+    The restore is atomic (same as the delete): the entry is moved out
+    of the trash back to its original location.
+
+    Args:
+        path: Original location to restore to. The trash entry whose
+            original-path suffix matches this is selected. Resolved
+            against the sandbox base directory.
+        force: If True, overwrite an existing file/directory at the
+            target location. Default False — refuse to clobber current
+            state.
+
+    Returns:
+        ``"Restored <path> from .llm-trash/<entry>"`` on success, or
+        ``"Error: ..."`` if no matching trash entry exists or the
+        target already exists without ``force=True``.
+    """
+    base = _env_base_dir() or Path.cwd()
+    try:
+        target = _resolve_under_base(path, base)
+    except PermissionError as exc:
+        return f"Error: {exc}"
+
+    trash = _trash_dir(base)
+    if not trash.exists() or not any(trash.iterdir()):
+        return f"Error: trash is empty"
+
+    # Build the expected suffix. We use the same _make_trash_name logic
+    # but only the path part (no timestamp).
+    rel = str(Path(path).expanduser())
+    if rel.startswith("./"):
+        rel = rel[2:]
+    expected_suffix = "__" + rel.replace("/", "__").replace(os.sep, "__")
+
+    # Find all matching trash entries, newest first (lexicographic sort
+    # works because the timestamp prefix is fixed-width ISO format).
+    matches = []
+    for entry in trash.iterdir():
+        if entry.name.endswith(expected_suffix):
+            matches.append(entry)
+    # Also handle the _N suffix appended for same-second collisions
+    if not matches:
+        # Try with _N suffix: expected_suffix + "_N"
+        for entry in trash.iterdir():
+            base_name = entry.name
+            # Strip trailing _N if present
+            stripped = base_name
+            while True:
+                # Try stripping "_<digits>" from the end
+                last_under = stripped.rfind("_")
+                if last_under > 0 and stripped[last_under + 1:].isdigit():
+                    stripped = stripped[:last_under]
+                    if stripped.endswith(expected_suffix):
+                        matches.append(entry)
+                        break
+                else:
+                    break
+
+    if not matches:
+        return f"Error: no trashed entry matches {path}"
+
+    matches.sort(key=lambda e: e.name, reverse=True)
+    newest = matches[0]
+
+    # Check if target already exists
+    if target.exists() and not force:
+        return (
+            f"Error: {path} already exists; "
+            f"pass force=True to overwrite with the trashed version"
+        )
+
+    # Ensure parent exists
+    try:
+        target.parent.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        return f"Error creating parent directory: {exc}"
+
+    # If target exists and force=True, remove it first
+    if target.exists() and force:
+        if not _safe_remove(target):
+            return f"Error: could not remove existing {path} before restore"
+
+    try:
+        if newest.is_dir() and not newest.is_symlink():
+            shutil.move(str(newest), str(target))
+        else:
+            os.replace(newest, target)
+    except OSError as exc:
+        return f"Error restoring from trash: {exc}"
+
+    n_matches = len(matches)
+    msg = f"Restored {path} from .llm-trash/{newest.name}"
+    if n_matches > 1:
+        msg += f" ({n_matches - 1} older match(es) still in trash)"
+    return msg
+
+
+# ---------------------------------------------------------------------------
+# list_trash
+# ---------------------------------------------------------------------------
+
+def list_trash(limit: int = 50) -> str:
+    """
+    List entries currently in the trash, newest first.
+
+    Useful when the model needs to figure out which path to pass to
+    ``restore_file``. Each line shows the deletion timestamp, the size
+    (or ``dir`` for directories), and the original relative path.
+
+    Args:
+        limit: Maximum number of entries to return. Default 50. Set to
+            0 for no limit (may produce a very long list for big trash
+            dirs).
+
+    Returns:
+        One entry per line in the form
+        ``YYYY-MM-DD_HH-MM-SS  <size>  <original_path>``, followed by
+        a summary line. Returns ``"Trash is empty"`` if nothing is in
+        the trash.
+    """
+    if limit < 0:
+        return "Error: limit must be >= 0"
+
+    base = _env_base_dir() or Path.cwd()
+    trash = _trash_dir(base)
+
+    if not trash.exists():
+        return "Trash is empty"
+
+    try:
+        entries = sorted(trash.iterdir(), key=lambda e: e.name, reverse=True)
+    except OSError as exc:
+        return f"Error listing trash: {exc}"
+
+    if not entries:
+        return "Trash is empty"
+
+    if limit > 0:
+        displayed = entries[:limit]
+    else:
+        displayed = entries
+
+    lines: list[str] = []
+    for entry in displayed:
+        parsed = _parse_trash_entry(entry.name)
+        if parsed is None:
+            lines.append(f"??  {entry.name}")
+            continue
+        ts, orig = parsed
+        try:
+            if entry.is_dir() and not entry.is_symlink():
+                size = "dir"
+            else:
+                size = f"{entry.stat().st_size}B"
+        except OSError:
+            size = "??"
+        lines.append(f"{ts.strftime(_TRASH_TS_FORMAT)}  {size:>10}  {orig}")
+
+    suffix = ""
+    if limit > 0 and len(entries) > limit:
+        suffix = f"\n... ({len(entries) - limit} more entr(y|ies) not shown)"
+
+    return "\n".join(lines) + suffix + f"\n{len(entries)} entr(y|ies) total"
+
+
+# ---------------------------------------------------------------------------
+# empty_trash
+# ---------------------------------------------------------------------------
+
+def empty_trash(older_than_days: int = 0) -> str:
+    """
+    Permanently delete trash entries older than ``older_than_days``.
+
+    By default (``older_than_days=0``) this empties the trash completely.
+    Pass a positive number to only purge old entries — useful as a
+    manual cleanup that's more aggressive than the auto-prune.
+
+    This is the only tool that performs *irreversible* deletion. Use it
+    when you're confident the trashed files are no longer needed.
+
+    Args:
+        older_than_days: Only delete entries older than this many days.
+            Default 0 = delete everything in the trash.
+
+    Returns:
+        ``"Permanently deleted N entr(y|ies) from trash"`` on success.
+    """
+    if older_than_days < 0:
+        return "Error: older_than_days must be >= 0"
+
+    base = _env_base_dir() or Path.cwd()
+    trash = _trash_dir(base)
+
+    if not trash.exists():
+        return "Trash is empty"
+
+    cutoff = datetime.now() - timedelta(days=older_than_days)
+    removed = 0
+    errors = 0
+
+    for entry in list(trash.iterdir()):
+        parsed = _parse_trash_entry(entry.name)
+        if parsed is None:
+            # Unrecognised file in trash — leave it alone
+            continue
+        ts, _ = parsed
+        if ts < cutoff:
+            if _safe_remove(entry):
+                removed += 1
+            else:
+                errors += 1
+
+    msg = f"Permanently deleted {removed} entr(y|ies) from trash"
+    if errors:
+        msg += f" ({errors} could not be removed)"
+    return msg
+
+
+# ---------------------------------------------------------------------------
 # Diff engine (minimal, dependency-free)
 # ---------------------------------------------------------------------------
 
@@ -1290,6 +1796,91 @@ if llm is not None:
                 else:
                     _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
 
+        # -- delete_file -------------------------------------------------
+
+        def delete_file(self, path: str) -> str:
+            """Move a file to the trash. See module-level delete_file."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return delete_file(path)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        # -- delete_dir --------------------------------------------------
+
+        def delete_dir(self, path: str, recursive: bool = False) -> str:
+            """Move a directory to the trash. See module-level delete_dir."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return delete_dir(path, recursive=recursive)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        # -- restore_file ------------------------------------------------
+
+        def restore_file(self, path: str, force: bool = False) -> str:
+            """Restore a trashed entry. See module-level restore_file."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return restore_file(path, force=force)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        # -- list_trash --------------------------------------------------
+
+        def list_trash(self, limit: int = 50) -> str:
+            """List trash entries. See module-level list_trash."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return list_trash(limit=limit)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        # -- empty_trash -------------------------------------------------
+
+        def empty_trash(self, older_than_days: int = 0) -> str:
+            """Permanently purge trash entries. See module-level empty_trash."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return empty_trash(older_than_days=older_than_days)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
 else:  # pragma: no cover - llm not installed
 
     class FileTools:  # type: ignore[no-redef]
@@ -1409,6 +2000,66 @@ else:  # pragma: no cover - llm not installed
                 else:
                     os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
 
+        def delete_file(self, path):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return delete_file(path)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        def delete_dir(self, path, recursive=False):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return delete_dir(path, recursive=recursive)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        def restore_file(self, path, force=False):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return restore_file(path, force=force)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        def list_trash(self, limit=50):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return list_trash(limit=limit)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
+        def empty_trash(self, older_than_days=0):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return empty_trash(older_than_days=older_than_days)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
 
 # ---------------------------------------------------------------------------
 # llm hook implementation – this is what `llm` discovers via the entry point
@@ -1424,6 +2075,11 @@ def _register_all(register) -> None:
     register(list_dir)
     register(grep_file)
     register(git_apply)
+    register(delete_file)
+    register(delete_dir)
+    register(restore_file)
+    register(list_trash)
+    register(empty_trash)
     # Also register the toolbox class so users can enable all tools at once
     # with `-T FileTools`.
     if llm is not None:
