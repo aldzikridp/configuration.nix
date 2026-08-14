@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-file-tools"
+version = "0.3.0"
+description = "An llm plugin that adds file read/write/patch/ls/grep/git-apply tools."
+authors = [{ name = "Super Z" }]
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+dependencies = [
+    "llm>=0.20",
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+# Entry point: the right-hand side is the module that contains @llm.hookimpl functions.
+[project.entry-points.llm]
+file_tools = "llm_file_tools"
+
+[tool.setuptools]
+py-modules = ["llm_file_tools"]
