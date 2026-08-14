@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "llm-file-tools";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   # Vendored source: llm_file_tools.py + pyproject.toml sit next to this file.
