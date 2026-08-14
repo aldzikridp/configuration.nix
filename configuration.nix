@@ -51,6 +51,7 @@
     git
     gnumake
     killall
+    ripgrep          # used by llm-file-tools' grep_file (fast path; falls back to grep)
     man-pages
     man-pages-posix
 
@@ -193,3 +194,4 @@
   system.stateVersion = "23.05"; # Did you read the comment?
 
 }
+

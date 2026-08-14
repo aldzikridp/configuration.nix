@@ -99,6 +99,12 @@ let
   llm-wikipedia-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-wikipedia/default.nix { };
   llm-fetch-url-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-fetch-url/default.nix { };
 
+  # llm-file-tools plugin: read_file / write_file / patch_file / apply_diff /
+  # list_dir / grep_file (ripgrep+grep) / git_apply. Runtime deps on PATH:
+  # `git` (already in environment.systemPackages) and `ripgrep` (added to
+  # configuration.nix) — without ripgrep, grep_file falls back to grep.
+  llm-file-tools-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-file-tools/default.nix { };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -109,6 +115,7 @@ let
       llm-ctx7       = llm-ctx7-pkg;
       llm-wikipedia  = llm-wikipedia-pkg;
       llm-fetch-url  = llm-fetch-url-pkg;
+      llm-file-tools = llm-file-tools-pkg;
     };
   };
 
@@ -128,6 +135,7 @@ let
     llm-ctx7
     llm-wikipedia
     llm-fetch-url
+    llm-file-tools
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
@@ -141,3 +149,4 @@ in
 {
   home.packages = [ myLlm ];
 }
+
