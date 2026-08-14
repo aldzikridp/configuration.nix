@@ -81,6 +81,7 @@ let
   pkgs' = pkgs.extend (final: prev: {
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (python-final: python-prev: {
+        # Issue: https://github.com/NixOS/nixpkgs/issues/551795
         courlan = python-prev.courlan.overridePythonAttrs (old: {
           doCheck = false;
         });
