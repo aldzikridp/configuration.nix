@@ -2,11 +2,12 @@
 llm-file-tools
 ==============
 
-A plugin for Simon Willison's `llm` CLI that exposes seven file-manipulation
+A plugin for Simon Willison's `llm` CLI that exposes eight file-manipulation
 tools to any chat model that supports tool calling:
 
 * ``read_file``    – read a file (optionally a slice of it, with optional line numbers)
 * ``write_file``   – write or overwrite a file (atomic, with create_only guard)
+* ``create_dir``   – create a directory (optional parents, optional exist_ok)
 * ``patch_file``   – search-and-replace a single block inside an existing file
 * ``apply_diff``   – apply a unified diff to a file
 * ``list_dir``     – list the contents of a directory (one level deep)
@@ -47,12 +48,13 @@ except Exception:  # pragma: no cover - llm is only required at runtime
     llm = None  # type: ignore
 
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "FileTools",
     "read_file",
     "write_file",
+    "create_dir",
     "patch_file",
     "apply_diff",
     "list_dir",
@@ -261,6 +263,69 @@ def write_file(
         return f"Error writing file: {exc}"
 
     return f"Wrote {len(data)} bytes to {path}"
+
+
+# ---------------------------------------------------------------------------
+# create_dir
+# ---------------------------------------------------------------------------
+
+def create_dir(
+    path: str,
+    parents: bool = True,
+    exist_ok: bool = False,
+) -> str:
+    """
+    Create a directory.
+
+    Use this tool when you need an *empty* directory (e.g. `tests/`,
+    `docs/`, `src/utils/`). If you only need a directory because you're
+    about to put a file in it, call ``write_file`` instead — it creates
+    parent directories automatically.
+
+    Args:
+        path: Directory to create. Resolved against the sandbox base
+            directory; paths that escape the sandbox are refused.
+        parents: If True (default), create missing parent directories as
+            needed (like ``mkdir -p``). If False, the call fails when the
+            parent directory doesn't already exist.
+        exist_ok: If True, do nothing when the directory already exists
+            (idempotent). If False (default), the call fails with an
+            error when the directory exists. This guard prevents the
+            model from accidentally "creating" a directory that's already
+            there with different ownership/permissions.
+
+    Returns:
+        ``"Created directory <path>"`` on success, or ``"Error: ..."``
+        on failure. Refuses to clobber an existing file with a directory.
+    """
+    base = _env_base_dir() or Path.cwd()
+    try:
+        target = _resolve_under_base(path, base)
+    except PermissionError as exc:
+        return f"Error: {exc}"
+
+    if target.exists():
+        if target.is_dir():
+            if exist_ok:
+                return f"Directory already exists: {path}"
+            return (
+                f"Error: directory already exists: {path} "
+                f"(pass exist_ok=True to allow)"
+            )
+        return f"Error: path exists but is not a directory: {path}"
+
+    if not parents and not target.parent.exists():
+        return (
+            f"Error: parent directory does not exist: {target.parent} "
+            f"(pass parents=True to create it automatically)"
+        )
+
+    try:
+        target.mkdir(parents=parents, exist_ok=False)
+    except OSError as exc:
+        return f"Error creating directory: {exc}"
+
+    return f"Created directory {path}"
 
 
 def patch_file(
@@ -1079,6 +1144,28 @@ if llm is not None:
                 else:
                     _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
 
+        # -- create_dir -------------------------------------------------
+
+        def create_dir(
+            self,
+            path: str,
+            parents: bool = True,
+            exist_ok: bool = False,
+        ) -> str:
+            """Create a directory. See module-level create_dir."""
+            import os as _os
+
+            prev = _os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return create_dir(path, parents=parents, exist_ok=exist_ok)
+            finally:
+                if prev is None:
+                    _os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    _os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
         # -- patch_file --------------------------------------------------
 
         def patch_file(
@@ -1244,6 +1331,18 @@ else:  # pragma: no cover - llm not installed
                 else:
                     os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
 
+        def create_dir(self, path, parents=True, exist_ok=False):
+            prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
+            try:
+                if self._base_dir is not None:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = str(self._base_dir)
+                return create_dir(path, parents=parents, exist_ok=exist_ok)
+            finally:
+                if prev is None:
+                    os.environ.pop("LLM_FILE_TOOLS_BASE_DIR", None)
+                else:
+                    os.environ["LLM_FILE_TOOLS_BASE_DIR"] = prev
+
         def patch_file(self, path, search, replace, replace_all=False):
             prev = os.environ.get("LLM_FILE_TOOLS_BASE_DIR")
             try:
@@ -1319,6 +1418,7 @@ def _register_all(register) -> None:
     """Register every tool exposed by this plugin."""
     register(read_file)
     register(write_file)
+    register(create_dir)
     register(patch_file)
     register(apply_diff)
     register(list_dir)

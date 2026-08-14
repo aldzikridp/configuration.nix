@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "llm-file-tools"
-version = "0.2.0"
+version = "0.3.0"
 description = "An llm plugin that adds file read/write/patch/ls/grep/git-apply tools."
 authors = [{ name = "Super Z" }]
 license = { text = "Apache-2.0" }
