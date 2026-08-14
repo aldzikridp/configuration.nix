@@ -1,97 +1,86 @@
-# Nix derivation for `streamdown` — a streaming markdown renderer
-# for modern terminals, part of the DAY50 suite of open-source AI tools.
+# Nix derivation for `streamdown` with the `latex` plugin added.
 #
-# Upstream is published on PyPI as `streamdown`, but the source lives at
-# github.com/day50-dev/render-markdown-terminal (the repo is named after
-# the project's original working title). The dist name `streamdown` is
-# what the [project.scripts] entry points (`streamdown` and `sd`) live
-# under, and what `import streamdown` resolves to.
+# This is the entry point for `callPackage ../pkgs/streamdown/ { }` —
+# it wraps the base derivation in `pkgs/streamdown/streamdown.nix` with
+# an `overrideAttrs` that injects our `latex.py` plugin via `postPatch`.
+# The `postPatch` step copies our vendored `latex.py` into the source
+# tree's `streamdown/plugins/` directory before hatchling builds the
+# wheel.
 #
-# Build it via:
-#   pkgs.python3Packages.callPackage ./default.nix { }
+# Why `postPatch` and not `postInstall`?
+# --------------------------------------
+# streamdown plugins are file-based, not entry-point-based. The upstream
+# `pyproject.toml` declares:
 #
-# The derivation produces two CLI entry points (`streamdown` and `sd`),
-# both pointing at `streamdown.sd:main`. They land on PATH automatically
-# when the derivation is added to `home.packages` — no `withPackages`
-# wrapping is needed because the package declares its own console
-# scripts via `[project.scripts]` in pyproject.toml.
+#   [tool.hatch.build.targets.wheel]
+#   packages = ["streamdown"]
+#   include = ["streamdown/plugins/*"]
 #
-# Note on `sd.py`: the entry-point module is a bash/python polyglot.
-# The first 19 lines are a bash prologue (`#!/usr/bin/env bash` plus a
-# PEP 723 inline-metadata block) wrapped inside a Python triple-quoted
-# string. From Python's point of view the file is a normal module that
-# imports `main` from `streamdown.sdlib` and re-exports it. Hatchling
-# handles this without issue.
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  # Runtime deps — mirror [project.dependencies] in pyproject.toml.
-  pygments,
-  appdirs,
-  toml,
-  wcwidth,
-  pylatexenc,
-  # Optional extra from [project.optional-dependencies].images. Included
-  # because requirements.txt and the PEP 723 inline metadata in sd.py
-  # both list it — inline image rendering is a headline feature of the
-  # CLI. Drop this if you want a slimmer build.
-  term-image,
-}:
+# So hatchling bundles every `.py` file in `streamdown/plugins/` into the
+# wheel at build time. If we copy our plugin in AFTER the wheel is built
+# (i.e. `postInstall`), it lands in the nix store as a separate file that
+# Python's import system can't find — `import streamdown.plugins.latex`
+# would fail because the wheel's RECORD doesn't list it.
+#
+# By copying in `postPatch` (which runs AFTER `unpackPhase` extracts the
+# source, but BEFORE `buildPhase` invokes hatchling), our plugin becomes
+# part of the source tree, hatchling bundles it into the wheel, and the
+# resulting `streamdown.plugins.latex` module is importable normally.
+#
+# Usage
+# -----
+# In `home/home.nix`, use:
+#
+#   (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
+#
+# This file calls the original `streamdown.nix` derivation and applies
+# the override — no other changes needed.
+#
+# Verifying
+# ---------
+# After `nixos-rebuild switch`, the plugin is active. streamdown discovers
+# plugins by scanning `streamdown/plugins/*.py` at runtime and calling each
+# module's top-level `Plugin(text, state, style)` function. To confirm:
+#
+#   $ python3 -c "from streamdown.plugins import latex; print(latex.Plugin)"
+#   <function Plugin at 0x...>
+#
+# The latex plugin converts `$$...$$` LaTeX blocks to plain text using
+# `pylatexenc` (which is already a runtime dep of the base streamdown
+# derivation, so no new dependencies are introduced).
 
-buildPythonPackage rec {
-  pname = "streamdown";
-  version = "0.36.6";
+{ lib, callPackage, ... }@args:
 
-  src = fetchFromGitHub {
-    owner = "day50-dev";
-    repo = "render-markdown-terminal";
-    rev = "v${version}";
-    # `lib.fakeHash` is a placeholder. The first `nix build` will fail
-    # and print the correct SRI hash in the error output (look for a
-    # line like `specified: sha256-0000...` and `got: sha256-XXXX...`).
-    # Replace `lib.fakeHash` below with that `got:` value.
-    #
-    # Alternatively compute it directly without a build attempt:
-    #   nix-prefetch-url --unpack --type sha256 \
-    #     https://github.com/day50-dev/render-markdown-terminal/archive/refs/tags/v0.36.6.tar.gz
-    #   nix hash to-sri --type sha256 <prefetch-output>
-    #hash = lib.fakeHash;
-    hash = "sha256-RL6dKFlCob+VRN+CEUAmvEWOMAuKs/l7fkb6PMU80Ik=";
-  };
+let
+  # 1. Build the base streamdown package from the existing derivation.
+  #    `callPackage` resolves all the deps (pygments, appdirs, toml,
+  #    wcwidth, pylatexenc, term-image, hatchling) from python3Packages.
+  base = callPackage ./streamdown.nix { };
+in
+base.overrideAttrs (old: {
+  # 2. Add `latex.py` to the source tree before the wheel build.
+  #    `${./latex.py}` is a store-path reference to the vendored file
+  #    sitting next to this nix file. `cp` puts it into the unpacked
+  #    source's `streamdown/plugins/` directory; hatchling's
+  #    `include = ["streamdown/plugins/*"]` then bundles it.
+  postPatch = (old.postPatch or "") + ''
+    cp ${./latex.py} streamdown/plugins/latex.py
+  '';
 
-  pyproject = true;
-
-  build-system = [ hatchling ];
-
-  # All runtime deps are propagated so `streamdown` works as a
-  # standalone CLI when this derivation is dropped straight into
-  # `home.packages`. Without propagation, the entry-point wrapper
-  # would fail to import its own libraries at runtime.
-  propagatedBuildInputs = [
-    pygments
-    appdirs
-    toml
-    wcwidth
-    pylatexenc
-    term-image
+  # 3. Make sure the import check still passes with the extra plugin.
+  #    The base derivation sets `pythonImportsCheck = [ "streamdown" ]`
+  #    which is unaffected. We additionally verify the plugin module
+  #    is importable.
+  pythonImportsCheck = (old.pythonImportsCheck or [ "streamdown" ]) ++ [
+    "streamdown.plugins.latex"
   ];
 
-  # Upstream ships a shell-based test suite under tests/ that shells
-  # out to `sd` itself and compares ANSI-stripped output against
-  # fixture files. Not appropriate for the Nix build sandbox (no TTY,
-  # and the harness assumes a working `sd` on PATH). The library is
-  # exercised in real usage by the LLM tools wired up in home/llm.nix.
-  doCheck = false;
-
-  pythonImportsCheck = [ "streamdown" ];
-
-  meta = with lib; {
-    description = "A streaming markdown renderer for modern terminals with syntax highlighting";
-    homepage = "https://github.com/day50-dev/render-markdown-terminal";
-    license = licenses.mit;
-    mainProgram = "streamdown";
-    platforms = platforms.unix;
+  # 4. Update the meta description so `nix profile` / `nix-env` users
+  #    can tell at a glance this is the latex-patched variant.
+  meta = (old.meta or { }) // {
+    description = (old.meta or { }).description or "" + " (with latex plugin)";
+    longDescription = (old.meta or { }).longDescription or ""
+      + "\n\nThis build includes the custom latex plugin (streamdown/plugins/latex.py) "
+      + "that converts $$...$$ LaTeX blocks to plain text via pylatexenc.";
   };
-}
+})

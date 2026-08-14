@@ -63,7 +63,7 @@
     context7-mcp
     rtk
     (pkgs.callPackage ../pkgs/term-llm/default.nix { })
-    (pkgs.python3Packages.callPackage ../pkgs/streamdown/latex-plugin.nix { })
+    (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
   ];
   programs = {
     lazygit.enable = true;
