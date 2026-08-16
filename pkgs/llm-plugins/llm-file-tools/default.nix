@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   # Vendored source: llm_file_tools.py + pyproject.toml sit next to this file.
-  # Mirrors the pattern used by pkgs/llm-ctx7, pkgs/llm-wikipedia, etc.
+  # Mirrors the pattern used by pkgs/llm-plugins/llm-ctx7, pkgs/llm-plugins/llm-wikipedia, etc.
   src = ./.;
 
   build-system = [ setuptools ];
