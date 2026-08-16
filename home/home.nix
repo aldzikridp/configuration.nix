@@ -60,6 +60,7 @@
     #(transmission_4.override { enableCli = false; })
     transmission_4
     unstable.opencode
+    unstable.pi-coding-agent
     context7-mcp
     rtk
     (pkgs.callPackage ../pkgs/term-llm/default.nix { })
