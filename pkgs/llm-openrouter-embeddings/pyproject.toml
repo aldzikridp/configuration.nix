@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-openrouter-embeddings"
+version = "0.1.0"
+description = "Config-driven LLM plugin for OpenRouter embedding models."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "EVA-02" }]
+keywords = ["llm", "llm-plugin", "openrouter", "embeddings"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "llm>=0.26",
+    "openai",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+# Entry point that tells llm how to load this plugin. Left-hand side
+# ("openrouter-embeddings") is the plugin name shown by `llm plugins`.
+# Right-hand side ("llm_openrouter_embeddings") is the importable module
+# that contains the @llm.hookimpl def register_embedding_models(register)
+# function.
+[project.entry-points.llm]
+openrouter-embeddings = "llm_openrouter_embeddings"
+
+[tool.setuptools]
+py-modules = ["llm_openrouter_embeddings"]

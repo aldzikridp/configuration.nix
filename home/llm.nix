@@ -1,7 +1,8 @@
 # Replacement for home/llm.nix
 #
-# Wires the three custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url)
-# into the `llm` CLI alongside the existing nixpkgs-bundled plugins.
+# Wires the five custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
+# llm-file-tools, llm-openrouter-embeddings) into the `llm` CLI alongside
+# the existing nixpkgs-bundled plugins.
 #
 # ──────────────────────────────────────────────────────────────────────────
 # Key design decisions (read if you're debugging a build failure):
@@ -45,7 +46,7 @@
 #
 # 3. Why we still need `myPython = pkgs'.python3.override { packageOverrides }`:
 #
-#    We need to inject our three custom plugin derivations into a Python
+#    We need to inject our five custom plugin derivations into a Python
 #    package set BY NAME, so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])`
 #    can resolve them. `pythonPackagesExtensions` could do this too, but
 #    since the custom plugins don't have transitive-dependency issues
@@ -106,6 +107,17 @@ let
   # configuration.nix) — without ripgrep, grep_file falls back to grep.
   llm-file-tools-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-file-tools/default.nix { };
 
+  # llm-openrouter-embeddings plugin: embedding models hosted by OpenRouter
+  # (https://openrouter.ai/api/v1). The model list is user-provided at
+  # runtime via ~/.config/io.datasette.llm/openrouter-embeddings.yaml —
+  # see pkgs/llm-openrouter-embeddings/README.md.
+  llm-openrouter-embeddings-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-openrouter-embeddings/default.nix { };
+
+  # llm-tools-rag plugin: RAG tool (get_collections / get_relevant_documents)
+  # for searching llm's embeddings database. Fetched from GitHub via
+  # fetchFromGitHub (see pkgs/llm-tools-rag/default.nix).
+  llm-tools-rag-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-tools-rag/default.nix { };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -117,6 +129,8 @@ let
       llm-wikipedia  = llm-wikipedia-pkg;
       llm-fetch-url  = llm-fetch-url-pkg;
       llm-file-tools = llm-file-tools-pkg;
+      llm-openrouter-embeddings = llm-openrouter-embeddings-pkg;
+      llm-tools-rag = llm-tools-rag-pkg;
     };
   };
 
@@ -137,6 +151,8 @@ let
     llm-wikipedia
     llm-fetch-url
     llm-file-tools
+    llm-openrouter-embeddings
+    llm-tools-rag
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
