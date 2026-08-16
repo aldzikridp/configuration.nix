@@ -1,8 +1,8 @@
 # Replacement for home/llm.nix
 #
-# Wires the five custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
-# llm-file-tools, llm-openrouter-embeddings) into the `llm` CLI alongside
-# the existing nixpkgs-bundled plugins.
+# Wires the six custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
+# llm-file-tools, llm-openrouter-embeddings, llm-tools-rag) into the `llm`
+# CLI alongside the existing nixpkgs-bundled plugins.
 #
 # ──────────────────────────────────────────────────────────────────────────
 # Key design decisions (read if you're debugging a build failure):
@@ -46,7 +46,7 @@
 #
 # 3. Why we still need `myPython = pkgs'.python3.override { packageOverrides }`:
 #
-#    We need to inject our five custom plugin derivations into a Python
+#    We need to inject our six custom plugin derivations into a Python
 #    package set BY NAME, so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])`
 #    can resolve them. `pythonPackagesExtensions` could do this too, but
 #    since the custom plugins don't have transitive-dependency issues
@@ -68,18 +68,39 @@
 #    `importlib.metadata`, so any package in the env whose
 #    `pyproject.toml` declares `[project.entry-points.llm]` is picked up
 #    automatically.
+#
+# 5. Why the llm env is based on `pkgs.unstable` and `llm` is overridden to 0.32:
+#
+#    Neither nixos-26.05 (pinned in flake.nix) nor nixpkgs-unstable ship
+#    llm 0.32 yet (stable has 0.30, unstable has 0.31.1). llm 0.32 requires
+#    `sqlite-utils>=4.0` and `condense-json>=1.1`. nixpkgs-unstable already
+#    has sqlite-utils 4.1.1 (and a coordinated openai/click set), but still
+#    has condense-json 0.1.3 — so we base the llm environment on
+#    `pkgs.unstable` and add two lightweight overrides via
+#    `pythonPackagesExtensions`: `llm` -> 0.32 and `condense-json` -> 1.1.
+#    Because this is an EXTENSION (not packageOverrides), every plugin in
+#    the env — bundled (llm-gemini, ...) and custom — genuinely rebuilds
+#    against llm 0.32, avoiding a dual-llm-version conflict.
+#
+#    Trade-offs: we drop nixpkgs' install/uninstall-disable patch and the
+#    @listOfPackagedPlugins@ postPatch substitution (the other bundled
+#    patches target 0.31.1-specific code and may not apply to 0.32), so
+#    `llm install`/`uninstall` run real pip — unused here since plugins
+#    are managed via Nix. Upstream tests are skipped (doCheck = false),
+#    consistent with the vendored plugins.
 { pkgs, ... }:
 
 let
-  # Step 1: Extend `pkgs` with a Python packages extension that disables
-  # tests on `courlan` and `trafilatura`. The extension is applied to
-  # every Python interpreter's package set, so when `trafilatura`'s
-  # callPackage resolves `courlan`, it gets the test-disabled version —
-  # producing a different .drv hash and a working build.
-  #
-  # The library works fine at runtime; only the test suites are broken
-  # on Python 3.13. Track upstream: https://github.com/adbar/courlan/issues
-  pkgs' = pkgs.extend (final: prev: {
+  # Step 1: Extend `pkgs.unstable` (see header section 5 for why unstable)
+  # with Python package extensions that (a) disable tests on `courlan` and
+  # `trafilatura` and (b) bump `llm` to 0.32 and `condense-json` to 1.1.
+  # The extension is applied to every Python interpreter's package set, so
+  # when `trafilatura`'s callPackage resolves `courlan`, it gets the
+  # test-disabled version — producing a different .drv hash and a working
+  # build. The library works fine at runtime; only the test suites are
+  # broken on Python 3.13.
+  # Track upstream: https://github.com/adbar/courlan/issues
+  pkgs' = pkgs.unstable.extend (final: prev: {
     pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
       (python-final: python-prev: {
         # Issue: https://github.com/NixOS/nixpkgs/issues/551795
@@ -90,10 +111,45 @@ let
           doCheck = false;
         });
       })
+
+      # llm 0.32 + condense-json 1.1 (llm 0.32 requires condense-json>=1.1).
+      # `final` here is the top-level `pkgs.unstable`, which provides
+      # fetchFromGitHub. sqlite-utils 4.1.1 already comes from unstable.
+      (python-final: python-prev: {
+        condense-json = python-prev.condense-json.overridePythonAttrs (old: {
+          version = "1.1";
+          src = final.fetchFromGitHub {
+            owner = "simonw";
+            repo = "condense-json";
+            tag = "1.1";
+            hash = "sha256-IBYjDFhbQlZ/17nTo5FvJM7aeadKS5dW7J8IGy4956M=";
+          };
+          # 1.1's test suite needs `hypothesis`, which the 0.1.3
+          # derivation doesn't provide; skip tests (library works fine).
+          doCheck = false;
+        });
+        llm = python-prev.llm.overridePythonAttrs (old: {
+          version = "0.32";
+          src = final.fetchFromGitHub {
+            owner = "simonw";
+            repo = "llm";
+            tag = "0.32";
+            hash = "sha256-lDPF4Z+U9Zlqc1Dt7pCrxmthAZj4a0hNpz5d8J7TtM8=";
+          };
+          # Drop nixpkgs' install/uninstall-disable patch and the
+          # @listOfPackagedPlugins@ postPatch substitution (the other
+          # bundled patches target 0.31.1-specific code and may not apply
+          # to 0.32). Plugins are managed via Nix, so `llm install` is
+          # unused.
+          patches = [];
+          postPatch = "";
+          doCheck = false;
+        });
+      })
     ];
   });
 
-  # Step 2: Build the three plugin derivations using the EXTENDED pkgs.
+  # Step 2: Build the six plugin derivations using the EXTENDED pkgs.
   # Because the extension applies to python3Packages too, `trafilatura`
   # (pulled in by llm-fetch-url/default.nix) resolves to the test-disabled
   # version, and so does its transitive `courlan` dep.
