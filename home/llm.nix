@@ -151,28 +151,28 @@ let
 
   # Step 2: Build the six plugin derivations using the EXTENDED pkgs.
   # Because the extension applies to python3Packages too, `trafilatura`
-  # (pulled in by llm-fetch-url/default.nix) resolves to the test-disabled
+  # (pulled in by llm-plugins/llm-fetch-url/default.nix) resolves to the test-disabled
   # version, and so does its transitive `courlan` dep.
-  llm-ctx7-pkg       = pkgs'.python3Packages.callPackage ../pkgs/llm-ctx7/default.nix { };
-  llm-wikipedia-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-wikipedia/default.nix { };
-  llm-fetch-url-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-fetch-url/default.nix { };
+  llm-ctx7-pkg       = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-ctx7/default.nix { };
+  llm-wikipedia-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-wikipedia/default.nix { };
+  llm-fetch-url-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-fetch-url/default.nix { };
 
   # llm-file-tools plugin: read_file / write_file / patch_file / apply_diff /
   # list_dir / grep_file (ripgrep+grep) / git_apply. Runtime deps on PATH:
   # `git` (already in environment.systemPackages) and `ripgrep` (added to
   # configuration.nix) — without ripgrep, grep_file falls back to grep.
-  llm-file-tools-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-file-tools/default.nix { };
+  llm-file-tools-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-file-tools/default.nix { };
 
   # llm-openrouter-embeddings plugin: embedding models hosted by OpenRouter
   # (https://openrouter.ai/api/v1). The model list is user-provided at
   # runtime via ~/.config/io.datasette.llm/openrouter-embeddings.yaml —
-  # see pkgs/llm-openrouter-embeddings/README.md.
-  llm-openrouter-embeddings-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-openrouter-embeddings/default.nix { };
+  # see pkgs/llm-plugins/llm-openrouter-embeddings/README.md.
+  llm-openrouter-embeddings-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-openrouter-embeddings/default.nix { };
 
   # llm-tools-rag plugin: RAG tool (get_collections / get_relevant_documents)
   # for searching llm's embeddings database. Fetched from GitHub via
-  # fetchFromGitHub (see pkgs/llm-tools-rag/default.nix).
-  llm-tools-rag-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-tools-rag/default.nix { };
+  # fetchFromGitHub (see pkgs/llm-plugins/llm-tools-rag/default.nix).
+  llm-tools-rag-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-tools-rag/default.nix { };
 
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
