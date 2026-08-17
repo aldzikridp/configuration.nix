@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-openai-compatible-embeddings"
+version = "0.1.0"
+description = "LLM plugin for OpenAI-compatible HTTP embedding APIs."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "EVA-02" }]
+keywords = ["llm", "llm-plugin", "embeddings", "openai-compatible"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = ["llm>=0.26", "httpx", "pyyaml"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+# Entry point that tells llm how to load this plugin.
+# LHS = plugin name shown by `llm plugins`; RHS = importable module containing
+# the @llm.hookimpl def register_embedding_models(register): function.
+[project.entry-points.llm]
+openai-compatible-embeddings = "llm_openai_compatible_embeddings"
+
+[tool.setuptools]
+py-modules = ["llm_openai_compatible_embeddings"]

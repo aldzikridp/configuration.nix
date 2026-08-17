@@ -1,8 +1,6 @@
-# Replacement for home/llm.nix
-#
-# Wires the seven custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
-# llm-file-tools, llm-openrouter-embeddings, llm-tools-rag, llm-commandcode)
-# into the `llm`
+# Wires the custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
+# llm-file-tools, llm-openrouter-embeddings, llm-tools-rag, llm-commandcode,
+# llm-openai-compatible-embeddings) into the `llm`
 # CLI alongside the existing nixpkgs-bundled plugins.
 #
 # ──────────────────────────────────────────────────────────────────────────
@@ -150,7 +148,7 @@ let
     ];
   });
 
-  # Step 2: Build the seven plugin derivations using the EXTENDED pkgs.
+  # Step 2: Build the plugins derivations using the EXTENDED pkgs.
   # Because the extension applies to python3Packages too, `trafilatura`
   # (pulled in by llm-plugins/llm-fetch-url/default.nix) resolves to the test-disabled
   # version, and so does its transitive `courlan` dep.
@@ -183,6 +181,13 @@ let
   # auth.json files. See pkgs/llm-plugins/llm-commandcode/README.md.
   llm-commandcode-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-commandcode/default.nix { };
 
+  # llm-openai-compatible-embeddings plugin: embedding models against any
+  # OpenAI-compatible /embeddings endpoint (Ollama, LM Studio, vLLM, Jina,
+  # ...). Servers/models are user-configured at runtime via
+  # ~/.config/io.datasette.llm/openai-compatible-embeddings.yaml — see
+  # pkgs/llm-plugins/llm-openai-compatible-embeddings/README.md.
+  llm-openai-compatible-embeddings-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-openai-compatible-embeddings/default.nix { };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -197,11 +202,12 @@ let
       llm-openrouter-embeddings = llm-openrouter-embeddings-pkg;
       llm-tools-rag = llm-tools-rag-pkg;
       llm-commandcode = llm-commandcode-pkg;
+      llm-openai-compatible-embeddings = llm-openai-compatible-embeddings-pkg;
     };
   };
 
   # Step 4: Build ONE python environment that contains `llm`, the
-  # nixpkgs-bundled plugins we want, AND the seven custom plugins. `ps`
+  # nixpkgs-bundled plugins we want, AND the custom plugins. `ps`
   # here is `myPython.pkgs`, so `ps.llm-ctx7` / etc. resolve via the
   # Step 3 overlay.
   myLlmEnv = myPython.withPackages (ps: with ps; [
@@ -220,6 +226,7 @@ let
     llm-openrouter-embeddings
     llm-tools-rag
     llm-commandcode
+    llm-openai-compatible-embeddings
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the

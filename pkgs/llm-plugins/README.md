@@ -29,6 +29,7 @@ below target that version.
 | `llm-fetch-curl` | tool | `register_tools` | vendored | `fetch_url`, shells out to `curl`+`pandoc`+`sed` (orphaned) |
 | `llm-file-tools` | tool | `register_tools` | vendored | 13 file tools + `FileTools` toolbox |
 | `llm-openrouter-embeddings` | embedding models | `register_embedding_models` | vendored | config-driven OpenRouter embeddings |
+| `llm-openai-compatible-embeddings` | embedding models | `register_embedding_models` | vendored | config-driven OpenAI-compatible endpoints (Ollama, LM Studio, vLLM, ...) |
 | `llm-tools-rag` | tool (toolbox) | `register_tools` | `fetchFromGitHub` | RAG search over llm's embeddings DB |
 | `llm-commandcode` | chat models | `register_models` + `register_commands` | vendored | ported from `pi-commandcode-provider` |
 
