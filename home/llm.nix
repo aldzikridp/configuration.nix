@@ -226,7 +226,7 @@ let
     llm-openrouter-embeddings
     llm-tools-rag
     llm-commandcode
-    llm-openai-compatible-embeddings
+    #llm-openai-compatible-embeddings
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
