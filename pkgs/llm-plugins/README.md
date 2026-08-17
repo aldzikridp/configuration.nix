@@ -28,7 +28,7 @@ below target that version.
 | `llm-fetch-url` | tool | `register_tools` | vendored | `fetch_url`, uses `trafilatura` |
 | `llm-fetch-curl` | tool | `register_tools` | vendored | `fetch_url`, shells out to `curl`+`pandoc`+`sed` (orphaned) |
 | `llm-file-tools` | tool | `register_tools` | vendored | 13 file tools + `FileTools` toolbox |
-| `llm-openrouter-embeddings` | embedding models | `register_embedding_models` | vendored | config-driven OpenRouter embeddings |
+| `llm-openrouter-embeddings` | embedding models | `register_embedding_models` | vendored | config-driven OpenRouter embeddings (per-model `provider` routing) |
 | `llm-openai-compatible-embeddings` | embedding models | `register_embedding_models` | vendored | config-driven OpenAI-compatible endpoints (Ollama, LM Studio, vLLM, ...) |
 | `llm-tools-rag` | tool (toolbox) | `register_tools` | `fetchFromGitHub` | RAG search over llm's embeddings DB |
 | `llm-commandcode` | chat models | `register_models` + `register_commands` | vendored | ported from `pi-commandcode-provider` |
@@ -438,7 +438,8 @@ def register_embedding_models(register):
 ```
 
 `llm-openrouter-embeddings` is the worked example (config-driven model list,
-aliases, per-model `dimensions`/`batch_size`).
+aliases, per-model `dimensions`/`batch_size`, and per-model OpenRouter
+`provider` routing: `order` / `allow_fallbacks` / `data_collection`).
 
 ---
 

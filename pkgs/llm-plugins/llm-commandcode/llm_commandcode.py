@@ -1,8 +1,5 @@
 """llm plugin: Command Code (commandcode.ai) model provider.
 
-Port of the pi extension https://github.com/patlux/pi-commandcode-provider
-(https://github.com/patlux/pi-commandcode-provider) to an llm plugin.
-
 Registers models from the Command Code Provider API
 (https://api.commandcode.ai/provider/v1/models) as ``commandcode/{id}``
 (e.g. ``commandcode/deepseek/deepseek-v4-flash``) and streams completions

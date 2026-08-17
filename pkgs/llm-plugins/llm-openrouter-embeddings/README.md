@@ -23,7 +23,7 @@ model IDs yourself in a YAML config file.
    # Simple form: just a model ID.
    - openai/text-embedding-3-small
 
-   # Extended form: optional aliases, dimensions, batch_size.
+   # Extended form: optional aliases, dimensions, batch_size, provider.
    - model: voyage/voyage-3
      aliases:
        - openrouter-voyage-3
@@ -31,6 +31,13 @@ model IDs yourself in a YAML config file.
    - model: openai/text-embedding-3-large
      dimensions: 1024
      batch_size: 25
+     # Optional OpenRouter provider routing (all keys optional).
+     provider:
+       order:
+         - openai
+         - azure
+       allow_fallbacks: true
+       data_collection: deny
    ```
 
    Supported keys per entry:
@@ -41,6 +48,21 @@ model IDs yourself in a YAML config file.
    | `aliases`    | extra names you can pass to `llm embed -m`                   |
    | `dimensions` | optional embedding dimension (sent to the API)               |
    | `batch_size` | optional override for how many items to embed per request    |
+   | `provider`   | optional OpenRouter provider-routing block (see below)       |
+
+   Provider routing (forwarded verbatim as `{"provider": ...}` on the
+   request body, per the [OpenRouter embeddings API
+   reference](https://openrouter.ai/docs/api_reference/embeddings)):
+
+   ```yaml
+   provider:
+     order: ["openai", "azure"]   # provider slugs, tried in order
+     allow_fallbacks: false        # bool; disable fallback routing
+     data_collection: deny         # "allow" or "deny"
+   ```
+
+   All three provider keys are optional and validated independently:
+   an invalid value is warned about on stderr and dropped, never fatal.
 
 ## Usage
 

@@ -14,6 +14,8 @@
 #
 # The model list is NOT baked into this derivation: the user lists the
 # OpenRouter model IDs in ~/.config/io.datasette.llm/openrouter-embeddings.yaml.
+# Per-model provider routing (order / allow_fallbacks / data_collection) is
+# optional and forwarded as {"provider": ...} on the request body.
 {
   lib,
   buildPythonPackage,
@@ -25,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "llm-openrouter-embeddings";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   # Vendor the source files that sit next to this default.nix.

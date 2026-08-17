@@ -1,12 +1,7 @@
 # llm-commandcode
 
 An [llm](https://llm.datasette.io/) plugin that provides
-[Command Code](https://commandcode.ai) models. It is a port of the pi
-extension [`pi-commandcode-provider`](https://github.com/patlux/pi-commandcode-provider);
-an unofficial, community-maintained integration. You need your own Command
-Code account and API key or subscription. Command Code's terms, availability,
-and pricing apply.
-
+[Command Code](https://commandcode.ai) models.
 ## What it provides
 
 - Models are discovered dynamically from the Command Code Provider API
