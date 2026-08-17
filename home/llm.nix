@@ -1,7 +1,8 @@
 # Replacement for home/llm.nix
 #
-# Wires the six custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
-# llm-file-tools, llm-openrouter-embeddings, llm-tools-rag) into the `llm`
+# Wires the seven custom plugins (llm-ctx7, llm-wikipedia, llm-fetch-url,
+# llm-file-tools, llm-openrouter-embeddings, llm-tools-rag, llm-commandcode)
+# into the `llm`
 # CLI alongside the existing nixpkgs-bundled plugins.
 #
 # ──────────────────────────────────────────────────────────────────────────
@@ -149,7 +150,7 @@ let
     ];
   });
 
-  # Step 2: Build the six plugin derivations using the EXTENDED pkgs.
+  # Step 2: Build the seven plugin derivations using the EXTENDED pkgs.
   # Because the extension applies to python3Packages too, `trafilatura`
   # (pulled in by llm-plugins/llm-fetch-url/default.nix) resolves to the test-disabled
   # version, and so does its transitive `courlan` dep.
@@ -174,6 +175,14 @@ let
   # fetchFromGitHub (see pkgs/llm-plugins/llm-tools-rag/default.nix).
   llm-tools-rag-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-tools-rag/default.nix { };
 
+  # llm-commandcode plugin: Command Code (commandcode.ai) model provider,
+  # ported from the pi extension pi-commandcode-provider. Models are
+  # discovered from the Provider API at runtime (commandcode/{id}), with
+  # streaming, tools, reasoning, and image input. Uses `llm keys set
+  # commandcode` / COMMANDCODE_API_KEY, falling back to existing pi/commandcode
+  # auth.json files. See pkgs/llm-plugins/llm-commandcode/README.md.
+  llm-commandcode-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-commandcode/default.nix { };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -187,11 +196,12 @@ let
       llm-file-tools = llm-file-tools-pkg;
       llm-openrouter-embeddings = llm-openrouter-embeddings-pkg;
       llm-tools-rag = llm-tools-rag-pkg;
+      llm-commandcode = llm-commandcode-pkg;
     };
   };
 
   # Step 4: Build ONE python environment that contains `llm`, the
-  # nixpkgs-bundled plugins we want, AND the three custom plugins. `ps`
+  # nixpkgs-bundled plugins we want, AND the seven custom plugins. `ps`
   # here is `myPython.pkgs`, so `ps.llm-ctx7` / etc. resolve via the
   # Step 3 overlay.
   myLlmEnv = myPython.withPackages (ps: with ps; [
@@ -209,6 +219,7 @@ let
     llm-file-tools
     llm-openrouter-embeddings
     llm-tools-rag
+    llm-commandcode
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
