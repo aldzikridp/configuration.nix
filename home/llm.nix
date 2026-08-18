@@ -188,6 +188,15 @@ let
   # pkgs/llm-plugins/llm-openai-compatible-embeddings/README.md.
   llm-openai-compatible-embeddings-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-openai-compatible-embeddings/default.nix { };
 
+  # llm-semsearch plugin: semantic_search tool backed by semsearch's Python
+  # library (SemanticSearchService). Reads search defaults from
+  # <llm.user_dir()>/semantic-search.yaml. semsearch is built against pkgs'
+  # so it's ABI-compatible with the llm env.
+  semsearch-pkg       = pkgs'.python3Packages.callPackage ../pkgs/semsearch/default.nix { };
+  llm-semsearch-pkg   = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-semsearch/default.nix {
+    pg-semantic-search = semsearch-pkg;
+  };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -203,6 +212,8 @@ let
       llm-tools-rag = llm-tools-rag-pkg;
       llm-commandcode = llm-commandcode-pkg;
       llm-openai-compatible-embeddings = llm-openai-compatible-embeddings-pkg;
+      pg-semantic-search = semsearch-pkg;
+      llm-semsearch = llm-semsearch-pkg;
     };
   };
 
@@ -227,6 +238,7 @@ let
     llm-tools-rag
     llm-commandcode
     #llm-openai-compatible-embeddings
+    llm-semsearch
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the

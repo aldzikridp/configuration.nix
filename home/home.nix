@@ -65,6 +65,7 @@
     rtk
     (pkgs.callPackage ../pkgs/term-llm/default.nix { })
     (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
+    (pkgs.python3Packages.callPackage ../pkgs/semsearch/default.nix { })
   ];
   programs = {
     lazygit.enable = true;
