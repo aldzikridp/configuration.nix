@@ -75,22 +75,23 @@ def _load_config() -> dict:
 
 def semantic_search(
     query: str,
-    k: int | None = None,
     filter: str | None = None,
-    rerank: bool | None = None,
 ) -> str:
-    """Search local documents indexed by semsearch (semantic search).
-
-    Performs a cosine-similarity search over documents previously ingested
-    into PostgreSQL + pgvector via ``semsearch ingest``. Returns the most
-    relevant document chunks matching the query.
+    """Search local documents.
 
     Args:
         query: The search query string.
-        k: Number of results to return (default: from config, or 5).
-        filter: JSON filter string to narrow results, e.g.
-            '{"doc_type": "pdf"}' or '{"source": {"$ilike": "docs/%"}}'.
-        rerank: Whether to rerank results using the configured reranker.
+        filter: JSON filter string to narrow results
+            - Specific file → `{"source": "path/to/file.md"}`
+            - File type → `{"doc_type": "pdf"}`
+            - Directory → `{"source": {"$ilike": "docs/%"}}`
+            - Multiple types → `{"doc_type": {"$in": ["pdf", "csv"]}}`
+            - Exclude type → `{"doc_type": {"$ne": "json"}}`
+            - Page range → `{"page": {"$between": [1, 10]}}`
+            - Combine AND → `{"$and": [{...}, {...}]}`
+            - Combine OR → `{"$or": [{...}, {...}]}`
+            - Negate → `{"$not": {...}}`
+            - Field exists → `{"page": {"$exists": true}}`
     """
     if not query:
         return "error: query must not be empty"
@@ -99,8 +100,8 @@ def semantic_search(
     config = _load_config()
 
     # Merge: CLI args override config, config overrides hardcoded defaults
-    effective_k = k if k is not None else config.get("k", 5)
-    effective_rerank = rerank if rerank is not None else config.get("rerank", False)
+    effective_k = config.get("k", 5)
+    effective_rerank = config.get("rerank", False)
     config_path = config.get("config")
 
     # Parse filter: CLI string takes precedence, then config dict
