@@ -52,8 +52,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aldzikridp";
     repo = "semantic-search";
-    rev = "2dc2a53ec4ec7dd1f2a54bcdbd0a63ad7a923f0b";
-    hash = "sha256-8ixq4RWrn5dNcWhZp1Uv2B7rG04BeracFKiwa5/QAJ8=";
+    rev = "81a378340e94df884c8d80015f4d7c96e3453e81";
+    hash = "sha256-TsEeMuvcEWDdj4ZBCR4LB5qXCJ0hlGAGN640AfbeUUs=";
   };
 
   pyproject = true;
