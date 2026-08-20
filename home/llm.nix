@@ -197,6 +197,12 @@ let
     pg-semantic-search = semsearch-pkg;
   };
 
+  # llm-semantic-search plugin: semantic_search tool via HTTP API.
+  # Sends requests to a running semsearch serve endpoint instead of calling
+  # the Python library directly. Reads config from
+  # <llm.user_dir()>/semantic-search-server.yaml.
+  llm-semantic-search-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-semantic-search/default.nix { };
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -214,6 +220,7 @@ let
       llm-openai-compatible-embeddings = llm-openai-compatible-embeddings-pkg;
       pg-semantic-search = semsearch-pkg;
       llm-semsearch = llm-semsearch-pkg;
+      llm-semantic-search = llm-semantic-search-pkg;
     };
   };
 
@@ -238,7 +245,8 @@ let
     llm-tools-rag
     llm-commandcode
     #llm-openai-compatible-embeddings
-    llm-semsearch
+    #llm-semsearch
+    llm-semantic-search
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
