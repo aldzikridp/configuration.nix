@@ -20,6 +20,7 @@
     gopass
     pwgen
     ffmpeg-full
+    glow
     ffmpegthumbnailer # video thumbnail
     kopia
     ripgrep
