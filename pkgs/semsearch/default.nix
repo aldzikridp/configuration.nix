@@ -11,6 +11,7 @@
 #   semsearch init                  # Create database table
 #   semsearch ingest docs/file.md   # Ingest a file
 #   semsearch search "query"        # Search
+#   semsearch serve                  # Start FastAPI server
 #   semsearch --help                # Show all commands
 #
 # Configuration: all via environment variables or .env file.
@@ -24,6 +25,8 @@
   callPackage,
   # Runtime deps — mirror [project.dependencies] in pyproject.toml
   langchain,
+  httpx,
+  httpx2,
   langchain-core,
   langchain-community,
   langchain-text-splitters,
@@ -36,6 +39,8 @@
   pymupdf,
   python-dotenv,
   jq,
+  fastapi,
+  uvicorn,
   # Provider extras — [project.optional-dependencies.all]
   langchain-openai,
   langchain-ollama,
@@ -52,8 +57,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aldzikridp";
     repo = "semantic-search";
-    rev = "81a378340e94df884c8d80015f4d7c96e3453e81";
-    hash = "sha256-TsEeMuvcEWDdj4ZBCR4LB5qXCJ0hlGAGN640AfbeUUs=";
+    rev = "1cee3642cbbfa18e3be0eafee4096f25fde0eb60";
+    hash = "sha256-Hr+kt/UC+fxYvrN+QAfNIip3S9PVmnezPu7kGNQaszk=";
   };
 
   pyproject = true;
@@ -72,6 +77,8 @@ buildPythonPackage rec {
     langchain-community
     langchain-text-splitters
     psycopg
+    httpx2
+    httpx
     pgvector
     sqlalchemy
     pydantic
@@ -80,6 +87,8 @@ buildPythonPackage rec {
     pymupdf
     python-dotenv
     jq
+    fastapi
+    uvicorn
     # Provider extras (openai + ollama)
     langchain-openai
     langchain-ollama
