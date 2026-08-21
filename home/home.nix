@@ -40,7 +40,6 @@
     fd
     imagemagick
     lazygit
-    lua-language-server
     nixd
     buku
     p7zip

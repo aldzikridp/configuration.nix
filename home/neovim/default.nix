@@ -35,4 +35,11 @@
       rest-nvim
     ];
   };
+  home.packages = with pkgs;[
+    yaml-language-server
+    ty
+    lua-language-server
+    ccls
+    nodejs
+  ];
 }
