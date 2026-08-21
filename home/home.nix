@@ -67,9 +67,7 @@
     (pkgs.callPackage ../pkgs/term-llm/default.nix { })
     (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
     (pkgs.python3Packages.callPackage ../pkgs/semsearch/default.nix { })
-    (pkgs.callPackage ../pkgs/codegraph/default.nix { })
     (pkgs.callPackage ../pkgs/omniroute/default.nix { })
-    (pkgs.callPackage ../pkgs/gortex/default.nix { })
   ];
   programs = {
     lazygit.enable = true;
