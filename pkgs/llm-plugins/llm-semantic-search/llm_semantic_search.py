@@ -4,14 +4,14 @@ Sends search requests to a running `semsearch serve` endpoint instead of
 calling the Python library directly. This allows the LLM to query a remote
 or shared semantic search server.
 
-Search defaults (host, port, k, rerank) come from:
+Search defaults (socket_path or host/port, k, rerank) come from:
 
     <llm.user_dir()>/semantic-search-server.yaml
 
     Linux:  ~/.config/io.datasette.llm/semantic-search-server.yaml
     macOS:  ~/Library/Application Support/io.datasette.llm/semantic-search-server.yaml
 
-Example config::
+Example config (TCP/HTTP)::
 
     # Server host
     host: localhost
@@ -24,6 +24,11 @@ Example config::
 
     # Enable reranking by default
     rerank: true
+
+Or Unix domain socket — setting `socket_path` selects a Unix socket
+connection instead of TCP::
+
+    socket_path: /run/semsearch/semsearch.sock
 
 Args for the tool function override config defaults per-call.
 """
@@ -57,7 +62,8 @@ def _warn(message: str) -> None:
 def _load_config() -> dict:
     """Load search defaults from the YAML config file.
 
-    Returns a dict with optional keys: host, port, k, rerank.
+    Returns a dict with optional keys:
+        host, port, socket_path, k, rerank.
     Never raises: missing/broken config returns empty dict with a warning.
     """
     path = llm.user_dir() / CONFIG_FILENAME
@@ -104,10 +110,25 @@ def semantic_search(
     config = _load_config()
 
     # Merge: CLI args override config, config overrides hardcoded defaults
-    effective_host = config.get("host", DEFAULT_HOST)
-    effective_port = config.get("port", DEFAULT_PORT)
     effective_k = config.get("k", DEFAULT_K)
     effective_rerank = config.get("rerank", DEFAULT_RERANK)
+
+    # Unix socket connection settings (None for TCP/HTTP connections).
+    # Setting `socket_path` in the config selects a Unix socket connection;
+    # otherwise connect over TCP using host/port.
+    effective_socket: str | None = None
+    effective_host = ""
+    effective_port = 0
+
+    if config.get("socket_path") is not None:
+        effective_socket = str(config["socket_path"])
+        base_url = "http://localhost"
+        connect_desc = f"unix socket {effective_socket}"
+    else:
+        effective_host = config.get("host", DEFAULT_HOST)
+        effective_port = config.get("port", DEFAULT_PORT)
+        base_url = f"http://{effective_host}:{effective_port}"
+        connect_desc = base_url
 
     # Parse filter: CLI string takes precedence, then config dict
     filter_dict = None
@@ -129,13 +150,21 @@ def semantic_search(
         payload["filter"] = filter_dict
 
     # Make HTTP request
-    base_url = f"http://{effective_host}:{effective_port}"
     try:
-        client = httpx.Client(base_url=base_url, timeout=REQUEST_TIMEOUT)
+        if effective_socket is not None:
+            transport = httpx.HTTPTransport(uds=effective_socket)
+            client = httpx.Client(
+                transport=transport, base_url=base_url, timeout=REQUEST_TIMEOUT
+            )
+        else:
+            client = httpx.Client(base_url=base_url, timeout=REQUEST_TIMEOUT)
         response = client.post("/search", json=payload)
         response.raise_for_status()
-    except httpx.ConnectError:
-        return f"error: cannot connect to semsearch server at {base_url}. Is `semsearch serve` running?"
+    except httpx.ConnectError as e:
+        return (
+            f"error: cannot connect to semsearch server at {connect_desc} ({e}). "
+            f"Is `semsearch serve` running?"
+        )
     except httpx.TimeoutException:
         return f"error: request to semsearch server timed out after {REQUEST_TIMEOUT}s"
     except httpx.HTTPStatusError as e:

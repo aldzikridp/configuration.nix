@@ -1,8 +1,10 @@
 # Nix derivation for the `llm-semantic-search` plugin.
 #
 # Provides the `semantic_search` tool for llm, backed by a running
-# semsearch HTTP server (`semsearch serve`). Reads search defaults from
-# <llm.user_dir()>/semantic-search-server.yaml.
+# semsearch server (`semsearch serve`). Reads search defaults from
+# <llm.user_dir()>/semantic-search-server.yaml. Connects over TCP/HTTP
+# (host/port) or, when `socket_path` is set in the config, over a
+# Unix domain socket.
 #
 # Unlike llm-semsearch (which calls the Python library directly), this
 # plugin sends HTTP requests to a remote or shared server.
