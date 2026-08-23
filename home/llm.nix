@@ -87,66 +87,20 @@
 #    `llm install`/`uninstall` run real pip — unused here since plugins
 #    are managed via Nix. Upstream tests are skipped (doCheck = false),
 #    consistent with the vendored plugins.
-{ pkgs, ... }:
+{ pkgs, fetchFromGitHub, ... }:
 
 let
   # Step 1: Extend `pkgs.unstable` (see header section 5 for why unstable)
-  # with Python package extensions that (a) disable tests on `courlan` and
-  # `trafilatura` and (b) bump `llm` to 0.32 and `condense-json` to 1.1.
-  # The extension is applied to every Python interpreter's package set, so
-  # when `trafilatura`'s callPackage resolves `courlan`, it gets the
-  # test-disabled version — producing a different .drv hash and a working
-  # build. The library works fine at runtime; only the test suites are
-  # broken on Python 3.13.
-  # Track upstream: https://github.com/adbar/courlan/issues
-  pkgs' = pkgs.unstable.extend (final: prev: {
-    pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-      (python-final: python-prev: {
-        # Issue: https://github.com/NixOS/nixpkgs/issues/551795
-        courlan = python-prev.courlan.overridePythonAttrs (old: {
-          doCheck = false;
-        });
-        trafilatura = python-prev.trafilatura.overridePythonAttrs (old: {
-          doCheck = false;
-        });
-      })
-
-      # llm 0.32 + condense-json 1.1 (llm 0.32 requires condense-json>=1.1).
-      # `final` here is the top-level `pkgs.unstable`, which provides
-      # fetchFromGitHub. sqlite-utils 4.1.1 already comes from unstable.
-      (python-final: python-prev: {
-        condense-json = python-prev.condense-json.overridePythonAttrs (old: {
-          version = "1.1";
-          src = final.fetchFromGitHub {
-            owner = "simonw";
-            repo = "condense-json";
-            tag = "1.1";
-            hash = "sha256-IBYjDFhbQlZ/17nTo5FvJM7aeadKS5dW7J8IGy4956M=";
-          };
-          # 1.1's test suite needs `hypothesis`, which the 0.1.3
-          # derivation doesn't provide; skip tests (library works fine).
-          doCheck = false;
-        });
-        llm = python-prev.llm.overridePythonAttrs (old: {
-          version = "0.32";
-          src = final.fetchFromGitHub {
-            owner = "simonw";
-            repo = "llm";
-            tag = "0.32";
-            hash = "sha256-lDPF4Z+U9Zlqc1Dt7pCrxmthAZj4a0hNpz5d8J7TtM8=";
-          };
-          # Drop nixpkgs' install/uninstall-disable patch and the
-          # @listOfPackagedPlugins@ postPatch substitution (the other
-          # bundled patches target 0.31.1-specific code and may not apply
-          # to 0.32). Plugins are managed via Nix, so `llm install` is
-          # unused.
-          patches = [];
-          postPatch = "";
-          doCheck = false;
-        });
-      })
-    ];
-  });
+  # with the shared Python package extensions from
+  # ./python-package-extensions.nix: (a) test-disabled courlan/trafilatura,
+  # (b) llm -> 0.32, condense-json -> 1.1, and (c) openai pinned to 3.3.1.
+  #
+  # The extensions live in a SHARED file because home/home.nix builds the
+  # standalone `semsearch` CLI from this same extended set — semsearch's
+  # httpx2 clients must never meet an openai of a different major version
+  # (see the header of python-package-extensions.nix). Do NOT inline these
+  # overrides back here.
+  pkgs' = pkgs.unstable.extend (import ./python-package-extensions.nix);
 
   # Step 2: Build the plugins derivations using the EXTENDED pkgs.
   # Because the extension applies to python3Packages too, `trafilatura`
@@ -155,6 +109,7 @@ let
   llm-ctx7-pkg       = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-ctx7/default.nix { };
   llm-wikipedia-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-wikipedia/default.nix { };
   llm-fetch-url-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-fetch-url/default.nix { };
+  llm-tools-exa-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-tools-exa/default.nix { };
 
   # llm-file-tools plugin: read_file / write_file / patch_file / apply_diff /
   # list_dir / grep_file (ripgrep+grep) / git_apply. Runtime deps on PATH:
@@ -203,6 +158,17 @@ let
   # <llm.user_dir()>/semantic-search-server.yaml.
   llm-semantic-search-pkg = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-semantic-search/default.nix { };
 
+  llm-openrouter-pkg = pkgs'.python3Packages.llm-openrouter.overridePythonAttrs (old: {
+    version = "0.7";
+    src = pkgs'.fetchFromGitHub {
+      owner = "simonw";
+      repo = "llm-openrouter";
+      tag = "0.7";
+      hash = "sha256-SBOz09jgRsqv7W6qQTyxvWncpgxAa1nFCvZYnTYmunc=";
+    };
+    doCheck = false;
+  });
+
   # Step 3: Override python3 to add our custom plugins by name. We need
   # this so that `myPython.withPackages (ps: [ ps.llm-ctx7 ... ])` below
   # can resolve them — `withPackages` pulls from the overridden package
@@ -216,11 +182,13 @@ let
       llm-file-tools = llm-file-tools-pkg;
       llm-openrouter-embeddings = llm-openrouter-embeddings-pkg;
       llm-tools-rag = llm-tools-rag-pkg;
+      llm-tools-exa = llm-tools-exa-pkg;
       llm-commandcode = llm-commandcode-pkg;
       llm-openai-compatible-embeddings = llm-openai-compatible-embeddings-pkg;
       pg-semantic-search = semsearch-pkg;
       llm-semsearch = llm-semsearch-pkg;
       llm-semantic-search = llm-semantic-search-pkg;
+      llm-openrouter = llm-openrouter-pkg;
     };
   };
 
@@ -241,12 +209,12 @@ let
     llm-wikipedia
     llm-fetch-url
     llm-file-tools
-    llm-openrouter-embeddings
-    llm-tools-rag
     llm-commandcode
+    llm-openrouter
     #llm-openai-compatible-embeddings
     #llm-semsearch
     llm-semantic-search
+    llm-tools-exa
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
