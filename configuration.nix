@@ -161,7 +161,7 @@
         configDir = "/home/${myUsername}/Syncthing/.config/";   # Folder for Syncthing's settings and keys
     };
     suwayomi-server = {
-      enable = true;
+      enable = false;
       openFirewall = true;
       package = pkgs.suwayomi-server.overrideAttrs (oldAttrs: {
         version = "2.3.2243";
