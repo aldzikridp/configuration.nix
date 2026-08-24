@@ -110,6 +110,7 @@ let
   llm-wikipedia-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-wikipedia/default.nix { };
   llm-fetch-url-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-fetch-url/default.nix { };
   llm-tools-exa-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-tools-exa/default.nix { };
+  llm-tools-mcp-pkg  = pkgs'.python3Packages.callPackage ../pkgs/llm-plugins/llm-tools-mcp/default.nix { };
 
   # llm-file-tools plugin: read_file / write_file / patch_file / apply_diff /
   # list_dir / grep_file (ripgrep+grep) / git_apply. Runtime deps on PATH:
@@ -183,6 +184,7 @@ let
       llm-openrouter-embeddings = llm-openrouter-embeddings-pkg;
       llm-tools-rag = llm-tools-rag-pkg;
       llm-tools-exa = llm-tools-exa-pkg;
+      llm-tools-mcp = llm-tools-mcp-pkg;
       llm-commandcode = llm-commandcode-pkg;
       llm-openai-compatible-embeddings = llm-openai-compatible-embeddings-pkg;
       pg-semantic-search = semsearch-pkg;
@@ -215,6 +217,7 @@ let
     #llm-semsearch
     llm-semantic-search
     llm-tools-exa
+    llm-tools-mcp
   ]);
 
   # Step 5: `myLlmEnv` is a full python environment; we only want the
