@@ -56,9 +56,6 @@ def fetch_url(url: str) -> str:
     if not url:
         return "error: url must not be empty"
 
-    # Fetch the page. trafilatura.fetch_url handles redirects,
-    # compression, and encoding detection internally. Returns None on
-    # failure (HTTP error, timeout, malformed URL, etc.).
     try:
         downloaded = trafilatura.fetch_url(url)
     except Exception as e:
@@ -70,12 +67,6 @@ def fetch_url(url: str) -> str:
             "(HTTP error, timeout, DNS failure, or blocked by server)"
         )
 
-    # Extract the main content as Markdown. Settings chosen to mirror
-    # the original aichat behaviour:
-    #   - output_format="markdown"  -> Markdown instead of plain text
-    #   - include_links=True        -> preserve hyperlinks (pandoc does)
-    #   - include_images=False      -> drop images (sed strip in original)
-    #   - include_tables=True       -> preserve tables (pandoc does)
     try:
         result = trafilatura.extract(
             downloaded,
