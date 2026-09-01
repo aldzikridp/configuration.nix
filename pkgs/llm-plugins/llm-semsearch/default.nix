@@ -1,18 +1,11 @@
-# Nix derivation for the `llm-semsearch` plugin.
+# Nix derivation for the `llm-semsearch` plugin — fetch wrapper.
 #
-# Provides the `semantic_search` tool for llm, backed by semsearch's
-# Python library (SemanticSearchService). Reads search defaults from
-# <llm.user_dir()>/semantic-search.yaml.
-#
-# Build via:
-#   pkgs.python3Packages.callPackage ./default.nix { }
-#
-# Then inject it into the llm python env (see home/llm.nix).
-# semsearch itself is a transitive dependency — no need to add it
-# to withPackages separately.
+# Fetches source from github:aldzikridp/llm-plugins (Pattern A per-default.nix).
+# Vendored sources remain on disk until T7. See PLAN.md:§2.2 and §4 (pg-semantic-search injection).
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   setuptools,
   llm,
   pyyaml,
@@ -24,16 +17,17 @@ buildPythonPackage rec {
   version = "0.1.0";
   pyproject = true;
 
-  src = ./.;
+  src = "${fetchFromGitHub {
+    owner = "aldzikridp";
+    repo = "llm-plugins";
+    rev = "v0.1.0";
+    hash = "sha256-234Uo2yNZBImZIGQA/TIPVG3wZrRQt0GJF3h21B61QY=";
+  }}/pkgs/llm-semsearch";
 
   build-system = [ setuptools ];
 
-  # llm: runtime import for @llm.hookimpl and llm.user_dir()
-  # pyyaml: runtime import for parsing the YAML config file
-  # pg-semantic-search: runtime import for SemanticSearchService / get_settings
   propagatedBuildInputs = [ llm pyyaml pg-semantic-search ];
 
-  # No tests vendored.
   doCheck = false;
 
   pythonImportsCheck = [ "llm_semsearch" ];

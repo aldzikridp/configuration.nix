@@ -1,21 +1,11 @@
-# Nix derivation for the `llm-semantic-search` plugin.
+# Nix derivation for the `llm-semantic-search` plugin — fetch wrapper.
 #
-# Provides the `semantic_search` tool for llm, backed by a running
-# semsearch server (`semsearch serve`). Reads search defaults from
-# <llm.user_dir()>/semantic-search-server.yaml. Connects over TCP/HTTP
-# (host/port) or, when `socket_path` is set in the config, over a
-# Unix domain socket.
-#
-# Unlike llm-semsearch (which calls the Python library directly), this
-# plugin sends HTTP requests to a remote or shared server.
-#
-# Build via:
-#   pkgs.python3Packages.callPackage ./default.nix { }
-#
-# Then inject it into the llm python env (see home/llm.nix).
+# Fetches source from github:aldzikridp/llm-plugins (Pattern A per-default.nix).
+# Vendored sources remain on disk until T7. See PLAN.md:§2.2.
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   setuptools,
   llm,
   pyyaml,
@@ -27,16 +17,17 @@ buildPythonPackage rec {
   version = "0.1.0";
   pyproject = true;
 
-  src = ./.;
+  src = "${fetchFromGitHub {
+    owner = "aldzikridp";
+    repo = "llm-plugins";
+    rev = "v0.1.0";
+    hash = "sha256-234Uo2yNZBImZIGQA/TIPVG3wZrRQt0GJF3h21B61QY=";
+  }}/pkgs/llm-semantic-search";
 
   build-system = [ setuptools ];
 
-  # llm: runtime import for @llm.hookimpl and llm.user_dir()
-  # pyyaml: runtime import for parsing the YAML config file
-  # httpx2: runtime import for HTTP requests to semsearch server
   propagatedBuildInputs = [ llm pyyaml httpx2 ];
 
-  # No tests vendored.
   doCheck = false;
 
   pythonImportsCheck = [ "llm_semantic_search" ];
