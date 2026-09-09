@@ -60,6 +60,8 @@
     #(transmission_4.override { enableCli = false; })
     transmission_4
     unstable.opencode
+    unstable.obscura
+    unstable.codebase-memory-mcp
     unstable.pi-coding-agent
     context7-mcp
     rtk
