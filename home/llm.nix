@@ -208,9 +208,9 @@ let
     llm-docs
     # --- custom plugins (vendored in this repo) ---
     llm-ctx7
-    llm-wikipedia
-    llm-fetch-url
-    llm-file-tools
+    #llm-wikipedia
+    #llm-fetch-url
+    #llm-file-tools
     llm-commandcode
     llm-openrouter
     #llm-openai-compatible-embeddings
