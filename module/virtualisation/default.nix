@@ -34,7 +34,7 @@ in
   #};
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;
+    dockerCompat = false;
     defaultNetwork.settings = {
       dns_enabled = true;
     };
@@ -59,6 +59,7 @@ in
     podman-compose
     #quickemuHostCPUOnly
     quickemu
+    qemu_kvm
     #samba
     #fuse-overlayfs # for minikube with podman driver
   ];
