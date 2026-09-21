@@ -16,6 +16,7 @@
       options = "--delete-older-than 7d";
     };
   };
+  systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nixos/nix-daemon-environment";
 
   imports =
     [

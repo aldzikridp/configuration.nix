@@ -65,7 +65,7 @@
     unstable.pi-coding-agent
     context7-mcp
     rtk
-    (pkgs.callPackage ../pkgs/term-llm/default.nix { })
+    #(pkgs.callPackage ../pkgs/term-llm/default.nix { })
     (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
     # Standalone `semsearch` CLI. Built against the SAME extended package
     # set as the llm env (home/python-package-extensions.nix) so it shares

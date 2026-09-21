@@ -19,7 +19,8 @@ buildPythonPackage rec {
   src = "${fetchFromGitHub {
     owner = "aldzikridp";
     repo = "llm-plugins";
-    rev = "v0.1.0";
+    private = true;
+    rev = "4957ab2a28116a16ee098667fec33641bb3d44f8";
     hash = "sha256-234Uo2yNZBImZIGQA/TIPVG3wZrRQt0GJF3h21B61QY=";
   }}/pkgs/llm-fetch-url";
 

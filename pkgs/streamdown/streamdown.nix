@@ -46,8 +46,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "day50-dev";
-    repo = "render-markdown-terminal";
-    rev = "v${version}";
+    repo = "streamdown";
+    rev = "d062d14698e2ca11304850e7ecf7ae7de37365cb";
     # `lib.fakeHash` is a placeholder. The first `nix build` will fail
     # and print the correct SRI hash in the error output (look for a
     # line like `specified: sha256-0000...` and `got: sha256-XXXX...`).
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     #     https://github.com/day50-dev/render-markdown-terminal/archive/refs/tags/v0.36.6.tar.gz
     #   nix hash to-sri --type sha256 <prefetch-output>
     #hash = lib.fakeHash;
-    hash = "sha256-RL6dKFlCob+VRN+CEUAmvEWOMAuKs/l7fkb6PMU80Ik=";
+    hash = "sha256-x6E62p3KekbfI3Cd1oGTPuJrcGpyvemEo/+nuKdV5kE=";
   };
 
   pyproject = true;
