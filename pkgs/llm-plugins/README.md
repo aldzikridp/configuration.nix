@@ -1,29 +1,41 @@
 # llm-plugins — fetch wrappers
 
-Sources moved to [`github:aldzikridp/llm-plugins`](https://github.com/aldzikridp/llm-plugins)
-(tag `v0.1.0`, commit `e3b8870359b52b375d9b844bcb561095b37e284b`). Each
-`default.nix` in this directory fetches its source via `fetchFromGitHub`
-(**Pattern A — per-`default.nix`**, `rev = "v0.1.0"`,
-`hash = "sha256-234Uo2yNZBImZIGQA/TIPVG3wZrRQt0GJF3h21B61QY="`) and
-slices to `"/pkgs/<name>"`. See `../../llm-plugins/README.md` and
-`../../llm-plugins/PLAN.md:§2.2` for the inventory, writing guide, and
-fetch details.
+Sources live in the private repo
+[`github:aldzikridp/llm-plugins`](https://github.com/aldzikridp/llm-plugins),
+pinned **once** in `source.nix` (`rev` + `hash`). Every `default.nix` in
+this directory fetches it itself and slices to `"/pkgs/<name>"`:
 
-- `flake.nix` / `flake.lock` / `home/llm.nix` are unchanged (no flake
-  input) — `callPackage ../pkgs/llm-plugins/<name>/default.nix` still
-  works; only `default.nix` internals switched from `src = ./.;` to
-  `fetchFromGitHub`.
+```nix
+src = "${fetchFromGitHub (import ../source.nix)}/pkgs/llm-ctx7";
+```
+
+Nix deduplicates the identical fixed-output fetch, so the repo is built
+once regardless of how many wrappers import `source.nix`. Keeping the
+rev/hash in that one file is what stops the wrappers from drifting out of
+sync — they used to repeat it inline, and the 6 wrappers that are
+currently disabled in `home/llm.nix` (wikipedia, fetch-url, file-tools,
+both *-embeddings, semsearch) had drifted to the current rev with the
+*v0.1.0* tree hash, so they could not build if re-enabled. Only the 3
+enabled ones (ctx7, commandcode, semantic-search) had the right hash.
+
+- No flake input and no `home/llm.nix` change. Each wrapper is
+  self-contained: `callPackage ../pkgs/llm-plugins/<name>/default.nix
+  { }` works from any call site with no extra args (the
+  `llm-tools-rag` wrapper resolves its own `fetchFromGitHub` the same
+  way).
 - `llm-fetch-curl` was dropped (orphaned duplicate `pname`, unused in
   `home/llm.nix` — see `PLAN.md:§1.1` / `TODO.md:T1`).
 - 9 vendored wrappers (`llm-commandcode`, `llm-ctx7`, `llm-fetch-url`,
   `llm-file-tools`, `llm-openai-compatible-embeddings`,
   `llm-openrouter-embeddings`, `llm-semantic-search`, `llm-semsearch`,
-  `llm-wikipedia`) share the same `owner/repo/rev/hash`; Nix deduplicates
-  the fetch. 3 upstream wrappers (`llm-tools-exa`, `llm-tools-mcp`,
-  `llm-tools-rag`) still fetch from `daturkel`/`Virtuslab`.
-- Bumps: push + tag `v0.2.0` in `llm-plugins`, re-run
-  `nix flake prefetch github:aldzikridp/llm-plugins/v0.2.0 --json`, update
-  `rev`/`hash`/`version` in 9 wrappers.
+  `llm-wikipedia`) share one source; Nix deduplicates the fetch. 3
+  upstream wrappers (`llm-tools-exa`, `llm-tools-mcp`, `llm-tools-rag`)
+  fetch from `daturkel`/`Virtuslab` and are self-contained.
+- Bumps: edit `rev` in `source.nix`, then
+  `nix flake prefetch github:aldzikridp/llm-plugins/<rev> --json` and
+  replace `hash` with the `narHash` it prints. Bump a wrapper's
+  `version` only if that plugin's `pyproject.toml` version changed (it is
+  not used to fetch anything).
 
 The former vendored files (`llm_*.py`, `pyproject.toml`, per-plugin
 `README.md`) now live only in `llm-plugins/pkgs/<name>/`; `configuration.nix`

@@ -1,7 +1,5 @@
-# Nix derivation for the `llm-ctx7` plugin — fetch wrapper.
-#
-# Fetches source from github:aldzikridp/llm-plugins (Pattern A per-default.nix).
-# Vendored sources remain on disk until T7. See PLAN.md:§2.2.
+# llm-ctx7: slices /pkgs/llm-ctx7 out of the shared llm-plugins checkout
+# (rev/hash pinned once in ../source.nix; Nix deduplicates the fetch).
 {
   lib,
   buildPythonPackage,
@@ -15,14 +13,7 @@ buildPythonPackage rec {
   version = "0.1.0";
   pyproject = true;
 
-  src = "${fetchFromGitHub {
-    owner = "aldzikridp";
-    repo = "llm-plugins";
-    private = true;
-    rev = "4957ab2a28116a16ee098667fec33641bb3d44f8";
-    #sha256 = lib.fakeSha256;
-    sha256 = "sha256-32KbNtDEBowzMAYhWPaSeZEzs+oNRzGd9rKGGD5goMM=";
-  }}/pkgs/llm-ctx7";
+  src = "${fetchFromGitHub (import ../source.nix)}/pkgs/llm-ctx7";
 
   build-system = [ setuptools ];
 

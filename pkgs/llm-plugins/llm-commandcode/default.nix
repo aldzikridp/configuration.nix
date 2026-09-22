@@ -1,8 +1,5 @@
-# Nix derivation for the `llm-commandcode` plugin — fetch wrapper.
-#
-# Fetches source from github:aldzikridp/llm-plugins (Pattern A per-default.nix).
-# Vendored sources (.py/.toml/README) remain on disk until T7; src now
-# slices into the fetched tree. See llm-plugins/README.md and PLAN.md:§2.2.
+# llm-commandcode: slices /pkgs/llm-commandcode out of the shared llm-plugins checkout
+# (rev/hash pinned once in ../source.nix; Nix deduplicates the fetch).
 {
   lib,
   buildPythonPackage,
@@ -17,14 +14,7 @@ buildPythonPackage rec {
   version = "0.1.0";
   pyproject = true;
 
-  src = "${fetchFromGitHub {
-    owner = "aldzikridp";
-    repo = "llm-plugins";
-    private = true;
-    rev = "4957ab2a28116a16ee098667fec33641bb3d44f8";
-    #sha256 = lib.fakeSha256;
-    sha256 = "sha256-32KbNtDEBowzMAYhWPaSeZEzs+oNRzGd9rKGGD5goMM=";
-  }}/pkgs/llm-commandcode";
+  src = "${fetchFromGitHub (import ../source.nix)}/pkgs/llm-commandcode";
 
   build-system = [ setuptools ];
 
