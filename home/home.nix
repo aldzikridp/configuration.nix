@@ -28,6 +28,7 @@
     rsync
     rclone
     (pkgs.callPackage ../pkgs/fzf-tab/default.nix { })
+    (pkgs.callPackage ../pkgs/vnote/default.nix { })
     #(libsForQt5.callPackage ../pkgs/qqsp/default.nix { })
     pamixer
     unrar-wrapper

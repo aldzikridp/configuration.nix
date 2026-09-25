@@ -10,6 +10,7 @@ in
       pkgs.noto-fonts-color-emoji
       pkgs.roboto
       pkgs.corefonts
+      pkgs.noto-fonts-cjk-sans
     ] ++ nerdfonts ;
     fontDir.enable = true;
   };
