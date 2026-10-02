@@ -17,7 +17,13 @@
 {
   owner = "aldzikridp";
   repo = "llm-plugins";
+
+  # Private Git repo, required to add environemtn var to nix-daemon
+  # with below option in configuration.nix, put the credentials in file
+  # used in value.
+  # Put this in configuration.nix -> systemd.services.nix-daemon.serviceConfig.EnvironmentFile = "/etc/nixos/nix-daemon-environment";
   private = true;
-  rev = "4957ab2a28116a16ee098667fec33641bb3d44f8";
-  hash = "sha256-32KbNtDEBowzMAYhWPaSeZEzs+oNRzGd9rKGGD5goMM=";
+  rev = "a2598ac6d5bd18572e1bee69297872c342c6dc07";
+  hash = "sha256-Y+RFNT5Q7nLRjQznrjpaBdRA8ax9ZCZw3lySJgPTscc=";
+  #hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 }

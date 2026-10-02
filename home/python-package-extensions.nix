@@ -82,12 +82,13 @@ final: prev: {
       });
 
       llm = python-prev.llm.overridePythonAttrs (old: {
-        version = "0.33";
+        version = "0.36";
         src = final.fetchFromGitHub {
           owner = "simonw";
           repo = "llm";
-          tag = "0.33";
-          hash = "sha256-EXyEeSNtxF3xbGAaQwSFXRTHN4p/BzxqAW90gleeXEo=";
+          tag = "0.36";
+          hash = "sha256-ocLMOoC0W0Ke5R9l69xiX6Xq/xOwTA0lV+Zo+03eFxg=";
+          #hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
         # Drop nixpkgs' install/uninstall-disable patch and the
         # @listOfPackagedPlugins@ postPatch substitution (the other
