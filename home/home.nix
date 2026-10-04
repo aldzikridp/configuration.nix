@@ -73,7 +73,7 @@
     # one openai 3.3.1 derivation — semsearch passes httpx2 clients into
     # the OpenAI SDK, which hard-fails on an openai version mismatch.
     ((pkgs.unstable.extend (import ./python-package-extensions.nix)).python3Packages.callPackage ../pkgs/semsearch/default.nix { })
-    (pkgs.callPackage ../pkgs/omniroute/default.nix { })
+    (pkgs.callPackage ../pkgs/hax/default.nix { })
   ];
   programs = {
     lazygit.enable = true;
