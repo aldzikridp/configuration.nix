@@ -74,6 +74,7 @@
     # the OpenAI SDK, which hard-fails on an openai version mismatch.
     ((pkgs.unstable.extend (import ./python-package-extensions.nix)).python3Packages.callPackage ../pkgs/semsearch/default.nix { })
     (pkgs.callPackage ../pkgs/hax/default.nix { })
+    (pkgs.python3Packages.callPackage ../pkgs/mcpc/default.nix { })
   ];
   programs = {
     lazygit.enable = true;

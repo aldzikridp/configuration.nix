@@ -27,8 +27,9 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aldzikridp";
     repo = "mcpc";
-    rev = "f07ce9dbd1a16e54f365b2b3c324fe54ffd08200";
-    hash = "sha256-7H7RaXSaLIwujX3UKewvjAtBPBUaXeR0G+PT1bnQhQ4=";
+    rev = "8eba1f537e49d568ec17500fa04f77b35840e622";
+    #hash = lib.fakeHash;
+    hash = "sha256-u00eybroFASwhHuqOO5xlUlta+u/J1K8NxgNA888Dsg=";
   };
 
   build-system = [ setuptools ];
