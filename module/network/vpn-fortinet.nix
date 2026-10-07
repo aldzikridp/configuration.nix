@@ -89,7 +89,7 @@ in
         VPN_FORTINET_PSK=<group secret>
         ```
 
-        plus, to let the connection come up unattended,
+        optional, to let the connection come up unattended,
 
         ```
         VPN_FORTINET_PASSWORD=<password>
