@@ -14,7 +14,6 @@
     ./firefox
     ./neovim
     ./aichat
-    ./llm.nix
   ];
   home.packages = with pkgs;[
     gopass
@@ -60,14 +59,11 @@
     #(pkgs.callPackage ../pkgs/rifle/default.nix { })
     #(transmission_4.override { enableCli = false; })
     transmission_4
-    unstable.opencode
     unstable.obscura
     unstable.codebase-memory-mcp
     unstable.pi-coding-agent
     context7-mcp
     rtk
-    #(pkgs.callPackage ../pkgs/term-llm/default.nix { })
-    (pkgs.python3Packages.callPackage ../pkgs/streamdown/default.nix { })
     # Standalone `semsearch` CLI. Built against the SAME extended package
     # set as the llm env (home/python-package-extensions.nix) so it shares
     # one openai 3.3.1 derivation — semsearch passes httpx2 clients into

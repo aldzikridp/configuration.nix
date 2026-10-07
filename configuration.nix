@@ -23,6 +23,7 @@
       ./module/systemd-boot/boot.nix
       #./module/bash
       ./module/network/networking.nix
+      ./module/network/vpn-fortinet.nix
       ./module/network/dnscrypt.nix
       ./module/network/dnsmasq-adblock
       ./module/polkit
@@ -34,6 +35,8 @@
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  services.vpn-fortinet.enable = true;
 
   services.earlyoom.enable = true;
 
