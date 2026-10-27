@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "0.5.0";
+  version = "0.6.1";
 in
 stdenv.mkDerivation {
   pname = "hax";
@@ -31,7 +31,8 @@ stdenv.mkDerivation {
   # string. Same choice as the AUR package.
   src = fetchurl {
     url = "https://github.com/OleksandrChekhovskyi/hax/releases/download/v${version}/hax-${version}.tar.xz";
-    hash = "sha256-waFcNUlpuHAPcv+nt+7g7DXXALIp9W8GeBQjf8AFJYY=";
+      hash = "sha256-tGwTGHdw36tXfO47CnfQx9YigMcVw7g5YCyoihrjeho=";
+      #hash =lib.fakeHash;
   };
 
   strictDeps = true;
